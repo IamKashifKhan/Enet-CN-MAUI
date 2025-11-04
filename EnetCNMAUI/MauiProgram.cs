@@ -17,6 +17,7 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using EnetCNMAUI.Helpers;
 using EnetCNMAUI.Services;
+using Microsoft.Extensions.Configuration;
 
 using Akavache;
 using Splat.Builder;
@@ -58,9 +59,19 @@ namespace EnetCNMAUI
               {
                   handlers.AddHandler(typeof(CustomWebView), typeof(Platforms.CustomWebViewHandler));
               });
+
+
+            // Load configuration from embedded appsettings.json
+            var assembly = typeof(MauiProgram).Assembly;
+            using var stream = assembly.GetManifestResourceStream("EnetCNMAUI.Resources.Raw.appsettings.json");
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(stream)
+                .Build();
+            builder.Configuration.AddConfiguration(config);
+
             builder.Services.AddMauiBlazorWebView();
             builder.RegisterFirebaseServices();
-            builder.Services.RegisterServices();
+            builder.Services.RegisterServices(config);
             builder.Services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<AutoMapperProfiles>();
@@ -127,7 +138,7 @@ namespace EnetCNMAUI
         }
         // Services    }
 
-        private static IServiceCollection RegisterServices(this IServiceCollection services)
+        private static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
 
             //auth0
@@ -135,7 +146,7 @@ namespace EnetCNMAUI
         // services.AddSingleton<IRemoteAnalytics, FirebaseAnalyticsService>();
 
             services.AddAuthorizationCore();
- 
+
            // services.AddSingleton<IApiService, ApiService>();
             services.AddSingleton<ICNApiService, CNApiService>();
 
@@ -152,13 +163,7 @@ namespace EnetCNMAUI
 
             services.AddSingleton<IAppVersion, Platforms.AppVersionService>();
 
-            // Map configuration with platform-specific API keys
-            services.AddSingleton<IMapConfig>(new MapConfig
-            {
-                GoogleMapsApiKey = DeviceInfo.Platform == DevicePlatform.iOS
-                    ? "Key"  // Replace with actual iOS key
-                    : "Key"  // Replace with actual Android key
-            });
+            services.AddSingleton<IMapConfig, MapConfig>();
 
             return services;
         }

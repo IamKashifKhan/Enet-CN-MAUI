@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 *.mono/
+
+# Configuration files with sensitive data
+appsettings.json

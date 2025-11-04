@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<viewsBase:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EnetCNMAUI.Views.OffersPage"
+             xmlns:local="clr-namespace:EnetCNMAUI.RazorViews"
+             Shell.NavBarIsVisible="False"
+                xmlns:viewsBase="clr-namespace:EnetCNMAUI.Views.Base"
+             Title="OffersPage">
+    <BlazorWebView HostPage="wwwroot/index.html">
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type local:Offers}" />
+        </BlazorWebView.RootComponents>
+    </BlazorWebView>
+</viewsBase:BasePage>

@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnetCNMAUI", "EnetCNMAUI\EnetCNMAUI.csproj", "{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnetCNMAUI.ApiService", "EnetCNMAUI.ApiService\EnetCNMAUI.ApiService.csproj", "{78935040-EF04-430E-9F74-8270802486A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnetCNMAUI.Domain", "EnetCNMAUI.Domain\EnetCNMAUI.Domain.csproj", "{32AD9F75-BAD7-059D-5519-9C1F02701E18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnetCNMAUI.LocalCache", "EnetCNMAUI.LocalCache\EnetCNMAUI.LocalCache.csproj", "{8CD1E4D5-F384-A0B2-3820-1B2A558469EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0422825A-5E8F-4F80-AF33-FE32DDE6B24C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{78935040-EF04-430E-9F74-8270802486A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78935040-EF04-430E-9F74-8270802486A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78935040-EF04-430E-9F74-8270802486A2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{78935040-EF04-430E-9F74-8270802486A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78935040-EF04-430E-9F74-8270802486A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32AD9F75-BAD7-059D-5519-9C1F02701E18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32AD9F75-BAD7-059D-5519-9C1F02701E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32AD9F75-BAD7-059D-5519-9C1F02701E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32AD9F75-BAD7-059D-5519-9C1F02701E18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CD1E4D5-F384-A0B2-3820-1B2A558469EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CD1E4D5-F384-A0B2-3820-1B2A558469EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CD1E4D5-F384-A0B2-3820-1B2A558469EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CD1E4D5-F384-A0B2-3820-1B2A558469EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B78A7C34-1C98-42C4-B45D-493F88F264AC}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.TextStylePolicy = $2
+		$2.inheritsSet = null
+		$2.scope = application/xaml
+		$0.XmlFormattingPolicy = $3
+		$3.inheritsSet = null
+		$3.scope = application/xaml
+	EndGlobalSection
+EndGlobal

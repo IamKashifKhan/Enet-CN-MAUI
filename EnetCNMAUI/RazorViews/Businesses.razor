@@ -1,0 +1,312 @@
+﻿@using EnetCNMAUI.Views
+
+@inject ILocalCache localCache
+@inject ICNApiService apiService
+@inject ILoginService loginService
+@inject IThemeManager themeManager
+@inject IJSRuntime jSRuntime
+
+<div class="d-flex flex-column">
+
+    <!-- ========== HEADER START ========== -->
+    <header class="fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+        <div class="container d-flex flex-row justify-content-between">
+
+            <!-- Logo -->
+            <a @onclick="()=> GoBack()" href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
+                <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
+            </a>
+
+            <!-- DropDown Categories -->
+            <div class="btn-group d-none d-lg-flex align-self-start ms-lg-4 ms-xl-5 mt-auto mb-1">
+                <button class="btn btn-primary btn-sm dropdown-toggle rounded-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    All Categories
+                </button>
+                <ul class="dropdown-menu shadow"></ul>
+            </div>
+
+        </div>
+
+        <!-- Mobile Top -->
+        <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+            <div class="mob_top-left visible">
+                <a @onclick="() => GoBack()" href="index.html" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"><i class="bi bi-chevron-left"></i></a>
+            </div>
+            <div class="mob_top-head visible">
+                <div class="fs-5 text-truncate lh-lg">@CategoryName</div>
+            </div>
+            <div class="mob_top-right visible">
+                <div class="d-none me-5">
+                    <a href="" class="link-light p-2 py-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    <div id="offcanvasSearch" class="offcanvas offcanvas-top" tabindex="-1">
+                        <div class="offcanvas-body p-1 px-2">
+                            <button type="button" class="btn-close position-absolute end-0 me-1 p-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ========== HEADER END ========== -->
+    <!-- ========== MAIN CONTENT START ========== -->
+    <main class="flex-shrink-0 py-0">
+        <div class="container">
+            <div class="row">
+
+                <!-- Glide Categories Main -->
+                <div class="sliding-tabs bus-cat-main">
+                    <div id="owl-tabs" class="owl-carousel owl-theme">
+                            @if (mainCategories != null && mainCategories.Count > 0)
+                            {
+                                foreach (var item in mainCategories)
+                                {
+                                    <CategoryCapsule Category="item" OnSelected="HandleSelectedCategory"></CategoryCapsule>
+                                }
+                            }
+                            else
+                            {
+                                            <div class="loading">
+                                              <div></div>
+                                              <div></div>
+                                              <div></div>
+                                              <div></div>
+                                            </div> 
+                            }
+                    </div>
+                </div>
+
+                @* <!-- Glide Categories Sub -->
+                <div class="glide bus-cat-sub">
+                    <div class="glide__track" data-glide-el="track">
+                        <ul class="glide__slides">
+                            <li class="glide__slide"><a href="business-list.html"><div class="bus-label">Sub-Cat 01 <span>1 offers</span></div></a></li>
+                            <li class="glide__slide"><a href="business-list.html"><div class="bus-label">Sub-Cat 02 <span>4 offers</span></div></a></li>
+                            <li class="glide__slide"><a href="business-list.html"><div class="bus-label">Sub-Cat 03 <span>2 offers</span></div></a></li>
+                        </ul>
+                    </div>
+                </div>
+ *@
+                <h1 class="d-none d-lg-block text-center mb-4">Ventura City</h1>
+
+                <!-- Action List -->
+                <div class="action-list">
+                    <div class="dropdown  d-none">
+                        <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sort by: <i class="bi bi-filter-left"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="" class="dropdown-item active">Coming First</a></li>
+                            <li><a href="" class="dropdown-item">Coming Last</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="form-check form-check-reverse form-switch">
+                        <label for="card_toggle" class="form-check-label">Grid View</label>
+                        <input id="card_toggle" class="form-check-input" type="checkbox" @bind="IsGrid" />
+                    </div>
+                </div>
+
+                <!-- Business Cards -->
+                <ul id="card_container" class="card-group card-list">
+                    @if (businessList != null && businessList.Count > 0)
+                    {
+                        foreach (var item in businessList)
+                        {
+                            <BusinessCard Business="item" IsGridView="IsGrid"></BusinessCard>
+                        }
+                    }
+                    else
+                    {
+                        <LoadingCard></LoadingCard>
+
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </main>
+    <!-- ========== MAIN CONTENT END ========== -->
+
+</div>
+
+@code {
+    #region Parameters
+
+    [Parameter]
+    public string? CategoryId { get; set; }
+
+    private bool IsGrid;
+
+    #endregion
+
+    #region Injected References
+
+    private IJSObjectReference? businessesJsRefernce;
+    private DotNetObjectReference<Businesses>? businessesDotnetReference;
+
+    #endregion
+
+    #region Data Models
+
+    private List<CategoryItem>? mainCategories;
+    private List<BusinessItem>? businessList;
+    private string CategoryName = string.Empty;
+    private string CategoryKey = string.Empty;
+ 
+    #endregion
+
+    #region Lifecycle Methods
+
+    protected override async void OnInitialized()
+    {
+        businessesJsRefernce = await jSRuntime.InvokeAsync<IJSObjectReference>("import", "./RazorViews/Businesses.razor.js");
+        await jSRuntime.InvokeVoidAsync("Helpers.setDotNetHelper", DotNetObjectReference.Create(this));
+
+        businessesDotnetReference = DotNetObjectReference.Create(this);
+
+        var DataArray = CategoryId.Split(',');
+
+        if (DataArray[0] == "City")
+        {
+            // CategoryKey = DataArray[0];
+            GetCityBusiness(DataArray[1], string.Empty);
+
+        }
+        else if (DataArray[0] == "Search")
+        {
+            GetCityBusiness(string.Empty, DataArray[1]);
+        }
+        else
+        {
+            CategoryKey = DataArray[0];
+            await GetBusiness(CategoryKey);
+            CategoryName = DataArray[1];
+        }
+
+
+
+        GetMainCategories();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(2000);
+            SetupTabs();
+        }
+    }
+
+    #endregion
+
+    #region JS Setup
+
+    private async void SetupTabs()
+    {
+        //await businessesJsRefernce.InvokeVoidAsync("initCatSlider");
+        await businessesJsRefernce.InvokeVoidAsync("initToggleSwitch");
+
+    }
+
+    #endregion
+
+    #region API Calls
+
+    private async void GetMainCategories()
+    {
+        var categoryRequest = new CategoryRequest();
+        var output = await apiService.GetAppMainCategories(categoryRequest);
+
+        try
+        {
+            if (output.Success && output.Data != null)
+            {
+                output.Data.RemoveAt(0);
+                var main_categories = output.Data;
+
+                var diningcategory = main_categories.FirstOrDefault(x => x.Name == "Dining");
+                main_categories.Remove(diningcategory);
+                main_categories.Insert(0, diningcategory);
+
+                mainCategories = main_categories;
+                await InvokeAsync(StateHasChanged);
+                await businessesJsRefernce.InvokeVoidAsync("owlCarouselstart");
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching main categories: {ex.Message}");
+        }
+    }
+
+    private async Task GetBusiness(string category)
+    {
+        try
+        {
+            
+            var businessCategoryRequest = new CategoryBusinessRequest(category);
+            var output = await apiService.GetBusinessBasedonSubCategory(businessCategoryRequest);
+            businessList = output.Data;
+            await InvokeAsync(StateHasChanged);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching categories: {ex.Message}");
+        }
+    }
+    private async void GetCityBusiness(string city, string searchterm)
+    {
+        try
+        {
+            var cityBusinessRequest = new CityBusinessRequest(city, searchterm);
+            var output = await apiService.GetCityBusiness(cityBusinessRequest);
+            businessList = output.Data;
+            await InvokeAsync(StateHasChanged);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching categories: {ex.Message}");
+        }
+    }
+ 
+
+    #endregion
+
+    #region Navigation
+
+    private async void HandleSelectedCategory(CategoryItem categoryItem)
+    {
+        if (categoryItem.Category_Sub_Key == CategoryKey) return;
+        else
+        {
+            CategoryName = categoryItem.Name;
+            businessList.Clear();
+            await InvokeAsync(StateHasChanged);
+            await GetBusiness(categoryItem.Category_Sub_Key);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public async void GoBack()
+    {
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+
+    private async void HandleCategorySelected(CategoryItem categoryItem)
+    {
+        if (categoryItem.Category_Sub_Key == CategoryKey) return;
+        else
+        {
+            businessList.Clear(); 
+            await InvokeAsync(StateHasChanged);
+            GetBusiness(categoryItem.Category_Sub_Key); 
+        }
+    }
+
+    #endregion
+}

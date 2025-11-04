@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EnetCNMAUI.AppShell"
+             xmlns:controls="clr-namespace:EnetCNMAUI.Views"
+             xmlns:fontawesome="clr-namespace:FontAwesome"
+             Shell.TabBarBackgroundColor="#3055FA"
+             Shell.TabBarForegroundColor="White"
+             Shell.TabBarUnselectedColor="Gray"
+             Shell.TabBarTitleColor="White"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="AppShell">
+    <Shell.Resources>
+        <Style x:Key="ItemGrid" TargetType="Grid">
+            <Setter Property="RowDefinitions" Value="40" />
+            <Setter Property="ColumnDefinitions" Value="45,10*" />
+        </Style>
+        <Style x:Key="ItemLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontAttributes" Value="Bold"></Setter>
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="ItemHeaderLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#778094" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        
+    </Shell.Resources>
+
+
+    <Shell.FlyoutHeader>
+        <StackLayout BackgroundColor="#2A2A40" Padding="10" Orientation="Vertical">
+            <Image Source="user_image.png" WidthRequest="70" HeightRequest="70" Margin="0,10"/>
+            <Label Text="Gulf Coast Auto Truck Repair" FontSize="Medium" TextColor="White" Margin="0,10"/>
+            <Label Text="Member since 4 months" FontSize="Small" TextColor="Gray"/>
+        </StackLayout>
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutContent>
+        <VerticalStackLayout BackgroundColor="#2A2A40" Padding="20">
+    <!-- Header -->
+    <Label Text="EnetCNMAUI" 
+           FontSize="Medium" 
+           TextColor="LightGray" 
+           FontAttributes="Bold"
+           Margin="0,0,0,20"/>
+
+    <!-- Menu Items -->
+    <VerticalStackLayout Spacing="30">
+        <HorizontalStackLayout AutomationId="AboutEnetCNMAUI" Spacing="10">
+            <Image Source="about_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="About EnetCNMAUI" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+            <HorizontalStackLayout.GestureRecognizers>
+                 <TapGestureRecognizer Tapped="NavigationEventHandler"></TapGestureRecognizer>
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Image Source="add_business_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="Add Your Business" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+            <HorizontalStackLayout.GestureRecognizers>
+                 <TapGestureRecognizer Tapped="NavigationEventHandler"></TapGestureRecognizer>
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Image Source="invite_business_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="Invite a Business" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+            <HorizontalStackLayout.GestureRecognizers>
+                 <TapGestureRecognizer Tapped="NavigationEventHandler"></TapGestureRecognizer>
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Image Source="invite_friend_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="Invite a Friend" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+            <HorizontalStackLayout.GestureRecognizers>
+                 <TapGestureRecognizer Tapped="NavigationEventHandler"></TapGestureRecognizer>
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+
+          <!-- Account Section Header -->
+    <Label Text="Account" FontSize="Small" TextColor="LightGray" Margin="0,20,0,20"/>
+
+    <!-- Account Menu Items -->
+    <VerticalStackLayout Spacing="30">
+        <HorizontalStackLayout Spacing="10">
+            <Image Source="help_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="Help" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+            <HorizontalStackLayout.GestureRecognizers>
+                 <TapGestureRecognizer Tapped="NavigationEventHandler"></TapGestureRecognizer>
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Image Source="settings_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="Account Settings" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Image Source="logout_icon.png" WidthRequest="24" HeightRequest="24"/>
+            <Label Text="Logout" Style="{StaticResource ItemLabel}" VerticalOptions="Center"/>
+            <HorizontalStackLayout.GestureRecognizers>
+                 <TapGestureRecognizer Tapped="NavigationEventHandler"></TapGestureRecognizer>
+            </HorizontalStackLayout.GestureRecognizers>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+ 
+    
+</VerticalStackLayout>
+
+
+    </Shell.FlyoutContent>
+
+    
+    <!-- Additional Options -->
+    <Shell.FlyoutFooter>
+      
+
+   <VerticalStackLayout VerticalOptions="End" BackgroundColor="#2A2A40" Padding="20">
+
+    <!-- Dark Mode Toggle -->
+    <HorizontalStackLayout Spacing="10" Margin="0,30,0,0" HorizontalOptions="Center">
+        <Label Text="Dark Mode" FontSize="Medium" TextColor="White" VerticalOptions="Center"/>
+        <Switch IsToggled="True" ThumbColor="Red"/>
+    </HorizontalStackLayout>
+     </VerticalStackLayout>
+     </Shell.FlyoutFooter>
+
+
+    <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
+        <ShellContent    ContentTemplate="{DataTemplate controls:LoginPage}"/>
+    </ShellItem>   
+    <ShellItem Route="WelComePage" FlyoutItemIsVisible="False">
+        <ShellContent    ContentTemplate="{DataTemplate controls:WelComePage}"/>
+    </ShellItem>
+    <ShellItem Route="RegistrationPage" FlyoutItemIsVisible="False">
+        <ShellContent    ContentTemplate="{DataTemplate controls:RegistrationPage}"/>
+    </ShellItem>
+   
+    
+    <FlyoutItem Title="Home"    >
+        <FlyoutItem.Icon>
+            <FontImageSource Color="#1E1F17" FontAutoScalingEnabled="False" FontFamily="FA-PL" Glyph="{x:Static fontawesome:FontAwesomeIcons.House}"></FontImageSource>
+        </FlyoutItem.Icon>
+        <ShellContent  Route="HomePage" ContentTemplate="{DataTemplate controls:HomePage}" />
+    </FlyoutItem>
+     <!--<FlyoutItem Title="Feed"    >
+        <FlyoutItem.Icon>
+            <FontImageSource Color="#1E1F17" FontAutoScalingEnabled="False" FontFamily="FA-PL" Glyph="{x:Static fontawesome:FontAwesomeIcons.House}"></FontImageSource>
+        </FlyoutItem.Icon>
+        <ShellContent  Route="FeedPage" ContentTemplate="{DataTemplate controls:FeedPage}" />
+    </FlyoutItem>
+     <FlyoutItem Title="Businesses"    >
+        <FlyoutItem.Icon>
+            <FontImageSource Color="#1E1F17" FontAutoScalingEnabled="False" FontFamily="FA-PL" Glyph="{x:Static fontawesome:FontAwesomeIcons.House}"></FontImageSource>
+        </FlyoutItem.Icon>
+        <ShellContent  Route="BusinessesPage" ContentTemplate="{DataTemplate controls:BusinessesPage}" />
+    </FlyoutItem>
+     <FlyoutItem Title="Offers"    >
+        <FlyoutItem.Icon>
+            <FontImageSource Color="#1E1F17" FontAutoScalingEnabled="False" FontFamily="FA-PL" Glyph="{x:Static fontawesome:FontAwesomeIcons.House}"></FontImageSource>
+        </FlyoutItem.Icon>
+        <ShellContent  Route="OffersPage" ContentTemplate="{DataTemplate controls:OffersPage}" />
+    </FlyoutItem>
+     <FlyoutItem Title="More"    >
+        <FlyoutItem.Icon>
+            <FontImageSource Color="#1E1F17" FontAutoScalingEnabled="False" FontFamily="FA-PL" Glyph="{x:Static fontawesome:FontAwesomeIcons.House}"></FontImageSource>
+        </FlyoutItem.Icon>
+        <ShellContent  Route="MorePage" ContentTemplate="{DataTemplate controls:MorePage}" />
+    </FlyoutItem>-->
+     <TabBar>
+        <ShellContent  Title="Feed" Route="FeedPage" ContentTemplate="{DataTemplate controls:FeedPage}" >
+            <ShellContent.Icon>
+                 <FontImageSource FontFamily="FontAwesome"  Glyph="{x:Static fontawesome:FontAwesomeIcons.MoneyCheck}" /> <!-- Home icon -->
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent  Title="Businesses" Route="BusinessesPage" ContentTemplate="{DataTemplate controls:BusinessesPage}">
+            <ShellContent.Icon>
+                 <FontImageSource FontFamily="FontAwesome"  Glyph="{x:Static fontawesome:FontAwesomeIcons.Shop}"  /> <!-- Home icon -->
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent  Title="Offers" Route="OffersPage" ContentTemplate="{DataTemplate controls:OffersPage}" >
+            <ShellContent.Icon>
+                 <FontImageSource FontFamily="FontAwesome"  Glyph="{x:Static fontawesome:FontAwesomeIcons.Scissors}"  /> <!-- Home icon -->
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent   Title="More" Route="MorePage" ContentTemplate="{DataTemplate controls:MorePage}" >
+            <ShellContent.Icon>
+                 <FontImageSource FontFamily="FontAwesome"  Glyph="{x:Static fontawesome:FontAwesomeIcons.EllipsisVertical}"  /> <!-- Home icon -->
+            </ShellContent.Icon>
+        </ShellContent>
+     </TabBar>
+   
+</Shell>

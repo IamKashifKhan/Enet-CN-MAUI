@@ -1,0 +1,162 @@
+﻿@if (Category.Name == CategoryConstants.Cities)
+{
+   @*  <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="order-lg-first d-flex justify-content-lg-center align-items-center cities"
+       data-bs-toggle="offcanvas" data-bs-target="#offcanvasCities" aria-controls="offcanvasCities">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/cities.svg" alt="" /> <span>Cities</span> <i class="bi bi-chevron-down d-none d-lg-block"></i>
+        </h6>
+    </a> *@
+    <!--\/Cities Tile/OffCanvas START\/-->
+    <a href="" class="order-lg-first d-flex justify-content-lg-center align-items-center cities" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCities" aria-controls="offcanvasCities">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end justify-content-lg-start align-items-center gap-2 gap-lg-3"> <img src="img/cities.svg" alt="" /> <span>Cities</span> <i class="bi bi-chevron-down d-none d-lg-block"></i></h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.EatAndTreat)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center eats">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/eats.svg" alt="" /> <span>Eat &amp; Treat</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Dining)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center dining">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/dining.svg" alt="" /> <span>Dining</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.WineAndSpirits)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center dine-wine">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/dine-wine.svg" alt="" /> <span>Wine &amp; Spirits</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.HealthAndFitness)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center health">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/health.svg" alt="" /> <span>Health &amp; Fitness</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Automotive)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center automotive">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/automotive.svg" alt="" /> <span>Automotive</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Shops)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center shop">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/shop.svg" alt="" /> <span>Shops</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Pets)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center pets">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/pets.svg" alt="" /> <span>Pets</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.BeautyAndSpas)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center beauty">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/beauty.svg" alt="" /> <span>Beauty &amp; Spa</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Entertainment)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center entertainment">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/entertainment.svg" alt="" /> <span>Entertainment</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Kids)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center kids">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/kids.svg" alt="" /> <span>Kids</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.BusinessServices)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex d-lg-none align-items-center business-services">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/business-services.svg" alt="" /> <span>Business Services</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Home)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex d-lg-none align-items-center home">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/home.svg" alt="" /> <span>Home</span>
+        </h6>
+    </a>
+}
+else if (Category.Name == CategoryConstants.Bogo)
+{
+    <a href="" @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+       class="d-flex align-items-center bogo">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/bogo.svg" alt="" /> <span>BOGO</span>
+        </h6>
+    </a>
+}
+else if (Category.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks)
+{
+    <a href=""  @onclick:preventDefault @onclick="@(async () => await OnSelected.InvokeAsync(Category))" class=" d-flex align-items-center perks">
+        <h6 class="d-flex flex-wrap flex-lg-nowrap flex-column flex-lg-row justify-content-end
+                       justify-content-lg-start align-items-center gap-2 gap-lg-3">
+            <img src="img/perks.svg" alt="" /> <span>PERKS</span>
+        </h6>
+    </a>
+}
+
+
+@code {
+    [Parameter, EditorRequired] public CategoryItem Category { get; set; } = null!;
+    [Parameter, EditorRequired] public EventCallback<CategoryItem> OnSelected { get; set; }
+
+    
+}

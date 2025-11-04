@@ -1,0 +1,109 @@
+﻿@inject IJSRuntime JSRuntime
+@using ConnectNow.Domain.Models.MVC
+@using ConnectNow.Views
+@using Plugin.Firebase.CloudMessaging;
+@inject ICNApiService ApiService
+
+<div id="app">
+  <div class="d-flex flex-column">
+
+    <!--\/header START\/-->
+    <header class="nofoot fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+      <div class="container d-flex flex-row justify-content-between">
+
+        <!--\/LOGO START\/-->
+        <a href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
+          <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" style="height: 42px;" />
+        </a> <!--/\LOGO END/\-->
+
+      </div> <!--/\.container/\-->
+      <!--\/Mobile TOP START\/-->
+      <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+        <div class="mob_top-left invisible"> <a href="login.html" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"> <i class="bi bi-chevron-left"></i> </a> </div>
+        <div class="mob_top-head invisible"> <div class="fs-5 text-truncate lh-lg">Well Done!</div> </div>
+        <div class="mob_top-right invisible">
+          <div class="d-flex">
+            <a href="" class="link-light p-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch"> <i class="bi bi-search"></i> </a>
+            <div id="offcanvasSearch" class="offcanvas offcanvas-top" data-bs-scroll="false" tabindex="-1">
+              <div class="offcanvas-body p-1 px-2">
+                <button type="button" class="btn-close position-absolute end-0 p-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!--/\Mobile TOP END/\-->
+    </header> <!--/\header END/\-->
+ 
+    <!--\/main content START\/-->
+    <main class="flex-shrink-0 mb-0">
+      <div class="container-fluid">
+        <div class="row">
+
+          <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+            <h1 class="fs-36 fw-light lh-sm my-2">Well Done!</h1>
+            <h6 class="text-center text-body-emphasis fs-18">Let's Connect <span class="d-block text-body fw-normal fs-3 lh-sm">to your Local Community</span> </h6>
+            <img src="img/download-application.png" class="my-5" alt="" />
+                        <a href="landing-page.html" @onclick="Continue" class="btn btn-sm btn-secondary mt-5">Continue</a>
+          </div>
+
+        </div>
+      </div>
+    </main> <!--/\main content END/\-->
+
+  </div>
+</div>
+
+@code {
+
+    private bool IsAppBusy = false;
+
+     protected override async void OnInitialized()
+    {
+        base.OnAfterRender(true);
+    }
+
+
+    private async void Continue()
+    {
+        if (IsAppBusy) return;
+        IsAppBusy = true;
+        try
+        {
+            await GetSubscription();
+
+            await Shell.Current.GoToAsync("//HomePage");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}"); ;
+        }
+        finally
+        {
+            IsAppBusy = false;
+        }
+    }
+
+
+    private async Task GetSubscription()
+    {
+        try
+        {
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var output = await this.ApiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
+            if (output.Success && output.Data != null && output.Data.Count > 0)
+            {
+                var Plandetails = output.Data[0];
+                App.PlanDetails.IsActive = Plandetails.IsActive;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+    }
+
+
+
+}

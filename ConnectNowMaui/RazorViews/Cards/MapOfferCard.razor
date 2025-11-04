@@ -1,0 +1,103 @@
+﻿@inject ILocalCache LocalCache
+
+@if (isActivePlan)
+{
+    <div class="card">
+        <a href="">
+            <div>
+                <h6 class="card-title text-truncate">@Offer.Heading</h6>
+                <div class="bus-title">
+                    <img src="@Offer.BusinessLogoPath" alt="" />
+                    <h6 class="bus-label text-truncate">@Offer.BusinessName</h6>
+                </div>
+            </div>
+            <div class="card-img" style="background-image: url('@Offer.ThumbnailPath');"></div>
+            <div class="card-redeem">
+                <button class="btn btn-primary btn-sm me-auto" @onclick:stopPropagation="true"
+                        @onclick="HandleRedeemAsync">
+                    Redeem
+                </button>
+                <span title="Redemptions"><i class="bi bi-ticket-detailed"></i>  @Offer.RedemptionsCount</span>
+                <span title="Views"><i class="bi bi-eye"></i>  @Offer.OfferViews</span>
+            </div>
+        </a>
+    </div>
+
+}
+else
+{
+    <div class="card blur">
+        <div class="member-only">
+            To view and redeem this offer, please upgrade your account...
+            <button class="btn btn-secondary btn-sm d-flex mx-auto mt-1"><img src="img/lock.svg" class="me-1" alt=""> Start Saving</button>
+        </div>
+        <a href="">
+            <div>
+                <h6 class="card-title text-truncate">@Offer.Heading</h6>
+                <div class="bus-title">
+                    <img src="@Offer.BusinessLogoPath" alt="" />
+                    <h6 class="bus-label text-truncate">@Offer.BusinessName</h6>
+                </div>
+            </div>
+            <div class="card-img" style="background-image: url('@Offer.ThumbnailPath');"></div>
+            <div class="card-redeem">
+                <button class="btn btn-primary btn-sm me-auto" @onclick:stopPropagation="true"
+                        @onclick="HandleRedeemAsync">
+                    Redeem
+                </button>
+                <span title="Redemptions"><i class="bi bi-ticket-detailed"></i>  @Offer.RedemptionsCount</span>
+                <span title="Views"><i class="bi bi-eye"></i>  @Offer.OfferViews</span>
+            </div>
+        </a>
+    </div>
+}
+
+
+ 
+
+@code {
+    [Parameter, EditorRequired] public OffersMapItem Offer { get; set; } = null!;
+    [Parameter, EditorRequired] public EventCallback<OffersMapItem> OnSelected { get; set; }
+ 
+
+    public AALUser _user { get; set; } = default!;
+    private bool isActivePlan;
+    private PlanDetails CurrentPlanDetail { get; set; } = null!;
+    private IJSObjectReference? mobilenav;
+    private DotNetObjectReference<OfferCard>? mobilenavReference;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    private IJSObjectReference? _module;
+    private bool _busy;
+
+    protected override async  Task OnInitializedAsync()
+    {
+        CurrentPlanDetail = await LocalCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
+        isActivePlan = CurrentPlanDetail?.IsActive ?? false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/Cards/MapOfferCard.razor.js");
+        }
+    }
+
+    private async Task HandleRedeemAsync()
+    {
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            if (OnSelected.HasDelegate)
+                await OnSelected.InvokeAsync(Offer);
+
+            // Now open the offcanvas explicitly
+            if (_module is not null)
+                await _module.InvokeVoidAsync("showOffcanvas", "#offcanvasRedeem");
+        }
+        finally { _busy = false; }
+    }
+
+
+}

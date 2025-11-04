@@ -1,0 +1,138 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@inject IMapConfig MapConfig
+
+<div id="@_mapId"
+     class="@CssClass"
+     style="width:@Width; height:@Height; @ExtraStyle"></div>
+
+@code {
+    // ----- Configurable size -----
+    [Parameter] public string Width { get; set; } = "100%";
+    [Parameter] public string Height { get; set; } = "400px";
+    [Parameter] public string? CssClass { get; set; }
+    [Parameter] public string? ExtraStyle { get; set; }   // e.g., "border-radius:12px;"
+
+    // ----- Map params -----
+    [Parameter] public string ApiKey { get; set; } = "YOUR_API_KEY";
+    [Parameter] public double StartLat { get; set; } = 34.197504;
+    [Parameter] public double StartLng { get; set; } = -119.177052;
+    [Parameter] public int StartZoom { get; set; } = 12;
+    [Parameter] public EventCallback<MapViewChangedArgs> OnViewChanged { get; set; }
+    [Parameter] public EventCallback<int> OnMapPinTapped { get; set; }
+
+    private string _mapId = $"map_{Guid.NewGuid():N}";
+    private bool _initialized;
+    private DotNetObjectReference<GoogleMap>? _selfRef;
+
+    // Keep prior size so we can detect changes
+    private string? _prevWidth;
+    private string? _prevHeight;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _initialized) return;
+
+        _selfRef = DotNetObjectReference.Create(this);
+
+        try
+        {
+            await JS.InvokeVoidAsync("gmapsInterop.load", MapConfig.GoogleMapsApiKey);
+            await JS.InvokeVoidAsync("gmapsInterop.initMap",
+                _mapId,
+                new { lat = StartLat, lng = StartLng },
+                StartZoom,
+                _selfRef);
+
+            _prevWidth = Width;
+            _prevHeight = Height;
+            _initialized = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Google Maps initialization error: {ex.Message}");
+            // You could show a user-friendly error message here
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // If size changed after init, push to JS (runtime resize)
+        if (_initialized && (Width != _prevWidth || Height != _prevHeight))
+        {
+            await JS.InvokeVoidAsync("gmapsInterop.resize", _mapId, Width, Height);
+            _prevWidth = Width;
+            _prevHeight = Height;
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnMapViewChanged(MapViewChangedArgs args)
+    {
+        if (OnViewChanged.HasDelegate)
+            await OnViewChanged.InvokeAsync(args);
+    }
+
+    // Public helpers
+    public Task SetCenterAsync(double lat, double lng)
+        => JS.InvokeVoidAsync("gmapsInterop.setCenter", lat, lng).AsTask();
+
+    public Task SetZoomAsync(int zoom)
+        => JS.InvokeVoidAsync("gmapsInterop.setZoom", zoom).AsTask();
+
+    public Task AddMarkerAsync(double lat, double lng,int business_key, string title = "", string offerCount = "" )
+        => JS.InvokeVoidAsync("gmapsInterop.addMarker", lat, lng, business_key, title, offerCount).AsTask();
+
+    public Task FitAsync()
+        => JS.InvokeVoidAsync("gmapsInterop.fitToMarkers").AsTask();
+
+    public Task ClearMarkersAsync()
+        => JS.InvokeVoidAsync("gmapsInterop.clearMarkers").AsTask();
+
+    public Task SetFixCenterAsync(double lat, double lng)
+        => JS.InvokeVoidAsync("gmapsInterop.setFixedCenter", lat, lng).AsTask();
+
+    public Task SetRadiusAsync(double meters)
+        => JS.InvokeVoidAsync("gmapsInterop.setRadiusMeters", meters).AsTask();
+
+    // Optional: imperative size change method
+    public Task SetSizeAsync(string? width = null, string? height = null)
+        => JS.InvokeVoidAsync("gmapsInterop.resize", _mapId, width ?? Width, height ?? Height).AsTask();
+
+    public Task RemoveCircleAsync()
+        => JS.InvokeVoidAsync("gmapsInterop.removeCircle").AsTask();
+
+    public Task HideCircleAsync()
+        => JS.InvokeVoidAsync("gmapsInterop.hideCircle").AsTask();
+
+    public Task ShowCircleAsync()
+        => JS.InvokeVoidAsync("gmapsInterop.showCircle").AsTask();
+
+    public void Dispose() => _selfRef?.Dispose();
+
+    public class MapViewChangedArgs
+    {
+        public double CenterLat { get; set; }
+        public double CenterLng { get; set; }
+        public int Zoom { get; set; }
+        public Bounds Bounds { get; set; } = new();
+        public double CircleCenterLat { get; set; }
+        public double CircleCenterLng { get; set; }
+        public double CircleRadiusMeters { get; set; }
+    }
+    public class Bounds
+    {
+        public double North { get; set; }
+        public double South { get; set; }
+        public double East { get; set; }
+        public double West { get; set; }
+    }
+
+    [JSInvokable]
+    public async Task OnPinClick(int business_key)
+    {
+        await OnMapPinTapped.InvokeAsync(business_key);
+        StateHasChanged();
+    }
+
+}

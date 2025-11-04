@@ -1,0 +1,13 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.map-fullscreen {
+    position: fixed; /* take the whole screen */
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    width: 100vw;
+    height: 100dvh; /* dynamic viewport height (mobile-friendly) */
+    border-radius: 0;
+    z-index: 0; /* adjust if you have overlays */
+}

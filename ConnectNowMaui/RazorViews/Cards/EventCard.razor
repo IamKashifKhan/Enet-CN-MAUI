@@ -1,0 +1,76 @@
+﻿ 
+<li class="card" @onclick="HandleClick">
+    <a href="event-details.html">
+
+        @if (IsToday)
+        {
+            <div class="event_date today"> Today </div>
+
+        }
+        else if (IsSingleDay)
+        {
+              <div class="event_date">
+                    <span class="event_month_start"> @Event.EventStart.ToString("MMM") </span>
+                    <span class="event_day_start"> @Event.EventStart.ToString("dd")  </span>
+                  </div>
+        }
+        <div>
+            <h6 class="event_title text-truncate">
+              @Event.Title
+                <button class="heart d-none" data-bs-toggle="button" aria-selected="true"></button>
+            </h6>
+            <p class="event_time text-truncate">
+                <i class="bi bi-clock"></i>
+                <span class="event_time_start"> @StartTimeText </span>
+                <span> &ndash; </span>
+                <span class="event_time_end"> @EndTimeText </span>
+            </p>
+            <p class="event_loca_venue text-truncate">
+                <i class="bi bi-geo-alt"></i>
+               @LocationText
+            </p>
+        </div>
+    </a>
+</li>
+
+@code {
+    [Parameter, EditorRequired] public EventItem Event { get; set; } = null!;
+    [Parameter] public EventCallback<EventItem> OnSelected { get; set; }
+
+    string EventHref => string.IsNullOrWhiteSpace(Event.EventURL) ? "javascript:void(0)" : Event.EventURL;
+    string DisplayTitle => string.IsNullOrWhiteSpace(Event.Title) ? Event.Name : Event.Title;
+
+    bool IsToday =>
+        DateOnly.FromDateTime(Event.EventStart) <= DateOnly.FromDateTime(DateTime.Now) &&
+        DateOnly.FromDateTime(DateTime.Now) <= DateOnly.FromDateTime(Event.EventEnd);
+
+    bool IsSingleDay => Event.EventStart.Date == Event.EventEnd.Date;
+    bool HasPrice => Event.PriceRangeMin > 0 || Event.PriceRangeMax > 0;
+
+    string StartTimeText => string.IsNullOrWhiteSpace(Event.StartTime)
+        ? Event.EventStart.ToString("hh:mm tt")
+        : Event.StartTime;
+
+    string EndTimeText => string.IsNullOrWhiteSpace(Event.EndTime)
+        ? Event.EventEnd.ToString("hh:mm tt")
+        : Event.EndTime;
+    string LocationText => string.IsNullOrEmpty(Event.LocationName)
+        ? Event.City: Event.LocationName;
+
+    string PriceText => (Event.PriceRangeMin, Event.PriceRangeMax) switch
+    {
+        ( > 0, > 0) => $"{Event.PriceRangeMin:0}–{Event.PriceRangeMax:0}",
+        ( > 0, <= 0) => $"{Event.PriceRangeMin:0}+",
+        _ => ""
+    };
+
+  
+
+    async Task HandleClick(MouseEventArgs _)
+    {
+        if (OnSelected.HasDelegate)
+            await OnSelected.InvokeAsync(Event);
+    }
+
+ 
+}

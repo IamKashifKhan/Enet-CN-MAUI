@@ -1,0 +1,476 @@
+﻿@using ConnectNow.Services.Local
+@using ConnectNow.Views
+
+@inject ILocalCache localCache
+@inject ICNApiService apiService
+@inject ILoginService loginService
+@inject IThemeManager themeManager
+@inject IJSRuntime jSRuntime
+@inject IOfferService offerFavoriteService
+@inject IMapConfig MapConfig
+
+ <div id="app">
+  <div class="d-flex flex-column">
+
+    <!--\/header START\/-->
+    <header class="fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+      <div class="container d-flex flex-row justify-content-between">
+
+        <!--\/LOGO START\/-->
+        <a href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
+          <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
+        </a> <!--/\LOGO END/\-->
+
+        <!--\/DropDown Categories START\/-->
+        <div class="btn-group d-none d-lg-flex align-self-start ms-lg-4 ms-xl-5 mt-auto mb-1">
+          <button class="btn btn-primary btn-sm dropdown-toggle rounded-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">All Categories</button>
+          <ul class="dropdown-menu shadow">
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">BOGO <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="perks.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">PERKS! <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Dining <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Wine &amp; Spirits <small class="badge text-bg-secondary rounded-pill p-1">14</small></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Eat &amp; Treat <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Beauty &amp; Spas <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Health &amp; Fitness <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Automotive <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Shops <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Pets <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Entertainment <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Kids <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Business Services <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+            <li><a href="business-list.html" class="dropdown-item d-flex justify-content-between align-items-baseline px-2">Home <span class="badge text-bg-secondary rounded-pill p-1">4</span></a></li>
+          </ul>
+        </div> <!--/\DropDown Categories END/\-->
+
+      </div> <!--/\.container/\-->
+      <!--\/Mobile TOP START\/-->
+      <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+        <div class="mob_top-left visible"> <a @onclick="()=>GoBack()"  class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"> <i class="bi bi-chevron-left"></i> </a> </div>
+        <div class="mob_top-head visible"> <div class="fs-5 text-truncate lh-lg"></div> </div>
+        <div class="mob_top-right visible">
+          <div class="d-flex me-5">
+            <a href="" class="link-light p-2 py-3 d-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch"> <i class="bi bi-search"></i> </a>
+            <div id="offcanvasSearch" class="offcanvas offcanvas-top"  data-bs-scroll="false" tabindex="-1">
+              <div class="offcanvas-body p-1 px-2">
+                <button type="button" class="btn-close position-absolute end-0 me-1 p-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!--/\Mobile TOP END/\-->
+    </header> <!--/\header END/\-->
+
+    <!--\/main content START\/-->
+    <main class="flex-shrink-0 py-0 bus-cover">
+
+      <!--\/Profile Cover Photo START\/-->
+      <div class="container-fluid">
+		<div class="row">
+                    <div class="cover-photo" style="background-image:url('@BusinessItem.ProfileImagePath');">
+				<div class="container px-0">
+					<div class="bus-title">
+                         <img src=@BusinessItem.LogoPath alt="" />
+                         <h2 class="bus-label">@BusinessName <span class="card-offer">@BusinessItem.ActiveOffersCount Offers</span></h2>
+					</div>
+				</div>
+				<div class="cover-bottom rounded-top-pill bg-body"></div>
+			</div>
+		</div>
+	  </div> <!--\/Profile Cover Photo END\/-->
+
+      <div class="container">
+        <div class="row">
+
+			<h3 class="text-body-emphasis mb-3">Featured Offers</h3>
+
+			<!--\/Offers List START\/-->
+            <ul class="card-group offers">
+                        @if (BusinessOffers != null && BusinessOffers.Count > 0)
+                        {
+                            foreach (var offer in BusinessOffers)
+                            {
+                                <OfferCard Offer="offer" OnSelected="HandleOfferSelected" AddRemoveToFavorite="AddRemoveFav" isActivePlan=IsPlanActive></OfferCard>
+                            }
+                        }
+                        else
+                        {
+                            <LoadingCard></LoadingCard>
+                        }
+			
+			</ul> <!--\/Offers List END\/-->
+			
+			<button class="btn btn-sm btn-light text-black-50 border rounded-pill w-auto mx-auto mt-2 mb-4" type="button">Load More Offers <i class="bi bi-chevron-up"></i></button>
+
+			<div class="d-flex flex-column flex-md-row flex-nowrap align-items-center gap-4 mb-4">
+
+                        <GoogleMap Width="100%" Height="400px" ApiKey="@MapConfig.GoogleMapsApiKey"
+                                    StartLat="@Latitude"
+                                    StartLng="@Longitude"
+                                    StartZoom="12"
+                                    OnViewChanged="OnMapChanged"
+                                    @ref="_map" />
+
+             @*    <div style="height: 500px; width:100%;" @ref="_map"></div> *@
+ 				<div class="">
+                            <div> <a href="" target="_blank" class="d-flex flex-row flex-nowrap align-items-center gap-2 text-body" title="Open Maps"> <i class="bi bi-geo-alt"></i>@BusinessItem.Address @BusinessItem.City @BusinessItem.State @BusinessItem.Country @BusinessItem.Zipcode<i class="bi bi-box-arrow-up-right text-info ms-auto"></i> </a> </div>
+					@* <div>
+
+
+
+					  <a href="#bus-time" class="d-flex flex-row flex-nowrap align-items-center gap-2 text-body" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="bus-time"> <i class="bi bi-clock"></i> <span class="text-red">Closed</span> - Opens 13:00 Mon <i class="bi bi-chevron-down ms-auto"></i> </a>
+					  <ul id="bus-time" class="collapse font-monospace">
+						<li><span data-weekday>Monday</span> <span data-opening>12:00 pm</span> <b>-</b> <span data-closing>10:00 pm</span></li>
+						<li><span data-weekday>Tuesday</span> <span data-opening>11:00 am</span> <b>-</b> <span data-closing>10:00 pm</span></li>
+						<li><span data-weekday>Wednesday</span> <span data-opening>11:00 am</span> <b>-</b> <span data-closing>10:00 pm</span></li>
+						<li><span data-weekday>Thursday</span> <span data-opening>11:00 am</span> <b>-</b> <span data-closing>10:00 pm</span></li>
+						<li><span data-weekday>Friday</span> <span data-opening>03:00 pm</span> <b>-</b> <span data-closing>12:00 am</span></li>
+						<li><span data-weekday>Saturday</span> <span data-opening>12:00 pm</span> <b>-</b> <span data-closing>10:00 pm</span></li>
+						<li><span data-weekday>Sunday</span> <span data-opening>03:00 pm</span> <b>-</b> <span data-closing>02:00 am</span></li>
+					  </ul>
+					</div> *@
+                            @if (string.IsNullOrEmpty(Timings))
+                            {
+                              //  <LoadingCard></LoadingCard>
+                            }
+                            else
+                            {
+                                <p><i class="bi bi-clock"></i>@Timings </p>
+                            }
+                            <div> <a href="" target="_blank" class="d-flex flex-row flex-nowrap align-items-center gap-2 text-body" title="Open Link"> <i class="bi bi-globe-americas"></i> @BusinessItem.Website <i class="bi bi-box-arrow-up-right text-info ms-auto"></i> </a> </div>
+					<div class="d-flex flex-row flex-nowrap align-items-center gap-3 py-3 pb-md-1">
+                                @if (SocialLinksList != null && SocialLinksList.Count>0)
+                                {
+                                    @foreach (var socialLink in SocialLinksList)
+                                    {
+                                        <SocialTag Item="socialLink"   />
+                                    }
+                                }
+					 
+					</div>
+				</div>
+			</div>
+			<h3 class="w-100">About @BusinessName</h3>
+                    <p class="w-100 text-truncate-5">@BusinessDetailItem.About</p>
+			
+			<a href="" class="btn btn-sm btn-light text-black-50 border rounded-pill w-auto mx-auto mt-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAbout" aria-controls="offcanvasAbout"> Read More <i class="bi bi-arrow-right"></i> </a>
+            <div id="offcanvasAbout" class="offcanvas offcanvas-bottom rounded-4 rounded-bottom-0 px-0 shadow" tabindex="-1">
+              <div class="offcanvas-header">
+                            <h5 id="offcanvasCitiesLabel" class="offcanvas-title">About  @BusinessName</h5>
+                <button data-bs-dismiss="offcanvas" class="btn-close" type="button" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                 <p>@BusinessDetailItem.About</p>
+              </div>
+			</div>
+
+        </div>
+      </div>
+    </main> <!--/\main content END/\-->
+
+  </div>
+</div>
+
+
+<!--\/OffCanvas "Redeem" START\/-->
+<div id="offcanvasRedeem" class="offcanvas offcanvas-bottom rounded-4 rounded-bottom-0 px-0 shadow" data-bs-scroll="false" tabindex="-1">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">@BusinessName</h5>
+        <button data-bs-dismiss="offcanvas" class="btn-close" type="button" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+
+        <div class="offer-top mb-3">
+            <div class="offer-expiry">
+                @if (SelectedOffer.EndDate != default)
+                {
+                    @:Expiry @SelectedOffer.EndDate.ToString("MM-dd-yyyy")
+                }
+            </div>
+            <button class="@(SelectedOffer.isFavorite ? "heart active" : "heart")" @onclick="@(async () => AddRemoveFav(SelectedOffer))" type="button" data-bs-toggle="button"></button>
+        </div>
+
+        <!--\/Card "Redeem" START\/-->
+                    <div class="card redeem">
+                        <h2 class="card-header">@SelectedOffer?.Heading</h2>
+                        <div class="card-body">
+                            <h6 class="redeem-desc">@SelectedOffer?.Description</h6>
+                            <p>Tap Redeem at checkout.</p>
+
+                            @if (!string.IsNullOrWhiteSpace(SelectedOffer?.ThumbnailPath))
+                            {
+                                <div class="card-img" style="background-image: url('@SelectedOffer.ThumbnailPath');"></div>
+                            }
+
+                            <p class="text-muted small mb-0">
+                                This coupon is valid only at @(SelectedOffer?.BusinessName ?? "merchant").
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary btn-lg rounded-pill px-5"
+                               data-bs-toggle="modal" data-bs-target="#modalRedeemCode">
+                                Redeem Offer
+                            </a>
+                        </div>
+                    </div>
+
+    </div>
+</div> <!--/\OffCanvas "Redeem" END/\-->
+
+			<!--\/Modal "Redeem" START\/-->
+			<div id="modalRedeemCode" class="modal fade" aria-labelledby="modalRedeemCode" aria-hidden="true" tabindex="-1">
+			  <div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title text-body-emphasis">To Redeem this Offer</h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				  </div>
+				  <div class="modal-body">
+					<p>Enter code @SelectedOffer.ConfirmationCode to redeem offer at time of checkout </p>
+					<input @bind="Code" class="form-control form-control-lg font-monospace" type="text" minlength="6" maxlength="6" placeholder="Enter Code" />
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" @onclick="ValidateCode" class="btn btn-primary" data-bs-toggle="modal">OK</button>
+				  </div>
+				</div>
+			  </div>
+			</div> <!--/\Modal "Redeem" END/\-->
+
+			<!--\/Modal "Success" START\/-->
+			<div id="modalRedeemSuccess" class="modal fade" aria-labelledby="modalRedeemSuccess" aria-hidden="true" tabindex="-1">
+			  <div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title text-body-emphasis">Congrats..! Enjoy..!</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				  </div>
+				  <div class="modal-body">
+					<p>You have successfully redeemed this offer, thank for your shopping local!</p>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-primary" @onclick="GotoSavingPage" data-bs-dismiss="modal">SEE YOUR SAVINGS</button>
+				  </div>
+				</div>
+			  </div>
+			</div> <!--/\Modal Success END/\-->
+
+@code {
+    [Parameter]
+    public string? BusinessKeyweb { get; set; }
+    public string? BusinessKey { get; set; }
+    public string? BusinessName { get; set; }
+    public string Timings { get; set; }
+    public string Code { get; set; }
+    public BusinessDetailItem BusinessDetailItem = new();
+    public List<SocialListItem> SocialLinksList = new();
+    private List<BusinessTimings> BusinessTimingsList = new();
+    public List<BusinessOfferItem> BusinessOffers = new();
+    private BusinessItem BusinessItem = new();
+
+    private BusinessOfferItem SelectedOffer = new();
+
+    private double Latitude = 34.197504;    
+    private double Longitude = -119.177052;
+
+    public bool IsPlanActive;
+
+    private GoogleMap? _map;
+    private IJSObjectReference? _routeMapModule;
+    private DotNetObjectReference<BusinessProfile>? _routeMapReference;
+
+
+    
+    protected async override void OnInitialized()  
+            {  
+                var Key = BusinessKeyweb;  
+                var DataArray = Key.Split(',');  
+                BusinessKey = DataArray[0];  
+                BusinessName = DataArray[1];  
+                BusinessItem = await localCache.GetCacheItem<BusinessItem>(LocalCacheKeys.BusinessItem(int.Parse(BusinessKey)));  
+
+                // Fix for CS1503: Ensure BusinessItem.Latitude is not null before parsing  
+      
+                if (BusinessItem.Latitude.HasValue)
+                {
+                    Latitude = BusinessItem.Latitude.Value;
+                }
+                else
+                {
+                    Latitude = 0; // Default value or handle appropriately
+                }
+                // Fix for CS1503: Ensure BusinessItem.Longitude is not null before parsing  
+                if (BusinessItem.Longitude.HasValue)  
+                {  
+                    Longitude = BusinessItem.Longitude.Value;  
+                }  
+                else  
+                {  
+                    Longitude = 0; // Default value or handle appropriately  
+                }  
+
+                 var CurrentPlanDetail = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
+                 IsPlanActive = CurrentPlanDetail?.IsActive ?? false;
+                await GetBusinessDetails();  
+                _routeMapModule = await jSRuntime.InvokeAsync<IJSObjectReference>("import", "./RazorViews/BusinessProfile.razor.js");  
+                _routeMapReference = DotNetObjectReference.Create(this);  
+
+                await _map.HideCircleAsync();
+                await _map.SetCenterAsync(Latitude, Longitude);
+                await _map.AddMarkerAsync(Latitude, Longitude,BusinessItem.BusinessKey, BusinessItem.Name, BusinessItem.ActiveOffersCount.ToString());
+                await InvokeAsync(StateHasChanged);
+            }  
+      
+ 
+
+
+    async Task  GetBusinessDetails()
+    {
+        try
+        {
+            var user = App.CurrentUser;
+            var request = new BusinessDetailoffersRequest(App.CurrentUser.UserKey, BusinessKey);
+            var offersapiresut = await apiService.GetAppBusinessOffers(request);
+            var businessdetailsresult = await apiService.GetAppBusinessDetail(request);
+            var sociallinksresult = await apiService.GetBusinessSocial(request);
+            var businesstimingresults = await apiService.AppBusinessSchedule(request);
+
+            if (businessdetailsresult.Success) BusinessDetailItem = businessdetailsresult.Data;
+
+            if (sociallinksresult.Success)
+            {
+                SocialLinksList = sociallinksresult.Data;
+            }
+
+            if (offersapiresut.Success) BusinessOffers = offersapiresut.Data;
+            foreach (var item in BusinessOffers)
+            {
+                item.IsActivePlan = !App.PlanDetails.IsActive;
+                item.ShowRedemptionLabel = item.BusinessCategory.Any(x => x.SubCategoryKey == 22 || x.SubCategoryKey == 23 || x.SubCategoryKey == 7);
+            }
+
+            if (businesstimingresults.Success)
+            {
+                BusinessTimingsList = businesstimingresults.Data;
+                ProcessTimings();
+            }
+
+            if (BusinessDetailItem != null)
+            {
+                // MessagingCenter.Send<string, MapPinItem>("UpdateList", StringConstants.CompanyPin,
+                //     new MapPinItem
+                //     {
+                //         Address = BusinessDetailItem.Address,
+                //         Description = BusinessDetailItem.Name,
+                //         Position = new Xamarin.Forms.Maps.Position(Convert.ToDouble(BusinessDetailItem.Latitude), Convert.ToDouble(BusinessDetailItem.Longitude))
+                //     });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message.ToString()}");
+        }
+        finally
+        {
+            // IsBusy = false;
+            // if (Helpers.DialogsHelper.ProgressDialog.IsShowing) { Helpers.DialogsHelper.ProgressDialog.Hide(); }
+        }
+        await InvokeAsync(StateHasChanged);
+        // Crashes.GenerateTestCrash();
+
+
+        //Categories = new ObservableCollection<Category>(DataService.GetCategories());
+    }
+    // Receives actual circle center + radius from JS every idle
+    private Task OnMapChanged(GoogleMap.MapViewChangedArgs args)
+    {
+        // If you want to filter strictly by the rendered circle, use:
+        // var circleCenter = new Location(args.CircleCenterLat, args.CircleCenterLng);
+        // var radiusMeters = args.CircleRadiusMeters;
+        // _ = UpdateMapListItemsAsync(circleCenter, radiusMeters / 1000.0);
+
+        return Task.CompletedTask;
+    }
+    public async void GoBack()
+    {
+
+        await Shell.Current.GoToAsync("..");
+    }
+    private void ProcessTimings()
+    {
+
+        foreach (var item in BusinessTimingsList)
+        {
+            if (((int)DateTime.UtcNow.DayOfWeek) == item.DayOfWeek)
+            {
+                if (DateTime.UtcNow.TimeOfDay >= item.StartTime.TimeOfDay && DateTime.UtcNow.TimeOfDay <= item.EndTime.TimeOfDay)
+                {
+                    Timings = "Open Now";
+                }
+                else
+                {
+                    Timings = $"Closed -- Opens {item.StartTime.ToString("hh:mm tt")} - {item.EndTime.ToString("hh:mm tt")}";
+                }
+            }
+            else
+            {
+                Timings = $"Closed";
+
+            }
+        }
+    }
+
+    private async void HandleOfferSelected(BusinessOfferItem offer)
+    {
+        //await Shell.Current.GoToAsync(nameof(MySavingsPage));
+        SelectedOffer  =  offer;
+        if (IsPlanActive)
+        {
+
+        }
+
+    }
+    private async void AddRemoveFav(BusinessOfferItem offer)
+    {
+
+        try
+        {
+            var result  = await offerFavoriteService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, App.CurrentUser.UserKey);
+            offer.isFavorite = result.Data;
+            WeakReferenceMessenger.Default.Send<RefreshFavorites>();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+    private async Task openWebsite(string url)
+    {
+        // NavManager.NavigateTo(url, forceLoad: true);
+    }
+
+    private async void ValidateCode()
+    {
+        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
+        var output = await apiService.RedeemOffer(redeedmOfferRequest);
+        if (output.Success)
+        {
+            _routeMapModule.InvokeVoidAsync("showHideModal", true);
+        }
+        else
+        {
+            // var action = _dialogService.DisplayAlertAsync("Alert", output.Message, "OK");
+
+        }
+        
+    }
+    private async void GotoSavingPage()
+    {
+        await Shell.Current.GoToAsync(nameof(MySavingsPage));
+
+    
+    }
+
+    
+}

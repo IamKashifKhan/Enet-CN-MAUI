@@ -1,0 +1,247 @@
+﻿@using System.Collections.ObjectModel
+@inject ICNApiService Apiservice
+
+<div id="app">
+    <div class="d-flex flex-column">
+
+        <!-- Header (kept as-is; wired up where useful) -->
+        <header class="nofoot fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+            <div class="container d-flex flex-row justify-content-between">
+                <a @onclick="() => GoBack()" href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
+                    <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
+                </a>
+
+              
+            </div>
+
+            <!-- Mobile top (kept) -->
+            <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+                <div class="mob_top-left visible"> <a @onclick="() => GoBack()"  href="business-list.html" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"> <i class="bi bi-chevron-left"></i> </a> </div>
+                <div class="mob_top-head visible"> <div class="fs-5 text-truncate lh-lg">My Savings</div> </div>
+                <div class="mob_top-right visible">
+                    <div class="d-flex">
+                        
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class="flex-shrink-0 py-0 mt-5 pt-5">
+            <div class="container">
+                <div class="row">
+
+                    <div class="d-flex flex-wrap mb-4">
+                        <h6 class="w-100 text-center text-body-emphasis fs-6">
+                            Savings since 08/25/2021
+                        </h6>
+
+                        <div class="w-50 text-center fs-12 lh-sm border-end">
+                            Saving Amount <br />
+                            @if (IsSummaryLoading)
+                            {
+                                <span class="text-muted">loading…</span>
+                            }
+                            else
+                            {
+                                <span class="text-success fs-24 fw-bold">
+                                    @FormatCurrency(RedemptionSummary?.RedemptionDiscountsTotal ?? 0m)
+                                </span>
+                            }
+                        </div>
+
+                        <div class="w-50 text-center fs-12 lh-sm">
+                            Redemptions <br />
+                            @if (IsSummaryLoading)
+                            {
+                                <span class="text-muted">loading…</span>
+                            }
+                            else
+                            {
+                                <span class="text-success fs-24 fw-bold">@((RedemptionSummary?.Redemptions ?? 0))</span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- List -->
+                    @if (!string.IsNullOrWhiteSpace(Error))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            Failed to load savings: @Error
+                        </div>
+                    }
+                    else if (IsLoading && Redemptions.Count == 0)
+                    {
+                        <div class="text-center text-muted my-4">Loading your savings…</div>
+                    }
+                    else if (Redemptions.Count == 0)
+                    {
+                        <div class="text-center text-muted my-4">No savings yet.</div>
+                    }
+                    else
+                    {
+                        <ul class="card-group my-savings">
+                            @foreach (var r in Redemptions)
+                            {
+                                <li class="card">
+                                    <div>
+                                        <h6 class="card-title text-truncate">@r.Heading</h6>
+                                        <p class="card-disc text-truncate mb-0">@r.Description</p>
+
+                                        <div class="bus-title">
+                                            @if (!string.IsNullOrWhiteSpace(r.ImagePath))
+                                            {
+                                                <img src="@r.ImagePath" alt="" />
+                                            }
+                                            <h6 class="bus-label">@r.BusinessName</h6>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-img" style="background-image: url('@(r.ImagePath ?? "img/pic-saving.jpg")');"></div>
+
+                                    <div class="card-redeem">
+                                        <span title="Saved">Savings @FormatCurrency(r.Discount)</span>
+                                        <span title="Date">Used on @r.RedemptionTimestamp.ToString("MM/dd/yyyy")</span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+
+                        @if (HasMore)
+                        {
+                            <button class="btn btn-sm btn-light text-black-50 border rounded-pill w-auto mx-auto mt-2 mb-4"
+                                    disabled="@IsLoadingMore"
+                                    @onclick="LoadMoreAsync"
+                                    type="button">
+                                @(IsLoadingMore ? "Loading…" : "Load More Savings")
+                                <i class="bi bi-chevron-up"></i>
+                            </button>
+                        }
+                    }
+
+                </div>
+            </div>
+        </main>
+
+    </div>
+</div>
+
+@code {
+    // ====== State ======
+    private bool IsLoading { get; set; }
+    private bool IsLoadingMore { get; set; }
+    private bool IsSummaryLoading { get; set; }
+    private string? Error { get; set; }
+
+    private DateTime DefaultStartDate { get; set; } = DateTime.Today; // used if summary is null
+
+    private ObservableCollection<RedemptionsItem> redemptions = new();
+    public ObservableCollection<RedemptionsItem> Redemptions
+    {
+        get => redemptions;
+        set
+        {
+            redemptions = value;
+            // if you have a SetProperty helper (like in MVVM), use it instead
+            StateHasChanged();
+        }
+    }
+
+    private RedemptionSummaryItem? RedemptionSummary { get; set; }
+
+    // ====== Paging (optional; keep if your API supports it) ======
+    private int Page { get; set; } = 1;
+    private int PageSize { get; set; } = 20;
+    private bool HasMore { get; set; } = true;
+
+    // ====== Lifecycle ======
+    protected override async Task OnInitializedAsync()
+    {
+        await GetSavingsAsync();
+    }
+
+    // ====== Actions ======
+    private async Task GetSavingsAsync(bool append = false)
+    {
+        try
+        {
+            Error = null;
+            if (!append) IsLoading = true; else IsLoadingMore = true;
+            IsSummaryLoading = !append && Page == 1;
+
+             var redemptionRequest = new GetUserRedemptionRequest(App.CurrentUser.UserKey);
+    
+
+            var redemptionsResp = await Apiservice.GetUserRedemptions(redemptionRequest);
+            var summaryResp = await Apiservice.GetUserRedemptionSummary(redemptionRequest);
+
+            if (redemptionsResp?.Success == true && redemptionsResp.Data is not null)
+            {
+                if (append)
+                {
+                    foreach (var item in redemptionsResp.Data)
+                        Redemptions.Add(item);
+                }
+                else
+                {
+                    Redemptions = new ObservableCollection<RedemptionsItem>(redemptionsResp.Data);
+                }
+
+                // HasMore heuristic: if page size items returned, assume more pages
+                HasMore = redemptionsResp.Data.Count >= PageSize;
+            }
+            else
+            {
+                // if first load fails, clear the list to show empty state
+                if (!append) Redemptions.Clear();
+                HasMore = false;
+            }
+
+            if (summaryResp?.Success == true && summaryResp.Data is not null)
+            {
+                RedemptionSummary = summaryResp.Data;
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            HasMore = false;
+        }
+        finally
+        {
+            IsLoading = false;
+            IsLoadingMore = false;
+            IsSummaryLoading = false;
+            StateHasChanged();
+        }
+    }
+
+
+    public async void GoBack()
+    {
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async Task LoadMoreAsync()
+    {
+        if (IsLoadingMore) return;
+        Page++;
+        await GetSavingsAsync(append: true);
+    }
+
+    // ====== Helpers ======
+    private MarkupString FormatCurrency(decimal amount)
+    {
+        
+        // Render with cents in <sup> to mimic your HTML sample ($573<sup>.00</sup>)
+        var abs = Math.Abs(amount);
+        var dollars = Math.Truncate(abs);
+        var cents = (int)((abs - dollars) * 100m);
+        var sign = amount < 0 ? "-" : "";
+        var html = $"{sign}${dollars:N0}<sup>.{cents:00}</sup>";
+        return new MarkupString(html);
+    }
+  
+ 
+}

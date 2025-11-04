@@ -1,0 +1,35 @@
+﻿ 
+<a @onclick="@(async () => await OnSelected.InvokeAsync(Category))" href="">
+    <div class="bus-icon"><img src="@GetCategoryIcon(Category)" alt="" /></div>
+    <div class="bus-label">@Category.Name  <span>@Category.ActiveOffersCount</span></div>
+</a>
+
+
+@code {
+
+    [Parameter, EditorRequired] public CategoryItem Category { get; set; } = null!;
+    [Parameter, EditorRequired] public EventCallback<CategoryItem> OnSelected { get; set; }
+
+
+    private  string GetCategoryIcon(CategoryItem cat)
+    {
+        if (cat.Name == CategoryConstants.Cities) return "img/cities.svg";
+        if (cat.Name == CategoryConstants.EatAndTreat) return "img/eats.svg";
+        if (cat.Name == CategoryConstants.Dining) return "img/dining.svg";
+        if (cat.Name == CategoryConstants.WineAndSpirits) return "img/dine-wine.svg";
+        if (cat.Name == CategoryConstants.HealthAndFitness) return "img/health.svg";
+        if (cat.Name == CategoryConstants.Automotive) return "img/automotive.svg";
+        if (cat.Name == CategoryConstants.Shops) return "img/shop.svg";
+        if (cat.Name == CategoryConstants.Pets) return "img/pets.svg";
+        if (cat.Name == CategoryConstants.BeautyAndSpas) return "img/beauty.svg";
+        if (cat.Name == CategoryConstants.Entertainment) return "img/entertainment.svg";
+        if (cat.Name == CategoryConstants.Kids) return "img/kids.svg";
+        if (cat.Name == CategoryConstants.BusinessServices) return "img/business-services.svg";
+        if (cat.Name == CategoryConstants.Home) return "img/home.svg";
+        if (cat.Name == CategoryConstants.Bogo) return "img/bogo.svg";
+        if (cat.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks) return "img/perks.svg";
+
+        return "img/shop.svg"; // fallback
+    }
+
+}

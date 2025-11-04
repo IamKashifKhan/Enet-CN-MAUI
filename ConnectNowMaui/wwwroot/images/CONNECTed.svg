@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="21.413" height="18.5" viewBox="0 0 21.413 18.5">
+  <g id="CONNECTed" transform="translate(0.707 0.5)">
+    <g id="Group_67" data-name="Group 67" transform="translate(-227.299 -4.136)">
+      <path id="Path_131" data-name="Path 131" d="M247.3,13.685,244.873,16.3l-.921-3.524M245.011,16a9.207,9.207,0,0,0,.537-3.113,8.511,8.511,0,0,0-8.249-8.75,7.986,7.986,0,0,0-5.762,2.489m-.891,6.367-.921-3.523L227.3,12.087m2.288-2.314a9.207,9.207,0,0,0-.537,3.113,8.51,8.51,0,0,0,8.249,8.75,7.988,7.988,0,0,0,5.763-2.489" fill="none" stroke="#ec5f3f" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+    <g id="Group_68" data-name="Group 68" transform="translate(-227.299 -4.136)">
+      <path id="Path_132" data-name="Path 132" d="M241.8,16.473V14.366A1.274,1.274,0,0,0,240.564,13h-2.029l-1.252,2.083L236.031,13H234a1.274,1.274,0,0,0-1.241,1.368v2.107" fill="none" stroke="#00c1ef" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
+      <g id="Ellipse_32" data-name="Ellipse 32" transform="translate(235.072 6.81)" fill="none" stroke="#00c1ef" stroke-miterlimit="10" stroke-width="1">
+        <circle cx="2.228" cy="2.228" r="2.228" stroke="none"/>
+        <circle cx="2.228" cy="2.228" r="1.728" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

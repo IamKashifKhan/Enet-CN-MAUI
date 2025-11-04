@@ -1,0 +1,32 @@
+﻿
+
+@if(Item.Platform == "Facebook")
+{
+    <a  href="@((Item.Link?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true) ? Item.Link : $"https://{Item.Link}")" target="_blank" class="facebook" title="Facebook Profile"> <i class="bi bi-facebook"></i> </a>
+}
+else if (Item.Platform == "Instagram")
+{
+    <a  href="@((Item.Link?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true) ? Item.Link : $"https://{Item.Link}")" target="_blank" class="instagram" title="Instagram Profile"> <i class="bi bi-instagram"></i> </a>
+
+}
+else if (Item.Platform == "Twitter")
+{
+    <a  href="@((Item.Link?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true) ? Item.Link : $"https://{Item.Link}")" target="_blank" class="twitter" title="X Profile"> <i class="bi bi-twitter-x"></i> </a>
+
+}   
+else if (Item.Platform == "Youtube")
+{
+    <a  href="@((Item.Link?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true) ? Item.Link : $"https://{Item.Link}")" target="_blank" class="youtube" title="YouTube Profile"> <i class="bi bi-youtube"></i> </a>
+
+}
+else if (Item.Platform == "Linkedin")
+{
+    <a  href="@((Item.Link?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true) ? Item.Link : $"https://{Item.Link}")" target="_blank" class="linkedin" title="LinkedIn Profile"> <i class="bi bi-linkedin"></i> </a>
+
+}
+
+
+@code {
+    [Parameter, EditorRequired] public SocialListItem Item { get; set; } = null!;
+
+}

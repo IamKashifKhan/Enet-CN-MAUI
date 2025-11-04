@@ -1,0 +1,276 @@
+﻿@using ConnectNow.Views
+
+@inject ILocalCache localCache
+@inject ICNApiService apiService
+@inject ILoginService loginService
+@inject IThemeManager themeManager
+@inject IJSRuntime jSRuntime
+
+
+<div id="app">
+    <div class="d-flex flex-column">
+
+        <!--\/header START\/-->
+        <header class="nofoot fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+            <div class="container d-flex flex-row justify-content-between">
+
+                <!--\/LOGO START\/-->
+                <a href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
+                    <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
+                </a> <!--/\LOGO END/\-->
+                <!--\/DropDown Categories START\/-->
+            
+            </div> <!--/\.container/\-->
+            <!--\/Mobile TOP START\/-->
+            <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+                <div class="mob_top-left visible"> <a href=""  @onclick="()=>GoBack()" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"> <i class="bi bi-chevron-left"></i> </a> </div>
+                <div class="mob_top-head invisible"> <div class="fs-5 text-truncate lh-lg">Event Details</div> </div>
+                <div class="mob_top-right invisible"> </div>
+            </div> <!--/\Mobile TOP END/\-->
+        </header> <!--/\header END/\-->
+        <!--\/main content START\/-->
+        <main class="flex-shrink-0 py-0 bus-cover">
+
+            <!--\/Profile Cover Photo START\/-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="cover-event" style="background-image:url('@eventItem.ImagePath');">
+                        <div class="container px-0">
+                        </div>
+                    </div>
+                </div>
+            </div> <!--/\Profile Cover Photo END/\-->
+
+            <div class="container">
+                <div class="row">
+
+                    <h1 class="event_title border-bottom position-relative lh-1 mb-2 pb-3">
+                        @eventName
+                        <button class="heart active d-none" type="button" data-bs-toggle="button"></button>
+                    </h1>
+
+                    <!--\/Event Detail START\/-->
+                    <ul class="event-detail">
+                        <li class="border-0 bg-transparent">
+                            <i class="bi bi-exclamation-circle"></i>
+                            <div>
+                                <span class="d-block fw-bold">Presented by:</span>
+                                <span class="event_presenter">@eventItem.PresentedBy</span>
+                            </div>
+                        </li>
+                        <li class="w-50">
+                            <i class="bi bi-calendar-week"></i>
+                            <div>
+                                <span class="d-block fw-bold">Day(s):</span>
+                                @if (IsSingleDay)
+                                {
+                                      <span class="event_month_start"> JuL </span> <span class="event_day_start"> @eventItem.EventStart.ToString("dd") </span>
+                               
+                                }
+                                else
+                                {
+                                      <span class="event_month_start"> JuL </span> <span class="event_day_start"> @eventItem.EventStart.ToString("dd") </span>
+                                <span> &ndash; </span>
+                                <span class="event_month_end"> AUG </span> <span class="event_day_end"> @eventItem.EventStart.ToString("dd") </span>
+                                }
+
+                            </div>
+                        </li>
+                        <li class="w-50">
+                            <i class="bi bi-clock"></i>
+                            <div>
+                                <span class="fw-bold">Starts:</span>
+                                <span class="event_time_start"> @StartTimeText </span>
+                                <br />
+                                <span class="fw-bold">Ends:</span>
+                                <span class="event_time_end">@EndTimeText </span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="bi bi-ticket-detailed"></i>
+                            <span class="fw-bold">Price:</span>
+                            <span class="event_price"> @PriceText </span>
+                        </li>
+                        <li>
+                            <a href="tel:@eventItem.Phone" target="_blank" title="Make a Call">
+                                <i class="bi bi-telephone"></i>
+                                <div>
+                                    <span class="fw-bold">Phone:</span>
+                                    <span class="event_phone">@eventItem.Phone</span>
+                                </div>
+                                <i class="bi bi-box-arrow-up-right ms-auto"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@eventItem.EventURL" target="_blank" title="Go to Website">
+                                <i class="bi bi-globe-americas"></i>
+                                <div>
+                                    <span class="fw-bold">Website:</span>
+                                    <span class="event_web">@eventItem.EventURL </span>
+                                </div>
+                                <i class="bi bi-box-arrow-up-right ms-auto"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" target="_blank" title=" ">
+                                <i class="bi bi-geo-alt"></i>
+                                <div>
+                                    <span class="event_loca_venue d-block fw-bold">@eventItem.LocationName </span>
+                                    <span class="event_loca_venue_detail"> @eventItem.Address; @eventItem.City, @eventItem.Zip </span>
+                                </div>
+                                <i class="bi bi-box-arrow-up-right ms-auto"></i>
+                            </a>
+                        </li>
+                    </ul> <!--/\Event Detail END/\-->
+                    <!--\/Description START\/-->
+                    <div class="mb-5">
+                        <h6>Event Description:</h6>
+                        <p>@eventItem.Description</p>
+                        <div id="event-desc" class="collapse">
+                            <p>@eventItem.Description.</p>
+                        </div>
+                        <button data-bs-target="#event-desc" aria-controls="event-desc" aria-expanded="false" data-bs-toggle="collapse" class="more-less">Read More</button>
+                    </div> <!--/\Description END/\-->
+
+                </div>
+            </div>
+        </main> <!--/\main content END/\-->
+        <!--\/footer START\/-->
+        <footer class="d-none d-lg-block shadow mt-auto">
+            <div class="container get-offers">
+                <h4 class="get-today-offer">Get Today's Top Offers</h4>
+                <div id="mc_embed_shell">
+                    <div id="mc_embed_signup">
+                        <form action="//allaboutlocal.us14.list-manage.com/subscribe/post?u=2d4dfb8f94681bcbf91c86884&amp;id=a89fb8de4e&amp;f_id=0031b4e5f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="col-12 col-lg-auto mb-3 mb-lg-0 validate" target="_blank">
+                            <div id="mc_embed_signup_scroll" class="footer-get-offer-bg">
+                                <div class="mc-field-group">
+                                    <span class="email-icon">
+                                        <i class="bi bi-envelope"></i>
+                                        <input id="mce-EMAIL" class="form-footer email-form email required" name="EMAIL" type="email" required="" value="" placeholder="Enter Email Address" />
+                                    </span>
+                                    <input id="mc-embedded-subscribe" class="btn btn-secondary button" name="subscribe" type="submit" value="SignUp" />
+                                </div>
+                                <div id="mce-responses" class="clear">
+                                    <div id="mce-error-response" class="response" style="display:none;"></div>
+                                    <div id="mce-success-response" class="response" style="display:none;"></div>
+                                </div>
+                                <div aria-hidden="true" style="position:absolute; left:-5000px;">
+                                    <input name="b_2d4dfb8f94681bcbf91c86884_a89fb8de4e" type="text" tabindex="-1" value="" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <p>Save every day by signing up for All About Local newsletter. By signing up, you agree to All About Local terms of service and privacy policy You may unsubscribe from the newsletters at any time. </p>
+            </div> <!--/\.get-offers/\-->
+
+            <div class="container">
+
+                <div class="row footer-bar">
+                    <div class="col-6 col-lg-3">
+                        <h5>Company</h5>
+                        <ul class="all-about">
+                            <li><a href="about-us.html">About Us</a></li>
+                            <li><a href="tips-help.html">Tips &amp; Help</a></li>
+                            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="items-user">
+                            <h5>My Profile</h5>
+                            <ul class="all-about">
+                                <li><a href="subscription-manage.html">Manage Subscription</a></li>
+                                <li><a href="subscription.html">Get Full Access</a></li>
+                                <li><a href="my-saving.html">My Saving</a></li>
+                                <li><a href="notifications.html">Notifications</a></li>
+                            </ul>
+                        </div>
+                        <h5>Connect</h5>
+                        <ul class="all-about">
+                            <li><a href="//fb.me/Allaboutlocalvc" target="_blank">Facebook</a></li>
+                            <li><a href="//instagr.am/allaboutlocalvc" target="_blank">Instagram</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 border-start footer-app">
+                        <img src="img/download-application.png" class="download-app-image float-lg-end mb-3" alt="AAL App Download" />
+                        <h3 class="get-saving">Get savings on the go!</h3>
+                        <h2 class="download-app">Download the App</h2>
+                        <h4 class="great-deal">Great Deals at Your Fingertips.</h4>
+                        <div class="app-store-icon mt-2">
+                            <a href="//apps.apple.com/us/app/all-about-local/id1597233724" target="_blank"><img src="img/App_Store.svg" alt="App Store" /></a>
+                            <a href="//play.google.com/store/apps/details?id=com.enettech.allaboutlocal" target="_blank"><img src="img/Google_Play.svg" alt="Playstore" /></a>
+                        </div>
+                    </div>
+                </div> <!--/\.footer-bar/\-->
+                <div class="row copyright">
+                    <div class="col-lg-4 footer-logo text-start">
+                        <div class="logo">
+                            <img src="img/logo.svg" onerror="this.src='img/logo.png'" alt="All About Local" />
+                            <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
+                        </div>
+                        © All About Local, Inc. All Rights Reserved.
+                    </div>
+                    <div class="col-lg-8 d-flex flex-column justify-content-end">
+                        <div class="accetp-card text-end">We Accept <img src="img/secure_payment.svg" alt="Secure Payments" /> </div>
+                        <div class="footer-links text-end">
+                            <a href="terms-of-service.html">Terms of Use</a>
+                            <a href="privacy-policy.html">Privacy Statement</a>
+                            <a href="licenses.html">Licenses</a>
+                            <a href="accessibility.html">Accessibility</a>
+                            <a href="selling-personal-info.html">Do Not Sell My Personal Information</a>
+                        </div>
+                    </div>
+                </div> <!--/\.copyright/\-->
+
+            </div>
+        </footer> <!--/\footer END/\-->
+
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string? eventName { get; set; }
+
+    public EventItem eventItem = new EventItem();
+    protected override async Task OnInitializedAsync()
+    {
+        eventItem = await localCache.GetCacheItem<EventItem>(StringConstants.SelectedEvent);
+     }
+
+    string DisplayTitle => string.IsNullOrWhiteSpace(eventItem.Title) ? eventItem.Name : eventItem.Title;
+
+    bool IsToday =>
+        DateOnly.FromDateTime(eventItem.EventStart) <= DateOnly.FromDateTime(DateTime.Now) &&
+        DateOnly.FromDateTime(DateTime.Now) <= DateOnly.FromDateTime(eventItem.EventEnd);
+
+    bool IsSingleDay => eventItem.EventStart.Date == eventItem.EventEnd.Date;
+    bool HasPrice => eventItem.PriceRangeMin > 0 || eventItem.PriceRangeMax > 0;
+
+    string StartTimeText => string.IsNullOrWhiteSpace(eventItem.StartTime)
+        ? eventItem.EventStart.ToString("hh:mm tt")
+        : eventItem.StartTime;
+
+    string EndTimeText => string.IsNullOrWhiteSpace(eventItem.EndTime)
+        ? eventItem.EventEnd.ToString("hh:mm tt")
+        : eventItem.EndTime;
+    string LocationText => string.IsNullOrEmpty(eventItem.LocationName)
+        ? eventItem.City : eventItem.LocationName;
+
+    string PriceText => (eventItem.PriceRangeMin, eventItem.PriceRangeMax) switch
+    {
+        ( > 0, > 0) => $"{eventItem.PriceRangeMin:0}–{eventItem.PriceRangeMax:0}",
+        ( > 0, <= 0) => $"{eventItem.PriceRangeMin:0}+",
+        _ => ""
+    };
+
+
+ 
+     public async void GoBack()
+    {
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+}

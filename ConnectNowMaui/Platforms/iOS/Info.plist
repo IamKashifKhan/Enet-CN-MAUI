@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.enettech.allaboutlocal</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>CFBundleShortVersionString</key>
+	<string>3.3</string>
+	<key>CFBundleVersion</key>
+	<string>7</string>
+	<key>CFBundleDisplayName</key>
+	<string>All About Local</string>
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>We request access to your location to provide personalized recommendations and offer location-based services. For example, we may suggest nearby restaurants or events based on your current location.</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>We request access to your location to provide personalized recommendations and offer location-based services. For example, we may suggest nearby restaurants or events based on your current location.</string>
+  <key>NSLocationUsageDescription</key>
+  <string>We request access to your location to provide personalized recommendations and offer location-based services. For example, we may suggest nearby restaurants or events based on your current location.</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>We request access to your location to provide personalized recommendations and offer location-based services. For example, we may suggest nearby restaurants or events based on your current location.</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>we want to upload you profile image for your profile</string>
+</dict>
+</plist>

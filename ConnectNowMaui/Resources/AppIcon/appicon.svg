@@ -1,0 +1,41 @@
+<!-- appicon.svg - MAUI-safe: no masks/filters; uses basic shapes & gradient only -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+
+  <!-- Gradients -->
+  <defs>
+    <!-- Background white -> light gray -->
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e6e6e6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background squircle -->
+  <rect x="0" y="0" width="1024" height="1024" rx="220" ry="220" fill="url(#bgGradient)"/>
+
+  <!-- Purple ring (outer ellipse), then inner ellipse re-filled with background gradient to simulate a cutout -->
+  <ellipse cx="512" cy="760" rx="280" ry="95" fill="#5A2D82"/>
+  <ellipse cx="512" cy="760" rx="200" ry="65" fill="url(#bgGradient)"/>
+
+  <!-- Drop shadow for pin (simple offset duplicate, low opacity) -->
+  <g opacity="0.18" transform="translate(0,10)">
+    <path d="M512 200
+             C 400 200, 300 300, 300 420
+             C 300 600, 512 820, 512 820
+             C 512 820, 724 600, 724 420
+             C 724 300, 624 200, 512 200 Z"
+          fill="#000000"/>
+  </g>
+
+  <!-- Green pin -->
+  <path d="M512 200
+           C 400 200, 300 300, 300 420
+           C 300 600, 512 820, 512 820
+           C 512 820, 724 600, 724 420
+           C 724 300, 624 200, 512 200 Z"
+        fill="#7AC943"/>
+
+  <!-- Circular "hole" in the pin: draw over it with the same background gradient -->
+  <circle cx="512" cy="420" r="90" fill="url(#bgGradient)"/>
+
+</svg>

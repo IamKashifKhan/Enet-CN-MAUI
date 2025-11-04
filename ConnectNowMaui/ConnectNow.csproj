@@ -1,0 +1,212 @@
+﻿
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+        <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
+        <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+        <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+        <!-- Note for MacCatalyst:
+            The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
+            When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+            The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
+            either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
+        <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+        <UseMaui>true</UseMaui>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>ConnectNow</RootNamespace>
+         <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnableDefaultCssItems>false</EnableDefaultCssItems>
+        <Nullable>enable</Nullable>
+
+        <!-- Display name -->
+        <ApplicationTitle>ConnectNow</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>com.companyname.ConnectNow</ApplicationId>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
+      <AndroidEnable16kPages>true</AndroidEnable16kPages>
+
+      <!--<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>-->
+     </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidDexTool>d8</AndroidDexTool>
+     <AndroidCreateNativeLibraryArchive>true</AndroidCreateNativeLibraryArchive>
+    <PublishTrimmed>False</PublishTrimmed>
+    <RunAOTCompilation>False</RunAOTCompilation>
+  </PropertyGroup>
+ 
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+	</PropertyGroup>
+     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+      <CreatePackage>false</CreatePackage>
+      <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+      <CodesignKey>Apple Distribution: All About Local LLC (JPCJ4632U5)</CodesignKey>
+      <MtouchLink>SdkOnly</MtouchLink>
+	  <UseInterpreter>true</UseInterpreter>
+   </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
+      <CreatePackage>false</CreatePackage>
+      <CodesignKey>Mac Developer</CodesignKey>
+      <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+       <CodesignProvision>AAL_Dev_Oct_2025</CodesignProvision>
+      <CodesignKey>Apple Development: Kashif Khan (QXCT8P64U5)</CodesignKey>
+      <ProvisioningType>manual</ProvisioningType>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- App Icon -->
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#000000" />
+
+        <!-- Splash Screen -->
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#52297a" BaseSize="200,200" />
+
+      <!-- Images -->
+        <MauiImage Include="Resources\Images\*" />
+        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+        <!-- Custom Fonts -->
+        <MauiFont Include="Resources\Fonts\*" />
+
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+       
+    </ItemGroup>
+
+    <ItemGroup>
+      
+        <PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
+      
+        <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.7" />
+      
+        <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.7" />
+      
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.111" />
+      
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+        <PackageReference Include="Plugin.Firebase" Version="3.1.4" />
+   
+        <PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
+        <PackageReference Include="IdentityModel.OidcClient" Version="6.0.0" />
+        <PackageReference Include="Plugin.Firebase.Crashlytics" Version="3.1.1" />
+      <PackageReference Include="AutoMapper" Version="15.0.1" />
+      <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.111" />
+
+
+    </ItemGroup>
+    <Target Name="LinkWithSwift" DependsOnTargets="_ParseBundlerArguments;_DetectSdkLocations" BeforeTargets="_LinkNativeExecutable">
+    <PropertyGroup>
+        <_SwiftPlatform Condition="$(RuntimeIdentifier.StartsWith('iossimulator-'))">iphonesimulator</_SwiftPlatform>
+        <_SwiftPlatform Condition="$(RuntimeIdentifier.StartsWith('ios-'))">iphoneos</_SwiftPlatform>
+    </PropertyGroup>
+    <ItemGroup>
+        <_CustomLinkFlags Include="-L" />
+        <_CustomLinkFlags Include="/usr/lib/swift" />
+        <_CustomLinkFlags Include="-L" />
+        <_CustomLinkFlags Include="$(_SdkDevPath)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(_SwiftPlatform)" />
+        <_CustomLinkFlags Include="-Wl,-rpath" />
+        <_CustomLinkFlags Include="-Wl,/usr/lib/swift" />
+    </ItemGroup>
+</Target>
+
+    <ItemGroup>
+      <Folder Include="AllAboutLocal\" />
+      <Folder Include="Services\Session\" />
+      <Folder Include="Fonts\" />
+      <Folder Include="Validations\" />
+      <Folder Include="wwwroot\images\" />
+      <Folder Include="Enums\" />
+      <Folder Include="RazorViews\PasswordReset\" />
+      <Folder Include="Views\PasswordReset\" />
+      <Folder Include="wwwroot\js\local\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="ViewModel\" />
+      <None Remove="Services\" />
+      <None Remove="Services\Session\" />
+      <None Remove="Fonts\" />
+      <None Remove="Platforms\iOS\GoogleService-Info.plist" />
+      <Content Remove="google-services.json" />
+      <None Remove="Services\Local\" />
+      <None Remove="Validations\" />
+      <Content Remove="wwwroot\fonts\FontAwesome\FontAwesome6Pro-Regular.woff" />
+      <Content Remove="wwwroot\fonts\FontAwesome\FontAwesome6Pro-Regular.woff2" />
+      <None Remove="Resources\Fonts\FontAwesome6Pro-Thin-100.otf" />
+      <None Remove="Resources\Fonts\FontAwesome6Pro-Solid-900.otf" />
+      <None Remove="Resources\Fonts\FontAwesome6Pro-Regular-400.otf" />
+      <None Remove="Resources\Fonts\FontAwesome6Pro-Light-300.otf" />
+      <None Remove="Helpers\" />
+      <Content Remove="wwwroot\images\" />
+      <None Remove="Enums\" />
+      <None Remove="RazorViews\PasswordReset\" />
+      <None Remove="Views\PasswordReset\" />
+      <None Remove="Resources\AppIcon\fglogo.svg" />
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+        <MauiAsset Include="Platforms\iOS\GoogleService-Info.plist" LogicalName="GoogleService-Info.plist" />
+    </ItemGroup>
+    <ItemGroup>
+      <BundleResource Include="Platforms\iOS\GoogleService-Info.plist" />
+      <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Thin-100.otf" />
+      <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Solid-900.otf" />
+      <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Regular-400.otf" />
+      <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Light-300.otf" />
+    </ItemGroup>
+      <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+        <GoogleServicesJson Include="google-services.json" />
+    </ItemGroup>
+      <ItemGroup>
+        <Content Include="RazorViews\BusinessProfile.razor.js" />
+        <Content Include="RazorViews\Cards\MapOfferCard.razor.js" />
+        <Content Include="RazorViews\Ecommerce.razor.js" />
+      </ItemGroup>
+      <ItemGroup>
+        <ProjectReference Include="..\ConnectNow.ApiService\ConnectNow.ApiService.csproj" />
+        <ProjectReference Include="..\ConnectNow.LocalCache\ConnectNow.LocalCache.csproj" />
+      </ItemGroup>
+      <ItemGroup>
+        <Compile Update="Views\SignUpPlanPage.xaml.cs">
+          <DependentUpon>SignUpPlanPage.xaml</DependentUpon>
+        </Compile>
+      </ItemGroup>
+      <ItemGroup>
+        <MauiXaml Update="Views\BusinessProfilePage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\CustomControls\CustomIndicator.xaml">
+          <SubType></SubType>
+        </MauiXaml>
+        <MauiXaml Update="Views\EcommercePage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\EventDetailPage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\ManageSubscriptionPage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\MySavingsPage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\RegisterSuccessPage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\SignUpPlanPage.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+      </ItemGroup>
+</Project>

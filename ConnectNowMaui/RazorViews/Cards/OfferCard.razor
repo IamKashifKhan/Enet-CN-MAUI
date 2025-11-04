@@ -1,0 +1,93 @@
+﻿@inject ILocalCache LocalCache
+<li class="@(isActivePlan? "card" : "card blur")">
+
+    @if (!isActivePlan)
+    {
+        <div class="member-only">
+            To view and redeem this offer, please upgrade your account...
+            <button class="btn btn-secondary btn-sm d-flex mx-auto mt-2"><img src="img/lock.svg" class="me-1" alt=""> Start Saving</button>
+        </div>
+    }
+
+    <a href="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRedeem" aria-controls="offcanvasRedeem">
+
+    <div class="card-body p-0">
+        <!-- wrapper (not a link) -->
+     
+        <div class="card-img" style="background-image: url('@Offer.ThumbnailPath');">
+            <button class="@(Offer.isFavorite?  "heart active" : "heart" )"  type="button"
+                    @onclick="@(async () => await AddRemoveToFavorite.InvokeAsync(Offer))">
+            </button>
+        </div>
+
+        <h6 class="card-title text-truncate">@Offer.Heading</h6>
+        <p class="card-disc text-truncate-2">@Offer.Description</p>
+
+        <div class="card-redeem">
+            <span><i class="bi bi-ticket-detailed"></i> @Offer.RedemptionsCount</span>
+            <span><i class="bi bi-eye"></i> @Offer.OfferViews</span>
+          
+                <!-- Call our handler; we will open the offcanvas via JS AFTER invoking the parent -->
+                <button type="button"
+                    class="btn btn-primary btn-sm ms-auto"
+                    @onclick:stopPropagation="true"
+                    @onclick="HandleRedeemAsync">
+                Redeem
+            </button>
+        </div>
+    </div>
+    </a>
+
+ </li>
+
+
+@code {
+    [Parameter, EditorRequired] public BusinessOfferItem Offer { get; set; } = null!;
+    [Parameter, EditorRequired] public bool isActivePlan { get; set; }
+    [Parameter, EditorRequired] public EventCallback<BusinessOfferItem> OnSelected { get; set; }
+    [Parameter, EditorRequired] public EventCallback<BusinessOfferItem> AddRemoveToFavorite { get; set; }
+
+    private string GetHeartClass() => Offer?.isFavorite == true ? "heart active" : "heart";
+
+    public AALUser _user { get; set; } = default!;
+    // private bool isActivePlan;
+    private PlanDetails CurrentPlanDetail { get; set; } = null!;
+    private IJSObjectReference? mobilenav;
+    private DotNetObjectReference<OfferCard>? mobilenavReference;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    private IJSObjectReference? _module;
+    private bool _busy;
+
+    override protected async void OnInitialized()
+    {
+        CurrentPlanDetail =  await LocalCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
+        //isActivePlan = CurrentPlanDetail?.IsActive ?? false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/Cards/OfferCard.razor.js");
+        }
+    }
+
+    private async Task HandleRedeemAsync()
+    {
+        if (!isActivePlan) return;
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            if (OnSelected.HasDelegate)
+                await OnSelected.InvokeAsync(Offer);
+
+            // Now open the offcanvas explicitly
+            if (_module is not null)
+                await _module.InvokeVoidAsync("showOffcanvas", "#offcanvasRedeem");
+        }
+        finally { _busy = false; }
+    }
+    
+
+}

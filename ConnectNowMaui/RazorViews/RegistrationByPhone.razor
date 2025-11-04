@@ -1,0 +1,443 @@
+﻿@inject IJSRuntime JSRuntime
+@using ConnectNow.Domain.Models.MVC
+@using ConnectNow.Views
+@using Plugin.Firebase.CloudMessaging;
+@inject EmailRegistrationRequestValidator emailValidator
+@inject ICNApiService apiService
+@inject ILocalCache LocalCache;
+<div class="main-wrap">
+
+    <!--\/header START\/-->
+    <header class="nofoot fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+      <div class="container d-flex flex-row justify-content-between">
+
+        <!--\/LOGO START\/-->
+        <a href="" class="logo d-none d-lg-block mb-2 mb-lg-0">
+          <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" style="height: 42px;" />
+        </a> <!--/\LOGO END/\-->
+
+
+        <!--\/Navigation START\/-->
+        <ul class="nav nav-foot d-flex flex-row flex-nowrap flex-lg-wrap justify-content-lg-end align-content-lg-between flex-lg-fill shadow mt-auto mt-lg-0">
+          <li class="d-none d-lg-none">
+            <a href="" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center column-gap-1 pb-1 pb-lg-2 px-2"> <img src="img/directory.svg" alt="Directory" /> Directory</a>
+          </li>
+          <li class="d-none d-lg-none">
+            <a href="" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center column-gap-1 pb-1 pb-lg-2 px-2"> <img src="img/events.svg" alt="Events" class="me-lg-1" /> Events</a>
+          </li>
+          <li class="d-none d-lg-none">
+            <a href="" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center column-gap-1 pb-1 pb-lg-2 px-2"> <img src="img/favorites.svg" alt="Favorites" /> Favorites</a>
+          </li>
+          <li class="d-none d-lg-none">
+            <a href="" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center column-gap-1 pb-1 pb-lg-2 px-2"> <img src="img/map.svg" alt="Map" /> Map</a>
+          </li>
+          <!--\/More DropUp START\/-->
+          <li class="d-none d-lg-none dropup">
+            <a href="" class="nav-link text-decoration-none dropdown-toggle d-flex flex-column flex-lg-row justify-content-between align-items-center column-gap-1 pb-1 pb-lg-2 px-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMore" aria-controls="offcanvasMore"> <img src="img/more.svg" alt="More" /> More</a>
+            <div id="offcanvasMore" class="offcanvas offcanvas-bottom rounded-4 rounded-bottom-0" tabindex="-1">
+              <div class="offcanvas-body shadow">
+            
+              </div>
+            </div>
+          </li> <!--/\More DropUp END/\-->
+      
+        </ul> <!--/\Navigation END/\-->
+
+      </div> <!--/\.container/\-->
+      <!--\/Mobile TOP START\/-->
+      <div id="mob_top" class="d-none d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+        <a href="" class="d-flex fs-5 link-light ms-1 me-3 p-2"> <i class="bi bi-chevron-left"></i> </a>
+        <div class="d-none fs-4 text-center text-truncate lh-lg me-auto">Create Account</div>
+        <div class="d-none">
+          <a href="" class="link-light mx-1 p-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch"> <i class="bi bi-search"></i> </a>
+          <div id="offcanvasSearch" class="offcanvas offcanvas-top" tabindex="-1">
+            <div class="offcanvas-body p-2 px-1">
+             
+            </div>
+          </div>
+        </div>
+      </div> <!--/\Mobile TOP END/\-->
+    </header> <!--/\header END/\-->
+    <!--\/main content START\/-->
+    <main class="flex-shrink-0 mb-0">
+        <div class="container-fluid">
+
+            <div class="row justify-content-center">
+                <div class="col-lg-5 d-none d-lg-block vh-100 bg-no-repeat bg-size-cover bg-position-center p-0" style="background-image:url('img/login-bg.jpg');"></div>
+                <div class="col-lg-7 d-flex align-items-center vh-100">
+                    <div class="card shadow-none border-0 ms-auto me-auto login-card">
+                        <div class="card-body text-left pt-0">
+                            <h3 class="login d-block d-lg-block">Create Account</h3>
+
+                            <form id="regForm" action="#">
+
+                                <!-- Screen-1 -->
+                                <div class="tab">
+                                    <h6 class="text-center text-body-emphasis fs-6">Your Phone Number will be your Login</h6>
+                                    <small class="d-block text-center mb-4">Get the Verification SMS Code sent to your phone. Enter Your Phone Number.</small>
+                                    <div class="form-floating mb-3">
+                                        <input  @bind="phone" id="phone" class="form-control" type="tel" placeholder="Your Phone" />
+                                        <label for="username">Your Phone:</label>
+                                    </div>
+                                </div>
+
+                                <!-- Screen-2 -->
+                                <div class="tab">
+                                    <h6 class="text-center text-body-emphasis fs-6">Verify @phone</h6>
+                                    <small class="d-block text-center mb-4">Enter 6-Digit Verification Code sent to @phone.<br /> <a href="#">Wrong Number?</a></small>
+                                    <div class="otp-group mb-3">
+                                        <input @bind="code" id="code" type="text"  class="@GetCodeInputClass()"  placeholder="Enter 6-Digit Code">
+                                    </div>
+                                </div>
+
+
+                                <div class="tab">
+                                    <h6 class="text-center text-body-emphasis fs-6">How you'll login</h6>
+                                    <small class="d-block text-center mb-4">Set Your Account Password</small>
+                                    <div class="form-floating position-relative mb-3">
+                                        <input @bind="password" id="password" class="form-control" type="@(isPasswordShowing ? "text" : "password")" placeholder="Password" />
+                                        <label for="password">Password:</label>
+                                        <i @onclick="ShowHidePassword" class="bi bi-eye" id="togglePassword"></i>
+                                    </div>
+                                    <div class="form-floating position-relative mb-3">
+                                        <input id="confirm-password" class="form-control" type="password" placeholder="Re-type Password" />
+                                        <label for="confirm-password">Re-type Password:</label>
+                                    </div>
+                                </div> <!-- .tab -->
+                                <div class="tab">
+                                    <h6 class="text-center text-body-emphasis fs-6">Account Information</h6>
+                                    <small class="d-block text-center mb-4">Enter Your Name and Email</small>
+
+                                    <div class="row row-cols-2 gx-0">
+                                        <div class="col form-floating mb-3">
+                                            <input @bind="firstname" id="firstname" class="form-control" type="text" placeholder="First Name" />
+                                            <label for="firstname">First Name:</label>
+                                        </div>
+                                        <div class="col form-floating mb-3">
+                                            <input @bind="lastname" id="lastname" class="form-control" type="text" placeholder="Last Name" />
+                                            <label for="lastname">Last Name:</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check text-left mb-2">
+                                        <input id="subscribeCheck" class="form-check-input" type="checkbox" />
+                                        <label for="subscribeCheck" class="">Yes, send me occassional emails about offers and events</label>
+                                    </div>
+
+                                    <div class="row row-cols-3 gx-0">
+                                        <div class="col-8 form-floating mb-3">
+                                            <input @bind="email" id="email" class="form-control" type="email" placeholder="Email Address" />
+                                            <label for="email">Email Address:</label>
+                                        </div>
+                                        <div class="col form-floating mb-3">
+                                            <input @bind="zipcode" id="zipcode" class="form-control" type="text" placeholder="Zip" />
+                                            <label for="zipcode">Zip:</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check text-left mb-3">
+                                        <input id="termsCheck" class="form-check-input" type="checkbox" />
+                                        <label for="termsCheck" class="">I agree to AllAboutLocal's <a href="" class="fw-bold">Terms of Services</a> and <a href="" class="fw-bold">Privacy Policy</a>, including the processing of your personal data.</label>
+                                    </div>
+                                </div> <!-- .tab -->
+                                <!-- Screen NAVIGATION -->
+                                <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                        <button type="button" id="prevBtn" @onclick="() => nextPrev(-1)" class="btn btn-secondary ms-auto p-2 px-3">Previous</button>
+                                        <button type="button"
+                                                id="nextBtn"
+                                                @onclick="() => nextPrev(1)"
+                                                class="btn btn-secondary ms-auto p-2 px-3 @(isNextDisabled ? "disabled" : "")">
+                                            Next
+                                        </button>
+                                </div>
+
+
+                                <div class="d-flex flex-row justify-content-between align-items-center gap-2 mt-3">
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                </div> <!-- steps indicator -->
+
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main> <!--/\main content END/\-->
+
+
+   
+</div>
+
+@code {
+    private IJSObjectReference? registrationByPhoneJsRefernce;
+    private DotNetObjectReference<RegistrationByPhone>? registrationByPhoneDotnetReference;
+
+    private string phone;
+    private string fullname;
+    private string code;
+    private string password;
+
+
+    private string firstname;
+    private string lastname;
+    private string email;
+    private string zipcode;
+
+
+    private bool isCodeInvalid = false;
+
+    private bool isPasswordShowing  = false;
+
+
+    private AALUser user = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        registrationByPhoneJsRefernce = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./RazorViews/RegistrationByPhone.razor.js");
+        await JSRuntime.InvokeVoidAsync("Helpers.setDotNetHelper", DotNetObjectReference.Create(this));
+
+        registrationByPhoneDotnetReference = DotNetObjectReference.Create(this);
+        SetupTabs();
+
+        //  await registrationByPhoneJsRefernce.InvokeVoidAsync("setPasswordViewToggle");
+
+        base.OnInitialized();
+    }
+    private async void SetupTabs()
+    {
+        try
+        {
+            var token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();
+        }
+        catch (Exception ex)
+        {
+
+        }
+        await Task.Delay(200);
+        await registrationByPhoneJsRefernce.InvokeVoidAsync("initTabs");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+        }
+        base.OnAfterRender(firstRender);
+    }
+    private int currenttab = 0;
+
+    private bool codeVerified = false;
+    private bool isNextDisabled = false;
+
+    private async void nextPrev(int n)
+    {
+        if (currenttab == 0)
+        {
+            isNextDisabled = true;
+            await this.InvokeAsync(this.StateHasChanged);
+
+            var registrationrequest = new RegisterByPhoneRequest(phone);
+            // var result = emailValidator.Validate(registrationrequest);
+            var RegisterByPhoneResult = await apiService.RegisterUserByPhone(registrationrequest);
+
+            if (RegisterByPhoneResult.Success)
+            {
+                await registrationByPhoneJsRefernce.InvokeVoidAsync("nextPrev", n, currenttab);
+                currenttab = currenttab + n;
+            }
+            isNextDisabled = false;
+            await this.InvokeAsync(this.StateHasChanged);
+            return;
+
+        }
+
+
+
+
+
+
+        if (currenttab == 1 && !codeVerified)
+        {
+            isNextDisabled = true;
+            await this.InvokeAsync(this.StateHasChanged);
+            var userVerificationByPhoneRequest = new VerifyByPhoneRequest(phone, code);
+
+            var userVerificationByPhoneresult = await apiService.VerifyUserByPhone(userVerificationByPhoneRequest);
+            if (userVerificationByPhoneresult.Success)
+            {
+                App.CurrentUser = userVerificationByPhoneresult.Data;
+                Preferences.Default.Set(StringConstants.CurrentUserKey, userVerificationByPhoneresult.Data.UserKey.ToString());
+
+                await registrationByPhoneJsRefernce.InvokeVoidAsync("nextPrev", n, currenttab);
+                currenttab = currenttab + n;
+                codeVerified = true;
+
+            }
+            else
+            {
+                isCodeInvalid = !userVerificationByPhoneresult.Success;
+                code = string.Empty;
+            }
+            isNextDisabled = false;
+            await this.InvokeAsync(this.StateHasChanged);
+            return;
+        }
+
+        if (currenttab == 2)
+        {
+            isNextDisabled = true;
+            await this.InvokeAsync(this.StateHasChanged);
+            var setPasswordRequest = new ConnectNow.Requests.User.SetPasswordRequest { Id = App.CurrentUser.UserKey, NewPassword = password };
+            var userrequest = new SetUserPasswordRequest(App.CurrentUser.UserKey, password);
+            //result = await apiservice.SetUserPassword(userrequest);
+            var setPasswordResult = await apiService.SetUserPassword(userrequest);
+            if (setPasswordResult.Success)
+            {
+                await registrationByPhoneJsRefernce.InvokeVoidAsync("nextPrev", n, currenttab);
+                currenttab = currenttab + n;
+                //  await Application.Current.MainPage.DisplayAlert("Success", "Account created successfully", "OK");
+
+                // await Shell.Current.GoToAsync("//LoginPage");
+
+            }
+            isNextDisabled = false;
+            await this.InvokeAsync(this.StateHasChanged);
+            return;
+
+        }
+
+        if (currenttab == 3)
+        {
+            isNextDisabled = true;
+            await this.InvokeAsync(this.StateHasChanged);
+
+
+            App.CurrentUser.FirstName = firstname;
+            App.CurrentUser.LastName = lastname;
+            App.CurrentUser.Email = email;
+
+            var userrequest = new UpdateUserRequest(App.CurrentUser);
+            var result = await apiService.UpdateUserBio(userrequest);
+            await LocalCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, result.Data);
+
+            if (result.Success)
+            {
+                await registrationByPhoneJsRefernce.InvokeVoidAsync("nextPrev", n, currenttab);
+                currenttab = currenttab + n;
+                isNextDisabled = false ;
+                await this.InvokeAsync(this.StateHasChanged);
+                //  await Application.Current.MainPage.DisplayAlert("Success", "Account created successfully", "OK");
+
+                await Shell.Current.GoToAsync(nameof(SignUpPlanPage));
+            }
+        }
+
+        await registrationByPhoneJsRefernce.InvokeVoidAsync("nextPrev", n, currenttab);
+        currenttab = currenttab + n;
+
+    }
+
+    [JSInvokable("resetTabCount")]
+    public Task resetTabCount(int n)
+    {
+        currenttab = currenttab - n;
+        return Task.CompletedTask;
+    }
+
+    [JSInvokable("callApiService")]
+    public async Task callApiService(int n)
+    {
+        if (n == 1)
+        {
+            //var registrationrequest = new ConnectNow.Requests.User.PhoneRegisterRequest { FullName = fullname, Phone = phone };
+
+            // var registrationrequest = new RegisterByPhoneRequest(phone);
+            // // var result = emailValidator.Validate(registrationrequest);
+            // var RegisterByPhoneResult = await apiService.RegisterUserByPhone(registrationrequest);
+
+            // //if (result.IsValid)
+            // //{
+            // //    var RegisterByEmailResult = await apiService.RegisterByEmail(registrationrequest);
+            // //}
+            // //else
+            // //{
+            // //    currenttab = currenttab - 1;
+            // //}
+            // await this.InvokeAsync(this.StateHasChanged);
+        }
+        else if (n == 2)
+        {
+            //var userVerificationByPhoneRequest = new UserVerificationByPhoneRequest { Phone = phone, VerificationCode = code };
+
+            // var userVerificationByPhoneRequest = new VerifyByPhoneRequest(phone, code);
+
+            // var userVerificationByPhoneresult = await apiService.VerifyUserByPhone(userVerificationByPhoneRequest);
+            // if (userVerificationByPhoneresult.Success)
+            // {
+            //     App.CurrentUser = userVerificationByPhoneresult.Data;
+            // }
+
+        }
+        else if (n == 3)
+        {
+            // var setPasswordRequest = new ConnectNow.Requests.User.SetPasswordRequest { Id = App.CurrentUser.UserKey, NewPassword = password };
+
+
+            // var userrequest = new SetUserPasswordRequest(App.CurrentUser.UserKey, code);
+            // //result = await apiservice.SetUserPassword(userrequest);
+
+
+            // var setPasswordResult = await apiService.SetUserPassword(userrequest);
+            // if (setPasswordResult.Success)
+            // {
+            //     //  await Application.Current.MainPage.DisplayAlert("Success", "Account created successfully", "OK");
+
+            //     // await Shell.Current.GoToAsync("//LoginPage");
+            //     await this.InvokeAsync(this.StateHasChanged);
+            // }
+        }
+        else if (n == 4)
+        {
+            // App.CurrentUser.FirstName = firstname;
+            // App.CurrentUser.LastName = lastname;
+            // App.CurrentUser.Email = email;
+
+            // var userrequest = new UpdateUserRequest(App.CurrentUser);
+            // var result = await apiService.UpdateUserBio(userrequest);
+
+            // if (result.Success)
+            // {
+            //     await Application.Current.MainPage.DisplayAlert("Success", "Account created successfully", "OK");
+
+            //     await Shell.Current.GoToAsync("//LoginPage");
+            // }
+        }
+    }
+
+
+    private async Task ValidatePhoneAsync(ChangeEventArgs e)
+    {
+        await registrationByPhoneJsRefernce.InvokeVoidAsync("validatePhone", "#phone");
+    }
+    private string GetCodeInputClass()
+    {
+        var baseClass = "style2-input ps-5 form-control text-grey-900 font-xsss fw-600";
+        return isCodeInvalid ? $"{baseClass} is-invalid" : baseClass;
+    }
+
+    private async void ShowHidePassword()
+    {
+        isPasswordShowing = !isPasswordShowing;
+        await this.InvokeAsync(StateHasChanged);
+
+
+    }
+}
+

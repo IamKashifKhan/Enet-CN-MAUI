@@ -1,0 +1,27 @@
+@import url('Chalet-LondonNineteenEighty.woff');
+@import url('Chalet-LondonNineteenEighty.woff2');
+@import url('Chalet-ParisNineteenEighty.woff2');
+@import url('Chalet-ParisNineteenEighty.woff');
+@import url('Chalet-NewYorkNineteenEighty.woff');
+@import url('Chalet-NewYorkNineteenEighty.woff2');
+@font-face {
+    font-family: 'Chalet';
+    src: url('Chalet-ParisNineteenEighty.woff2') format('woff2'), url('Chalet-ParisNineteenEighty.woff') format('woff');
+    font-weight: 100; /*fw-lighter*/
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Chalet';
+    src: url('Chalet-LondonNineteenEighty.woff2') format('woff2'), url('Chalet-LondonNineteenEighty.woff') format('woff');
+    font-weight: 400; /*fw-normal*/
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Chalet';
+    src: url('Chalet-NewYorkNineteenEighty.woff2') format('woff2'), url('Chalet-NewYorkNineteenEighty.woff') format('woff');
+    font-weight: 700; /*fw-bold*/
+    font-style: normal;
+    font-display: swap;
+}

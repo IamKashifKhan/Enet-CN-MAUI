@@ -1,0 +1,245 @@
+﻿@inject IJSRuntime JSRuntime
+@using ConnectNow.Domain.Models.MVC
+@using ConnectNow.Models
+@using ConnectNow.Views
+@using Plugin.Firebase.CloudMessaging;
+@inject EmailRegistrationRequestValidator emailValidator
+@inject ICNApiService apiService
+@inject ILocalCache localCache
+
+<div id="app">
+    <div class="d-flex flex-column">
+
+        <!-- ===================== HEADER START ===================== -->
+        <header class="fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
+            <div class="container d-flex flex-row justify-content-between">
+
+                <!-- Logo -->
+                <a href="" class="logo d-none d-lg-block mb-2 mb-lg-0">
+                    <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" style="height: 42px;" />
+                </a>
+
+            </div>
+
+            <!-- Mobile Top -->
+            <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+                <a href="register.html" class="d-flex fs-5 link-light ms-1 me-3 p-2" @onclick=GoBack><i class="bi bi-chevron-left"></i></a>
+                <div class="d-none fs-4 text-center text-truncate lh-lg me-auto">Subscription Plans</div>
+                <div class="d-none">
+                    <a href="" class="link-light mx-1 p-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch"><i class="bi bi-search"></i></a>
+                    <div id="offcanvasSearch" class="offcanvas offcanvas-top" tabindex="-1">
+                        <div class="offcanvas-body p-1 px-2">
+                            <button type="button" class="btn-close position-absolute end-0 me-1 p-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===================== HEADER END ======================= -->
+        <!-- ===================== MAIN START ======================= -->
+        <main class="flex-shrink-0 py-0">
+            <div class="container">
+                <div class="row">
+
+                    <div class="card shadow-none border-0 mx-auto mb-3 login-card">
+                        <div class="card-body text-left pt-0">
+                            <h1 class="text-center h5 mb-4">My Subscription Details</h1>
+
+                            <form action="" method="">
+                                <small class="d-flex justify-content-between align-items-center border-bottom mt-3 py-2">
+                                    Current Plan:
+                                    <span class="text-success fw-bold fs-6">@PlanDetails.PlanName</span>
+                                </small>
+
+                                <small class="d-flex justify-content-between align-items-center border-bottom mt-3 py-2">
+                                    Subscription Valid Untill:
+                                    <span class="text-success fw-bold fs-6">@PlanDetails.SubscriptionEnd.ToString("MM/dd/yyyy")</span>
+                                </small>
+
+                                <!-- ================= Toggle: Auto Renewal ================= -->
+                                <div class="d-flex justify-content-between align-items-center border-bottom m-0 py-2 form-check form-check-reverse form-switch">
+                                    <label for="renewal_toggle" class="form-check-label">
+                                        <small>Auto Renewal</small>
+                                    </label>
+
+                                    <!-- FIX: Use @bind + @bind:after (no @onchange) -->
+                                    <input id="renewal_toggle"
+                                           class="form-check-input"
+                                           type="checkbox"
+                                           @bind="IsRecurring"
+                                           @bind:event="onchange"
+                                           @bind:after="OnSwitchToggled" />
+                                </div>
+                                <!-- ======================================================= -->
+
+                                <small class="d-block text-center mb-2">If you have a member code, please enter it now!</small>
+                                <div class="input-group mb-4">
+                                    <div class="form-floating">
+                                        <input @bind=MemberShipCode id="memberCode" class="form-control" type="text" placeholder="Member Code:" />
+                                        <label for="memberCode">Member Code:</label>
+                                    </div>
+                                    <button @onclick="ValidateMembershipCode" id="button-addon2" class="btn btn-secondary px-4" type="button">Apply</button>
+                                </div>
+
+                          
+
+                             
+                            </form>
+                            <div class="form-group mt-5 mb-0">
+                                <span>  Delete my Account </span>
+                             
+
+                                <!-- Call our handler; we will open the offcanvas via JS AFTER invoking the parent -->
+                                <button type="button"
+                                        class="btn btn-primary btn-sm ms-auto"
+                                        @onclick:stopPropagation="true"
+                                        @onclick="DeleteUserAccount">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+        <!-- ===================== MAIN END ========================= -->
+
+    </div>
+</div>
+
+@code {
+    // ===================== Fields & Models =====================
+    private IJSObjectReference? signUpPlanJsRefernce;
+    private DotNetObjectReference<SignUpPlan>? signUpPlanDotnetReference;
+
+    public List<UserSubscriptionPlaneItem> PlanItems { get; set; } = new();
+    public PlanDetails PlanDetails { get; set; } = new();
+
+    public string SelectedPlanKey { get; set; } = string.Empty;
+    public string MemberShipCode { get; set; } = string.Empty;
+
+    private string? SelectedSchool { get; set; }
+    private string? userkey { get; set; }
+
+    // Toggle state (bound to checkbox)
+    private bool IsRecurring { get; set; } = true;
+
+    // ===================== Lifecycle ===========================
+    protected override async Task OnInitializedAsync()
+    {
+        userkey =  Preferences.Default.Get(StringConstants.CurrentUserKey,string.Empty);
+
+        await base.OnInitializedAsync();
+        await GetSubscription(); // Uncomment if you want to load on init
+    }
+
+    // ===================== Actions / Handlers ===================
+    // Called after @bind applies the new IsRecurring value
+    private async Task OnSwitchToggled()
+    {
+        Console.WriteLine($"Recurring status updated: {IsRecurring}");
+        await UpdateRecurringStatus();
+    }
+
+    private async Task ValidateMembershipCode()
+    {
+        try
+        {
+            ApiResult<string>? apiResult =
+                await apiService.UserSubscriptionTransactionOffer(
+                    new UserSubscriptionTransactionOfferRequest(App.CurrentUser.UserKey.ToString(), MemberShipCode));
+
+            if (apiResult.Success)
+            {
+                await GetSubscription();
+                App.DiscountCode = MemberShipCode;
+                await Shell.Current.GoToAsync(nameof(RegisterSuccessPage)); // OK in MAUI Blazor Hybrid
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", apiResult.Message, "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+
+    private async Task GetSubscription()
+    {
+        try
+        {
+            var req = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var output = await apiService.AppUsersActiveSubscription(req);
+
+            if (output.Success && output.Data is { Count: > 0 })
+            {
+                PlanDetails = output.Data[0];
+                App.PlanDetails.IsActive = PlanDetails.IsActive;
+                await localCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
+                Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task DeleteUserAccount()
+    {
+        try
+        {
+
+            bool confirm = await App.Current.MainPage.DisplayAlert("Confirm Deletion", "Are you sure you want to delete your account? This action cannot be undone.", "Yes, Delete", "Cancel");
+            if (!confirm) return;   
+            var deletionRequest = new UserDeletionRequest(App.CurrentUser.UserKey);
+            var result = await apiService.AppDeleteUserbyID(deletionRequest);
+
+            if (result.Success)
+            {
+                await App.Current.MainPage.DisplayAlert("Alert", "Your account has been permanently deleted", "Ok");
+                await SignOut();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+
+    private async Task UpdateRecurringStatus()
+    {
+        try
+        {
+            // Send the current toggle state to backend
+            var req = new SetPlanRecurringRequest(IsRecurring, PlanDetails.UserSubscriptionPlanKey.ToString());
+            var result = await apiService.SetPlanRecurring(req);
+            // Optionally handle result.Success / result.Message
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task SignOut()
+    {
+        Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
+        await localCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, new AALUser());
+        await localCache.ClearAllAsync();
+
+        await Shell.Current.GoToAsync("//LoginPage");
+    }
+
+    public async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+}

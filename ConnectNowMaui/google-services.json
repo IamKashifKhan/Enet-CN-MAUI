@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "558838725757",
+    "project_id": "connectnow-4d67c",
+    "storage_bucket": "connectnow-4d67c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558838725757:android:d82c77a3b0e9c936614514",
+        "android_client_info": {
+          "package_name": "com.enettech.connectnow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558838725757-c331hjkmh1pga9qur6c9ton0s1m9abr4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh2YW8Hfw45-_5k9_7mAPtzRAYe4qYg70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558838725757-c331hjkmh1pga9qur6c9ton0s1m9abr4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

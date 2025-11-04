@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": ".NET MAUI",
+        "type": "maui",
+        "request": "launch",
+        "preLaunchTask": "maui: Build"
+      },
+      {
+        "name": "Launch Android App",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/bin/Debug/net8.0-android/${ConnectNowMaui}.dll",
+        "cwd": "${workspaceFolder}",
+        "args": [],
+        "env": {
+          "DOTNET_ROOT": "/usr/local/share/dotnet",
+          "DOTNET_HOST_PATH": "/usr/local/share/dotnet/dotnet"
+        },
+        "stopAtEntry": false,
+        "console": "internalConsole",
+        "internalConsoleOptions": "openOnSessionStart",
+        "launchBrowser": false,
+        "android": {
+          "package": "com.yourcompany.yourappname",
+          "device": "emulator-5554" // Replace with your device/emulator ID if required
+        }
+      }
+    ]
+  }
+  

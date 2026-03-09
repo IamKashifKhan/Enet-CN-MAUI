@@ -1,0 +1,33 @@
+@import url('optimistic-200.woff');
+@import url('optimistic-200.woff2');
+@import url('optimistic-400.woff');
+@import url('optimistic-400.woff2');
+@import url('optimistic-700.woff');
+@import url('optimistic-700.woff2');
+@font-face{
+    font-display:swap;
+    font-family:Optimistic;
+    font-style:normal;
+    font-weight:200;
+    src:url(optimistic-200.woff2) format("woff2"),
+        url(optimistic-200.woff) format("woff"),
+        url(optimistic-200.eot) format("embedded-opentype");
+}
+@font-face{
+    font-display:swap;
+    font-family:Optimistic;
+    font-style:normal;
+    font-weight:400;
+    src:url(optimistic-400.woff2) format("woff2"),
+        url(optimistic-400.woff) format("woff"),
+        url(optimistic-400.eot) format("embedded-opentype");
+}
+@font-face{
+    font-display:swap;
+    font-family:Optimistic;
+    font-style:normal;
+    font-weight:700;
+    src:url(optimistic-700.woff2) format("woff2"),
+        url(optimistic-700.woff) format("woff"),
+        url(optimistic-700.eot) format("embedded-opentype");
+}

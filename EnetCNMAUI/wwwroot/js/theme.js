@@ -26,20 +26,18 @@ window.applyThemeClass = function () {
         // Optional: re-apply class just in case
         document.body.classList.add(themeClass);
         document.documentElement.classList.add(themeClass);
-        // Notify Blazor
-        //DotNet.invokeMethodAsync("ApexConnect", "ThemeUpdatedEvent");
     });
 }
-
-
-
-
 
 // Theme Switching
 document.addEventListener('DOMContentLoaded', () => {
     const htmlElement = document.documentElement;
     const bodyElement = document.body;
     const themeTrigger = document.getElementById('themeDropdown');
+    
+    // Skip theme switching if themeDropdown doesn't exist on this page
+    if (!themeTrigger) return;
+    
     const themeIcon = themeTrigger.querySelector('i');
     const themeOptions = document.querySelectorAll('[data-theme-value]');
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -87,6 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // Sticky Header on Scroll-Y DOWN > 9 / UP < 9
 document.addEventListener('DOMContentLoaded', (event) => {
     const headerElement = document.querySelector('header');
+    // Skip if no header element exists
+    if (!headerElement) return;
+    
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', function () {
         let currentScrollY = window.scrollY;
@@ -121,8 +122,14 @@ if (togglePassword && password) {
 
 // Hover Zoom for Offers Card Image
 const imageSizeCache = new Map();
-document.querySelectorAll('.offers .card-img').forEach(card => {
-    const imageUrl = card.style.backgroundImage.slice(5, -2);
+const offerCards = document.querySelectorAll('.offers .card-img');
+offerCards.forEach(card => {
+    const style = card.style.backgroundImage;
+    if (!style) return;
+    
+    const imageUrl = style.slice(5, -2);
+    if (!imageUrl) return;
+    
     const img = new Image();
     img.src = imageUrl;
     img.onload = function () {
@@ -144,7 +151,7 @@ document.querySelectorAll('.offers .card-img').forEach(card => {
         const newHeight = baseHeight * 1.03;
         const altWidth = baseWidth * 1.05;
         const altHeight = baseHeight * 1.05;
-        if (card.parentElement.tagName.toLowerCase() === 'a') {
+        if (card.parentElement && card.parentElement.tagName.toLowerCase() === 'a') {
             card.style.setProperty('--hover-background-size', `${newWidth}px ${newHeight}px`);
         } else {
             card.style.setProperty('--hover-background-size', `${altWidth}px ${altHeight}px`);
@@ -204,6 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const adjustSlideWidths = (sliderElement) => { // Width Adjustment
         setTimeout(() => {
             const slidesContainer = sliderElement.querySelector('.glide__slides');
+            if (!slidesContainer) return;
+            
             const slides = slidesContainer.querySelectorAll('.glide__slide');
             let totalWidth = 0;
             slides.forEach(slide => {

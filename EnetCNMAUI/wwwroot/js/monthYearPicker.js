@@ -1,9 +1,13 @@
-﻿// wwwroot/js/monthYearPicker.js  (MODULE VERSION)
+﻿// wwwroot/js/monthYearPicker.js
+// Month Year Picker - non-module version for Blazor
 
 // small debounce
-function _debounce(fn, wait) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), wait); }; }
+function _debounce(fn, wait) { 
+    let t; 
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), wait); }; 
+}
 
-export function init(cfg, dotnetRef) {
+function initMonthYearPicker(cfg, dotnetRef) {
     const byId = id => document.getElementById(id);
     const elContainer = byId(cfg.containerId);
     if (!elContainer) return;
@@ -139,3 +143,6 @@ export function init(cfg, dotnetRef) {
     document.getElementById(cfg.containerId)
         ?.addEventListener('shown.bs.offcanvas', _updatePreviewAndNotify);
 }
+
+// Make available globally for Blazor
+window.initMonthYearPicker = initMonthYearPicker;

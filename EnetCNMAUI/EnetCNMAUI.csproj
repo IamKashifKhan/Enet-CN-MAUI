@@ -127,7 +127,6 @@
       <Folder Include="Services\Session\" />
       <Folder Include="Fonts\" />
       <Folder Include="Validations\" />
-      <Folder Include="wwwroot\images\" />
       <Folder Include="Enums\" />
       <Folder Include="RazorViews\PasswordReset\" />
       <Folder Include="Views\PasswordReset\" />

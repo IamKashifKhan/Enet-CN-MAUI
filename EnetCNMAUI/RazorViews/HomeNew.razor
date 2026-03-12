@@ -1,0 +1,952 @@
+﻿@page "/homenew"
+@inject IJSRuntime JS
+
+<div class="offcanvas offcanvas-top h-100" tabindex="-1" id="offcanvasFullscreen" aria-labelledby="offcanvasFullscreenLabel">
+
+        <div class="offcanvas-body">
+            <div class="search-wrapper">
+
+                <!-- Search Bar -->
+                <div class="search-bar d-flex align-items-center mb-4">
+                    <span class="search-icon"><lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></span>
+                    <input type="text" class="form-control border-0" placeholder="Search for Offer / Food / Beauty etc.">
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+     
+     
+    
+     
+     
+     
+
+   
+   
+    
+                <!-- Popular Categories -->
+                <h5 class="section-title">Popular Categories</h5>
+                <div class="row text-center g-3 categories">
+                    <div class="owl-carousel categories-slider top-categories">
+
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/201307/health-care-diet.svg">
+                                <p>Health</p>
+                            </a>
+                        </div>
+
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/530617/air-ticket.svg">
+                                <p>Travel</p>
+                            </a>
+                        </div>
+      
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/502425/entertainment.svg">
+                                <p>Entertainment</p>
+                            </a>
+                        </div>
+
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/474354/house-to-rent.svg">
+                                <p>House</p>
+                            </a>
+                        </div>
+
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/284428/crayons-crayon.svg">
+                                <p>Kids</p>
+                            </a>
+                        </div>
+
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/405231/dog-face.svg">
+                                <p>Pets</p>
+                            </a>
+                        </div>
+      
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/287186/cream-beauty.svg">
+                                <p>Care</p>
+                            </a>
+                        </div>
+     
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/490919/car.svg">
+                                <p>Automotive</p>
+                            </a>
+                        </div>
+      
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/474987/shop.svg">
+                                <p>Shops</p>
+                            </a>
+                        </div>
+      
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/165157/dinner.svg">
+                                <p>Eat</p>
+                            </a>
+                        </div>
+      
+                        <div class="cat-item">
+                            <a href="#" class="hover-underline-animation center">
+                                <img src="https://www.svgrepo.com/show/276779/wine.svg">
+                                <p>Drink</p>
+                            </a>
+                        </div>
+      
+                    </div>
+                </div>
+
+                <!-- Recent Search -->
+                <h5 class="section-title mt-4">Recent Search</h5>
+                <ul class="recent-search list-unstyled">
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Plumber</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Burger</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Pet Food</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Movie</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                </ul>
+
+                <!-- Popular Offers -->
+                <h5 class="section-title mt-4">Popular Offers</h5>
+                <div class="row g-3 offer-cards">
+      
+                    <div class="owl-carousel offers-slider">
+                        <!-- each card -->
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-health.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>TEST elpsis Buy One Menu item, Get one Buy One Menu item, Get one ...</h6>
+                                        <small>Nearby 5mi</small>
+                                    </div>
+                                </a>
+                            </div>
+           
+                        </div>
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-kids02.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>Expert Plumber on Call...</h6>
+                                        <small>Nearby 4.3mi</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-pizza-small.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>Cat Lover Food Fish</h6>
+                                        <small>Nearby 1.3mi</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-dinner.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>Evil Death Horror Movie</h6>
+                                        <small>Nearby 1.2mi</small>
+                                    </div>
+                                </a>
+                            </div>
+      
+                        </div>
+                    </div>
+                </div>
+
+   
+   
+                <!-- Popular Business -->
+                <h5 class="section-title mt-4">Popular Businesses</h5>
+                <div class="row g-3 offer-cards">
+      
+                    <div class="owl-carousel offers-slider">
+                        <!-- each card -->
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-business01.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>TEST elpsis Buy One Menu item, Get one Buy One Menu item, Get one ...</h6>
+                                        <small>Nearby 5mi</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-business02.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>Expert Plumber on Call...</h6>
+                                        <small>Nearby 4.3mi</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-business03.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>Cat Lover Food Fish</h6>
+                                        <small>Nearby 1.3mi</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card custom-card">
+                                <a href="#" class="hover-underline-animation">
+                                    <img src="images/pic-business04.jpg" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6>Evil Death Horror Movie</h6>
+                                        <small>Nearby 1.2mi</small>
+                                    </div>
+                                </a>
+                            </div>
+      
+                        </div>
+                    </div>
+                </div>
+   
+                <!-- Nearby Range -->
+                <h5 class="section-title mt-4">Nearby Range</h5>
+                <div class="range-wrapper">
+                    <div class="d-flex justify-content-between">
+                        <span>0.5mi</span>
+                        <span>10mi</span>
+                    </div>
+
+                    <input type="range" min="0" max="10" step="0.1" value="3.5"
+                           class="form-range custom-range" id="distanceRange">
+
+                    <div class="text-center mt-2">
+                        <span id="rangeValue">3.5</span>mi
+                    </div>
+                </div>
+
+    
+                <!-- Button -->
+                <div class="text-center mt-4">
+                    <button class="btn filter-btn">Filter Now</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <!-- ================= HEADER ================= -->
+    <header class="header bg-white ">
+
+  
+   
+        <div class="container d-flex justify-content-end top-links gap-3 mt-2 d-xs-none d-sm-none d-md-none d-lg-flex">
+     
+            <a href="#" class="hover-underline-animation left">Events</a> <a href="#" class="hover-underline-animation left">Favorites</a> <a href="#" class="hover-underline-animation left">Map</a> <a href="#" class="hover-underline-animation left">Login / Signup</a>
+     
+        </div>
+     
+        <div class="container d-flex justify-content-between align-items-center border-bottom pt-3 pb-3 pt-md-3 pt-lg-1">
+
+   
+            <a href="index.html" class="logo d-xs-none d-sm-none d-md-none d-lg-block"><img src="images/logo-connect-local.svg" alt="" /></a>
+
+    
+            <div class="top-search-field  d-lg-none d-md-block">
+ 
+                <a href="#" class="form-control" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFullscreen" aria-controls="offcanvasFullscreen">
+                    <span class="" id="basic-addon1"><lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon>  </span> Search for Offer / Food / Beauty etc.
+                </a>
+            </div>
+
+	  
+     
+            <div class="d-flex gap-4 g-md-3">
+    
+                <a href="#" class=" d-xs-none d-sm-none d-md-none d-lg-block" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFullscreen" aria-controls="offcanvasFullscreen"><lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+                <a href="#"><lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"> </lord-icon></a>
+                <a href="#"><lord-icon src="https://cdn.lordicon.com/jdgfsfzr.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"> </lord-icon></a>
+                <a href="#"><lord-icon src="https://cdn.lordicon.com/onmwuuox.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+
+    
+            </div>
+
+     
+     
+      
+      
+        </div>
+
+  
+    </header>
+
+    <!-- ================= OFFER (OWL) ================= -->
+    <section class="bg-white d-lg-none d-md-block">
+        <div class="container border-bottom pt-3 pb-1">
+            <div class="row row-cols-4 row-cols-sm-4 row-cols-lg-4 g-1 top-offers text-center">
+
+                <div class="col">
+      
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/276618/badge-discount.svg">
+                        <p>Deals</p>
+                    </a>
+
+                </div>
+    
+                <div class="col">
+     
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/215200/badge-new.svg">
+                        <p>Whats New?</p>
+                    </a>
+   
+                </div>
+
+    
+                <div class="col">
+
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/397713/party-popper.svg">
+                        <p>Celebrate</p>
+                    </a>
+     
+                </div>
+
+    
+                <div class="col">
+
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/269440/placeholder-wedding.svg">
+                        <p>Near Me</p>
+                    </a>
+
+                </div>
+
+    
+
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- ================= OFFER (OWL) ================= -->
+    <!-- ================= CATEGORIES (OWL) ================= -->
+    <section class="bg-white pt-3 pb-2">
+        <div class="container">
+            <div class="owl-carousel categories-slider top-categories">
+
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/201307/health-care-diet.svg">
+                        <p>Health</p>
+                    </a>
+                </div>
+
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/530617/air-ticket.svg">
+                        <p>Travel</p>
+                    </a>
+                </div>
+      
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/502425/entertainment.svg">
+                        <p>Entertainment</p>
+                    </a>
+                </div>
+
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/474354/house-to-rent.svg">
+                        <p>House</p>
+                    </a>
+                </div>
+
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/284428/crayons-crayon.svg">
+                        <p>Kids</p>
+                    </a>
+                </div>
+
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/405231/dog-face.svg">
+                        <p>Pets</p>
+                    </a>
+                </div>
+      
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/287186/cream-beauty.svg">
+                        <p>Care</p>
+                    </a>
+                </div>
+     
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/490919/car.svg">
+                        <p>Automotive</p>
+                    </a>
+                </div>
+      
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/474987/shop.svg">
+                        <p>Shops</p>
+                    </a>
+                </div>
+      
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/165157/dinner.svg">
+                        <p>Eat</p>
+                    </a>
+                </div>
+      
+                <div class="cat-item">
+                    <a href="offers.html" class="hover-underline-animation center">
+                        <img src="https://www.svgrepo.com/show/276779/wine.svg">
+                        <p>Drink</p>
+                    </a>
+                </div>
+      
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= HERO SLIDER (OWL) ================= -->
+    <section class="container">
+        <div class="owl-carousel hero-slider rounded-4 overflow-hidden">
+
+   
+    
+
+    
+            <div class="hero-slide slide-image d-flex align-items-center">
+        
+                <img src="images/slide01.jpg" alt="" />
+
+            </div>
+    
+            <div class="hero-slide slide-image d-flex align-items-center">
+        
+                <img src="images/slide02.jpg" alt="" />
+
+            </div>
+    
+            <div class="hero-slide slide-image d-flex align-items-center">
+        
+                <img src="images/slide03.jpg" alt="" />
+
+            </div>
+
+    
+     
+    
+    
+
+   
+        </div>
+    </section>
+
+    <!-- ================= TOP REDEEMED ================= -->
+    <section class="container mt-5 redeemed-offers">
+        <div class="d-flex justify-content-between mb-3">
+            <h5 class="main-heading text-truncate">Top Redeemed</h5>
+            <small class="see-all"><a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a></small>
+        </div>
+
+        <div class="redeemed-wrapper">
+            <div class="owl-carousel redeemed-slider">
+
+  
+      
+       
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-dinner.jpg');"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="fw-semibold mb-0">Crunchy Burger CHECK ELPSISE Sample TEXT </h6>
+                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
+                        </div>
+                        <p class="small">Max Value $15.00</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">3</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">77</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+      
+      
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-health.jpg');"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="fw-semibold mb-0">Health Care</h6>
+                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
+                        </div>
+                        <p class="small">Healthcare</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">46</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">739</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-pizza-small.jpg');"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="fw-semibold mb-0">Spicy Pizza </h6>
+                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
+                        </div>
+                        <p class="small">Food</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">41</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">536</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-pizza.jpg');"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="fw-semibold mb-0">Bogo Pizza Offer </h6>
+                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
+                        </div>
+                        <p class="small">Value $15.00</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">49</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">736</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-skin.jpg');"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="fw-semibold mb-0">100$ SKin Care</h6>
+                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
+                        </div>
+                        <p class="small">Skin Care</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">19</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">536</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= TOP REDEEMED ================= -->
+    <section class="container mt-4 redeemed-offers">
+        <div class="d-flex justify-content-between mb-3">
+            <h5 class="main-heading text-truncate">Move More, Live Healthier</h5>
+            <small class="see-all"><a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a></small>
+        </div>
+
+        <div class="redeemed-wrapper">
+            <div class="owl-carousel redeemed-slider">
+
+  
+      
+       
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids01.jpg');"></div>
+                    <div class="card-body">
+                        <h6>Jamboo Jump</h6>
+                        <p class="small">$12.99</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">5</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">96</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+     
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids02.jpg');"></div>
+                    <div class="card-body">
+                        <h6>Trampoline</h6>
+                        <p class="small">JumpStudio</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">15</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">286</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids03.jpg');"></div>
+                    <div class="card-body">
+                        <h6>Jump $ jump</h6>
+                        <p class="small">Float area</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">563</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">856</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids04.jpg');"></div>
+                    <div class="card-body">
+                        <h6>Area51</h6>
+                        <p class="small">Blue Area for kids</p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">86</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">167</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+                <div class="card border-0 shadow-sm card-hover py-1">
+                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids05.jpg');"></div>
+                    <div class="card-body">
+                        <h6>Kids Enjoy Land</h6>
+                        <p class="small">Kids zone </p>
+                        <div class="d-flex gap-3 offers-icons">
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">159</span> <span class="view_txt">Redemptions</span>
+                            </small>
+                            <small>
+                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                           trigger="loop"
+                                           delay="2000"
+                                           colors="primary:#ff9935,secondary:#ff9935">
+                                </lord-icon> <span class="view_num">456</span> <span class="view_txt">Views</span>
+                            </small>
+                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+         
+                        </div>
+                    </div>
+                </div>
+
+      
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <div class="mt-5 pt-1 d-lg-none d-md-block"></div>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class=" mt-5  d-xs-none d-sm-none d-md-none d-lg-block">
+        <div class="container footer">
+            <div class="row p-5">
+
+                <div class="col-md-3 newsletter-subscription">
+                    <h6 class="mb-3">Get Today's Top Offers</h6>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control " placeholder="Email Address *">
+                        <button class="btn btn-warning">Subscribe</button>
+                    </div>
+                    <div class="text-subscription">
+                        Save every day by signing up for All About Local newsletter. By signing up, you agree to All About Local terms of service and privacy policy You may unsubscribe from the newsletters at any time.
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <h6 class="mb-3">Get savings on the go!</h6>
+                    <div class=" gap-2 app-stores">
+                        <a href="#"><img src="images/App_Store.svg" alt="" /> </a>
+                        <a href="#"><img src="images/Google_Play.svg" alt="" /></a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <h6 class="mb-3">Company</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="hover-underline-animation left">About Us</a></li>
+                        <li><a href="#" class="hover-underline-animation left">Privacy Policy</a></li>
+                        <li><a href="#" class="hover-underline-animation left">Get Full Access</a></li>
+                        <li><a href="#" class="hover-underline-animation left">My Saving</a></li>
+                    </ul>
+                </div>
+      
+                <div class="col-md-3">
+ 
+                    <div class="footer-card-social ">
+                        <a href="#" class="fa-brands fa-instagram"></a>
+                        <a href="#" class="fa-brands fa-facebook"></a>
+
+                        <small class="d-block">We Accept Cards </small>
+                        <img src="images/secure_payment.svg" alt="" />
+                    </div>
+     
+                </div>
+
+            </div>
+        </div>
+        <div class="container">
+            <div class="row py-3">
+                <div class="copyright">
+                    <div class="float-start">© 2026 All About Local, Inc. All Rights Reserved.</div>
+                    <div class="float-end"><a href="#" class="hover-underline-animation left">Terms of Use</a> | <a href="#" class="hover-underline-animation left">Privacy Statement</a> | <a href="#" class="hover-underline-animation left">Licenses</a> | <a href="#" class="hover-underline-animation left">Accessibility</a> | <a href="#" class="hover-underline-animation left">Do Not Sell My Personal Information</a></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ================= FOOTER SPACE ON MOBILE ONLY ================= -->
+    <div class="mt-5 pt-4 d-lg-none d-md-block"></div>
+
+    <ul class="nav nav-foot d-flex flex-row flex-nowrap flex-lg-wrap justify-content-lg-end align-content-lg-between flex-lg-fill shadow mt-auto mt-lg-0 ">
+        <li>
+            <a href="index-user.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+                <lord-icon src="https://cdn.lordicon.com/jeuxydnh.json"
+                           trigger="loop"
+                           delay="2000"
+                           colors="primary:#121331,secondary:#ff9935">
+                </lord-icon> Directory
+            </a>
+        </li>
+        <li>
+            <a href="events.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+                <lord-icon src="https://cdn.lordicon.com/uphbloed.json"
+                           trigger="loop"
+                           colors="primary:#121331,secondary:#ff9935">
+                </lord-icon> Events
+            </a>
+        </li>
+        <li>
+            <a href="favorites.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+                <lord-icon src="https://cdn.lordicon.com/nvsfzbop.json"
+                           trigger="loop"
+                           delay="2000"
+                           colors="primary:#121331,secondary:#ff9935">
+                </lord-icon> Favorites
+            </a>
+        </li>
+        <li>
+            <a href="maps.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+                <lord-icon src="https://cdn.lordicon.com/onmwuuox.json"
+                           trigger="loop"
+                           delay="2000"
+                           colors="primary:#121331,secondary:#ff9935">
+                </lord-icon> Map
+            </a>
+        </li>
+        <li>
+            <a href="more-page-user.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">
+                <lord-icon src="https://cdn.lordicon.com/feyvdmcx.json"
+                           trigger="loop"
+                           delay="2000"
+                           colors="primary:#121331,secondary:#ff9935">
+                </lord-icon> More
+            </a>
+        </li>
+    </ul>
+ 
+
+
+ @code {
+
+    private IJSObjectReference? _module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/HomeNew.razor.js");
+            await _module.InvokeVoidAsync("initCategoriesSlider");
+        }
+        else
+        {
+          //  if (_module != null)
+             //   await _module.InvokeVoidAsync("HomeNew.refresh");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            if (_module != null)
+            {
+               // await _module.InvokeVoidAsync("HomeNew.destroy");
+                await _module.DisposeAsync();
+            }
+        }
+        catch
+        {
+        }
+    }
+}

@@ -261,7 +261,7 @@
 
 
     <!-- ================= HEADER ================= -->
-    <header class="header bg-white ">
+    <header class="header bg-white sticky-top">
 
   
    
@@ -905,7 +905,7 @@
             </a>
         </li>
         <li>
-            <a href="more-page-user.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">
+            <a href="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMore" aria-controls="offcanvasMore" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">            
                 <lord-icon src="https://cdn.lordicon.com/feyvdmcx.json"
                            trigger="loop"
                            delay="2000"
@@ -914,7 +914,50 @@
             </a>
         </li>
     </ul>
- 
+<!--More -->
+<div class="offcanvas offcanvas-end more-links " tabindex="-1" id="offcanvasMore" aria-labelledby="offcanvasMoreLabel">
+    <div class="offcanvas-header px-4 pt-4 pb-0">
+        <h5 class="offcanvas-title section-title">
+            More Links
+        </h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  
+    <div class="offcanvas-body">
+    
+        <main class="flex-shrink-0 py-0">
+            <div class="container">
+                <div class="row">
+
+                    <div class="list-group list-group-flush px-0 py-2">
+
+                        <a href="subscription-manage.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon> Manage Subscription</a>
+                        <a href="" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/fgxwhgfp.json" trigger="loop" delay="2000"></lord-icon> Get Full Access</a>
+                        <a href="my-saving.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/eaegfqtv.json" trigger="loop" delay="2000"></lord-icon> My Savings</a>
+                        <a href="notifications.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000"></lord-icon> Notifications</a>
+                        <a href="about-us.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/ozlkyfxg.json" trigger="loop" delay="2000"></lord-icon> About Us</a>
+                        <a href="tips-help.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/lltgvngb.json" trigger="loop" delay="2000"></lord-icon> Tips &amp; Help</a>
+                        <a href="privacy-policy.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/apbwvyeg.json" trigger="loop" delay="2000"></lord-icon><i class="bi bi-shield-lock"></i> Privacy Statement</a>
+                        <a href="terms-of-service.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/hmpomorl.json" trigger="loop" delay="2000"></lord-icon> Terms of Use</a>
+                        <a href="licenses.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/mqgegihh.json" trigger="loop" delay="2000"></lord-icon> Licenses</a>
+                        <a href="accessibility.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/weehpyrf.json" trigger="loop" delay="2000"></lord-icon> Accessibility</a>
+                        <a href="selling-personal-info.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon> Do Not Sell My Personal Information</a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/orgpczfu.json" trigger="loop" delay="2000"></lord-icon> Logout</a>
+        
+                        <h5 class="offcanvas-title section-title  px-2 pt-4 pb-0">Theme Settings</h5>
+                        <div class="d-flex justify-content-between justify-content-center px-2">
+                            <a href="" class="dropdown-item d-flex gap-2" data-theme-value="auto"><lord-icon src="https://cdn.lordicon.com/bjxtqill.json" trigger="loop" delay="2000"></lord-icon> Default</a>
+                            <a href="" class="dropdown-item d-flex gap-2" data-theme-value="light"><lord-icon src="https://cdn.lordicon.com/iwjzoila.json" trigger="loop" delay="2000"></lord-icon> Light</a>
+                            <a href="" class="dropdown-item d-flex gap-2" data-theme-value="dark"><lord-icon src="https://cdn.lordicon.com/yodwgokk.json" trigger="loop" delay="2000"></lord-icon> Dark</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<!--More -->
 
 
  @code {

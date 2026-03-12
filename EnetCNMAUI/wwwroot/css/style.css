@@ -1,5 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+a{
+	text-decoration: none;
+}
 
+@media (max-width: 991px) {
+  .sticky-sm-top-only {
+    position: sticky;
+    top: 0;
+	  z-index: 2;
+
+    /* other related styles like z-index, etc. might also be present */
+  }
+	.inner-header{
+	padding-top: 15px;
+	padding-bottom: 15px;
+
+}
+}
+
+.more-links lord-icon{
+	width: 20px;
+	height: 20px;
+	--lord-icon-primary: #000000;
+    --lord-icon-secondary: #000000;
+}
+
+
+
+
+/* Theme Dropdown Temporary */
+.dropdown.position-fixed {background-color:var(--bs-danger); width:auto; top:4rem; right:0; z-index:9999;}
+.dropdown.position-fixed > a {margin-top:0;}
+.dropdown-toggle#themeDropdown:after {display:none;}
+.dropdown-toggle#themeDropdown + .dropdown-menu .dropdown-item-text {cursor:context-menu;}
 
 .offersWrap {display:flex; flex-wrap:wrap; gap:1.25rem;}
 .offersWrap .card {flex-grow:1; flex-shrink:0; flex-basis:calc(33.33% - 2.5rem);}
@@ -12,6 +45,10 @@
 .offersWrap .card {flex-basis:100%;}
 .offersWrap .card:last-child {flex-basis:100%;}
 }
+
+
+
+
 .offersWrap .card .card-img, .card .card-img {width:100%; height:11.25rem; object-fit:cover; background-position:center; background-size:cover; background-color:#999;}
 
 small .view_num {}
@@ -116,6 +153,65 @@ h5.main-heading {
 	text-decoration: none;
 	margin-top: 10px;
 }
+
+
+/*Member-Only Offers BLUR Effect*/
+.card.blur .card-body, .card.blur .card-img{pointer-events:none; filter:blur(0.100rem); opacity: 0.5}
+.card.blur .member-only {position:absolute; z-index:1; width:96%; margin-top:12%; margin-left:2%; padding:0.4375rem 0.5rem var(--bs-px-10); background-color:#ffcc00; color:#2d2d2d; font-weight:bold; line-height:1.25; padding: 15px 15px; text-align:center; border-radius:20px; border:0.1875rem dashed #262161;
+
+ box-shadow: -1px 0px 21px 0px rgba(0,0,0,0.2);
+-webkit-box-shadow: -1px 0px 21px 0px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 0px 21px 0px rgba(0,0,0,0.2);
+}
+
+.card.blur .member-only lord-icon{
+	width: 25px;
+	height: 25px;
+	    margin-top: -3px;
+}
+
+
+
+
+
+#offcanvasCities, #offcanvasAbout, #offcanvasRedeem, #offcanvasMonYrPicker, #offcanvasEventDesc, #offcanvasNearby {
+    --bs-offcanvas-height: auto;
+}
+
+
+.offer-expiry {font-size: 16px;}
+
+
+
+
+/*Redeem Section*/
+.offer-top {position:relative; align-items:center}
+.offer-top .heart {top:0.0625rem; right:0;}
+.offer-expiry {color:var(--bs-gray-400); letter-spacing:0.0375rem;}
+.offer-expiry, .card.redeem .card-body p {font-size:0.75rem;}
+.card.redeem {max-width:30rem; width:calc(100% - 1rem); height:28rem; margin:0 0.5rem; padding-right: 20px;
+    padding-left: 20px; align-self:center; border: 1px solid #d5d5d5 !important;
+    border-radius: 20px !important;}
+.card.redeem .card-header, .card.redeem .card-footer {background:none; text-align:center;}
+.card.redeem .card-header {color:var(--bs-heading-color); font-size: 26px;    font-weight: 500; border:none; padding:1rem 0 var(--bs-card-cap-padding-y);}
+.card.redeem .card-body {height:100%; overflow-y:auto; margin-bottom:0.5rem; padding:0;}
+.card.redeem .card-body .redeem-desc {text-align: center; color:var(--bs-body-color); font-weight:normal; line-height:1.25;}
+.card.redeem .card-body p {font-size:0.75rem; line-height:1.3; margin-bottom:var(--bs-px-10); text-align: center;}
+.card.redeem .card-img {width:100%; height:180px; margin:var(--bs-px-10) auto;     margin-top: 10px;
+    margin-bottom: 10px;}
+.card.redeem .card-footer {position:relative; border-top:0.125rem dashed rgba(var(--bs-black-rgb), 0.08); padding:1rem 0;}
+.card.redeem .card-footer:before,
+.card.redeem .card-footer:after {background-image:url('../img/redeem-foot.png'); background-color:rgb(var(--bs-white-rgb)); background-repeat:no-repeat; background-size:auto; width:var(--bs-px-10); height:1.1875rem; content:''; position:absolute; top:var(--bs-px-n10);}
+.card.redeem .card-footer:before {background-position:0 0; left:-0.8125rem;}
+.card.redeem .card-footer:after {background-position:calc(var(--bs-px-11) * -1) 0; right:-0.8125rem;}
+[data-bs-theme=dark] .card.redeem .card-footer, .theme-dark .card.redeem .card-footer {border-top-color:#224;}
+[data-bs-theme=dark] .card.redeem .card-footer:before, .theme-dark .card.redeem .card-footer:before,
+[data-bs-theme=dark] .card.redeem .card-footer:after, .theme-dark .card.redeem .card-footer:after {background-color:rgb(var(--bs-body-bg-rgb));}
+[data-bs-theme=dark] .card.redeem .card-footer:before, .theme-dark .card.redeem .card-footer:before {background-position:-1.375rem 0;}
+[data-bs-theme=dark] .card.redeem .card-footer:after, .theme-dark .card.redeem .card-footer:after {background-position:-2rem 0;}
+
+
+
 
 .card {
  text-align: left;
@@ -691,6 +787,12 @@ h5.main-heading {
         left: 0;
         z-index: 2;
   }
+		.nav-foot .nav-link:hover {
+    color: #ff9935;
+}
+	.nav-foot .nav-link.active {
+    color: #ff9935;
+}
   .nav-foot > li {
     width: 20%;
   }
@@ -1083,6 +1185,23 @@ a .suggested-card h6{
   overflow:hidden;
   transition:all .3s ease;
 }
+.business-item a {
+    color: #222222;
+
+}
+
+.business-item a h6{
+
+	transition: all 0.2s ease-out;
+}
+.business-item  a:hover h6 {
+    color: #ff9935;
+	transition: all 0.2s ease-in;
+}
+
+
+
+
 
 .business-header{
   display:flex;
@@ -1091,7 +1210,7 @@ a .suggested-card h6{
   padding:15px 0;
   cursor:pointer;
 }
-.business-header > div:first-child {
+.business-header > :first-child {
     width: calc(100% - 3rem);
     overflow: hidden;
 }
@@ -1101,7 +1220,7 @@ a .suggested-card h6{
   object-fit:cover;
   border-radius:20px;
 }
-.accordion-businesses {overflow: hidden;}
+.accordion-businesses {overflow: hidden; text-decoration: none;}
 .accordion-businesses h6{
 	    font-size: 20px;
     font-weight: bold !important;
@@ -1109,6 +1228,7 @@ a .suggested-card h6{
 		white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+	text-decoration: none;
 
 
 	
@@ -1137,6 +1257,8 @@ a .suggested-card h6{
     height: 35px;
     width: 35px;
     padding: 5px 0px 0px 6px;
+
+
 }
 .business-item .arrow {
     width: 40px;
@@ -1153,6 +1275,7 @@ a .suggested-card h6{
 }
 .business-item.active .arrow svg {
           stroke: #fff; /* Changes the stroke color to red */
+
 }
 
 

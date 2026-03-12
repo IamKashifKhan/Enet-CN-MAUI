@@ -1,3 +1,84 @@
+// Theme Switching
+document.addEventListener('DOMContentLoaded', () => {
+  const themeTrigger = document.getElementById('themeDropdown');
+  if (!themeTrigger) return;
+  const htmlElement = document.documentElement;
+  const bodyElement = document.body;
+  const themeIcon = themeTrigger.querySelector('i');
+  const themeOptions = document.querySelectorAll('[data-theme-value]');
+  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  let storedTheme = localStorage.getItem('bsTheme');
+  let effectiveTheme;
+  if (!storedTheme || storedTheme === 'auto') {
+    effectiveTheme = prefersDarkScheme ? 'dark' : 'light';
+    htmlElement.setAttribute('data-bs-theme', effectiveTheme);
+    bodyElement.classList.add(`theme-${effectiveTheme}`);
+    themeIcon.className = 'bi bi-circle-half';
+    storedTheme = 'auto';
+  } else {
+    effectiveTheme = storedTheme;
+    htmlElement.setAttribute('data-bs-theme', effectiveTheme);
+    bodyElement.classList.add(`theme-${effectiveTheme}`);
+    if (storedTheme === 'light') themeIcon.className = 'bi bi-sun-fill';
+    else if (storedTheme === 'dark') themeIcon.className = 'bi bi-moon-stars-fill';
+  }
+  themeOptions.forEach(option => {
+    option.classList.toggle('active', option.getAttribute('data-theme-value') === storedTheme);
+  });
+  themeOptions.forEach(option => {
+    option.addEventListener('click', function (e) {
+      e.preventDefault();
+      const selectedTheme = this.getAttribute('data-theme-value');
+      const selectedIcon = this.querySelector('i');
+      localStorage.setItem('bsTheme', selectedTheme);
+      bodyElement.classList.remove('theme-dark', 'theme-light');
+      if (selectedTheme === 'auto') {
+        const systemPref = prefersDarkScheme ? 'dark' : 'light';
+        htmlElement.setAttribute('data-bs-theme', systemPref);
+        bodyElement.classList.add(`theme-${systemPref}`);
+        themeIcon.className = 'bi bi-circle-half';
+      } else {
+        htmlElement.setAttribute('data-bs-theme', selectedTheme);
+        bodyElement.classList.add(`theme-${selectedTheme}`);
+        themeIcon.className = selectedIcon.className;
+      }
+      themeOptions.forEach(opt => opt.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+});
+
+
+
+	/* Toggle */
+$('.toggle-wrapper button').click(function(){
+  $('.toggle-wrapper button').removeClass('active');
+  $(this).addClass('active');
+  $('#offersScreen, #businessScreen').addClass('hidden');
+  $('#' + $(this).data('target')).removeClass('hidden');
+});
+
+/* Heart */
+$(document).on('click','.heart',function(){
+  $(this).text($(this).text() === "♡" ? "♥" : "♡");
+});
+
+
+/* Heart Animation */
+$(document).on('click', '.heart', function () {
+  $(this).toggleClass('active');
+
+  if ($(this).hasClass('active')) {
+    $(this).html('<i class="fa-solid fa-heart"></i>');
+  } else {
+    $(this).html('<i class="fa-regular fa-heart"></i>');
+  }
+});
+	
+	
+
+
+
 // search list item remove
 $(document).on('click', '.remove-item', function() {
     $(this).closest('li').fadeOut(200, function() {

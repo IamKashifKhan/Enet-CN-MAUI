@@ -6,127 +6,378 @@
 @inject IThemeManager themeManager
 @inject IJSRuntime jSRuntime
 
-<div class="d-flex flex-column">
+<div class="d-flex flex-column business-page-new">
 
-    <!-- ========== HEADER START ========== -->
-    <header class="fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
-        <div class="container d-flex flex-row justify-content-between">
-
-            <!-- Logo -->
-            <a @onclick="()=> GoBack()" href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
-                <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
-            </a>
-
-            <!-- DropDown Categories -->
-            <div class="btn-group d-none d-lg-flex align-self-start ms-lg-4 ms-xl-5 mt-auto mb-1">
-                <button class="btn btn-primary btn-sm dropdown-toggle rounded-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    All Categories
-                </button>
-                <ul class="dropdown-menu shadow"></ul>
-            </div>
-
+    <!-- Filter Business -->
+    <div class="offcanvas offcanvas-top h-100 border-0" tabindex="-1" id="filterBusiness" aria-labelledby="filterBusinessLabel">
+        <div class="offcanvas-header px-4 pt-4 pb-2">
+            <h5 class="offcanvas-title section-title" id="filterBusinessLabel">
+                <i class="fa-solid fa-sliders"></i> Filters - Business
+            </h5>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
-        <!-- Mobile Top -->
-        <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
-            <div class="mob_top-left visible">
-                <a @onclick="() => GoBack()" href="index.html" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"><i class="bi bi-chevron-left"></i></a>
+        <div class="offcanvas-body px-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div id="selectedTags2" class="d-flex flex-wrap gap-2"></div>
+                <button id="clearAll2" class="btn-clear-all p-0">Clear All</button>
             </div>
-            <div class="mob_top-head visible">
-                <div class="fs-5 text-truncate lh-lg">@CategoryName</div>
+
+            <hr class="divider-line">
+
+            <div class="mt-4">
+                <h6 class="section-title">Sub Categories</h6>
+                <div class="tags-group d-flex flex-wrap gap-2 mt-3">
+                    @if (mainCategories != null && mainCategories.Count > 0)
+                    {
+                        foreach (var item in mainCategories.Take(10))
+                        {
+                            <div class="filter-tag">
+                                <input type="checkbox" id="@($"cat_{item.Category_Sub_Key}")" value="@item.Name">
+                                <label for="@($"cat_{item.Category_Sub_Key}")">@item.Name</label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="filter-tag">
+                            <input type="checkbox" id="beauty" value="BEAUTY" checked>
+                            <label for="beauty">Beauty</label>
+                        </div>
+                        <div class="filter-tag">
+                            <input type="checkbox" id="eat" value="EAT">
+                            <label for="eat">Eat</label>
+                        </div>
+                        <div class="filter-tag">
+                            <input type="checkbox" id="kids" value="KIDS">
+                            <label for="kids">Kids</label>
+                        </div>
+                    }
+                </div>
             </div>
-            <div class="mob_top-right visible">
-                <div class="d-none me-5">
-                    <a href="" class="link-light p-2 py-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
-                        <i class="bi bi-search"></i>
+
+            <div class="mt-4">
+                <h6 class="section-title">Rating</h6>
+                <div class="tags-group d-flex flex-wrap gap-2 mt-3">
+                    <div class="filter-tag"><input type="checkbox" id="1star" value="1Star"><label for="1star">1 Star</label></div>
+                    <div class="filter-tag"><input type="checkbox" id="2star" value="2Star"><label for="2star">2 Star</label></div>
+                    <div class="filter-tag"><input type="checkbox" id="3star" value="3Star"><label for="3star">3 Star</label></div>
+                    <div class="filter-tag"><input type="checkbox" id="4star" value="4Star"><label for="4star">4 Star</label></div>
+                    <div class="filter-tag"><input type="checkbox" id="5star" value="5Star"><label for="5star">5 Star</label></div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h6 class="section-title">Features/Gold</h6>
+                <div class="tags-group d-flex flex-wrap gap-2 mt-3">
+                    <div class="filter-tag"><input type="checkbox" id="featured" value="Featured"><label for="featured">Featured</label></div>
+                    <div class="filter-tag"><input type="checkbox" id="gold" value="Gold"><label for="gold">Gold</label></div>
+                </div>
+            </div>
+
+            <h5 class="section-title mt-4">Nearby Range</h5>
+            <div class="range-wrapper">
+                <div class="d-flex justify-content-between">
+                    <span>0.5mi</span>
+                    <span>10mi</span>
+                </div>
+
+                <input type="range" min="0" max="10" step="0.1" value="3.5" class="form-range custom-range" id="distanceRange">
+
+                <div class="text-center mt-2">
+                    <span id="rangeValue">3.5</span>mi
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button class="btn filter-btn">Filter Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Offcanvas -->
+    <div class="offcanvas offcanvas-top h-100" tabindex="-1" id="offcanvasFullscreen" aria-labelledby="offcanvasFullscreenLabel">
+        <div class="offcanvas-body">
+            <div class="search-wrapper">
+
+                <div class="search-bar d-flex align-items-center mb-4">
+                    <span class="search-icon">
+                        <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon>
+                    </span>
+                    <input type="text" class="form-control border-0" placeholder="Search for Offer / Food / Beauty etc.">
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+                <h5 class="section-title">Popular Categories</h5>
+                <div class="row text-center g-3 categories">
+                    <div class="owl-carousel categories-slider top-categories">
+                        @if (mainCategories != null && mainCategories.Count > 0)
+                        {
+                            foreach (var item in mainCategories)
+                            {
+                                <div class="cat-item">
+                                    <a href="" class="hover-underline-animation center" @onclick="@(async () => await HandleSelectedCategory(item))" @onclick:preventDefault>
+                                        <img src="@GetCategoryIcon(item)" alt="@item.Name">
+                                        <p>@item.Name</p>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <h5 class="section-title mt-4">Recent Search</h5>
+                <ul class="recent-search list-unstyled">
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Plumber</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Burger</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Pet Food</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Movie</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                </ul>
+
+                <h5 class="section-title mt-4">Popular Businesses</h5>
+                <div class="row g-3 offer-cards">
+                    <div class="owl-carousel offers-slider">
+                        @if (businessList != null && businessList.Count > 0)
+                        {
+                            foreach (var item in businessList.Take(8))
+                            {
+                                <div class="item">
+                                    <div class="card custom-card">
+                                        <a href="#" class="hover-underline-animation">
+                                            <img src="@item.ProfileImagePath" class="card-img-top" alt="@GetBusinessTitle(item)">
+                                            <div class="card-body">
+                                                <h6>@GetBusinessTitle(item)</h6>
+                                                <small>Nearby 5mi</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="item">
+                                <div class="card custom-card">
+                                    <img src="images/pic-business01.jpg" class="card-img-top" alt="">
+                                    <div class="card-body">
+                                        <h6>Popular Business</h6>
+                                        <small>Nearby 5mi</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <h5 class="section-title mt-4">Nearby Range</h5>
+                <div class="range-wrapper">
+                    <div class="d-flex justify-content-between">
+                        <span>0.5mi</span>
+                        <span>10mi</span>
+                    </div>
+
+                    <input type="range" min="0" max="10" step="0.1" value="3.5" class="form-range custom-range">
+                    <div class="text-center mt-2"><span>3.5</span>mi</div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn filter-btn">Filter Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     
+    <!-- Mobile Header -->
+    <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
+        <div class="mob_top-left visible">
+            <a @onclick="() => GoBack()" href="" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2" @onclick:preventDefault>
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </div>
+        <div class="mob_top-head visible">
+            <div class="fs-5 text-truncate lh-lg">@DisplayHeaderTitle</div>
+        </div>
+        <div class="mob_top-right visible">
+            <a href="#" class="link-light p-2 py-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFullscreen" aria-controls="offcanvasFullscreen">
+                <i class="bi bi-search"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Inner Header -->
+    <div class="container inner-header mt-3 bg-white sticky-sm-top-only">
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-semibold text-truncate">
+                    <a href="" class="back-link" @onclick="() => GoBack()" @onclick:preventDefault>
+                        <span class="back-arrow me-3"><i class="fa-solid fa-angle-left"></i></span>
                     </a>
-                    <div id="offcanvasSearch" class="offcanvas offcanvas-top" tabindex="-1">
-                        <div class="offcanvas-body p-1 px-2">
-                            <button type="button" class="btn-close position-absolute end-0 me-1 p-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    @DisplayHeaderTitle
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <section class="bg-white pt-3 pb-2">
+        <div class="container">
+            <div class="owl-carousel categories-slider top-categories" id="owl-tabs">
+                @if (mainCategories != null && mainCategories.Count > 0)
+                {
+                    foreach (var item in mainCategories)
+                    {
+                        <div class="cat-item">
+                            <a href="" class="hover-underline-animation center" @onclick="@(async () => await HandleSelectedCategory(item))" @onclick:preventDefault>
+                                <img src="@GetCategoryIcon(item)" alt="@item.Name">
+                                <p>@item.Name</p>
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="loading">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container border-top pt-3">
+        <div class="row">
+
+            <!-- Toggle + Filter + Sort -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="toggle-wrapper">
+                    <button class="@(ShowOffers ? "active" : "")" @onclick="() => ToggleScreen(true)">Offers</button>
+                    <button class="@(!ShowOffers ? "active" : "")" @onclick="() => ToggleScreen(false)">Businesses</button>
+                </div>
+
+                <div class="d-flex align-items-center gap-2 filter-sort-bar">
+                    <a href="#" class="filter-link" data-bs-toggle="offcanvas" data-bs-target="#filterBusiness">
+                        <i class="fa-solid fa-sliders"></i> Filters
+                    </a>
+
+                    <select class="form-select custom-select-arrow sort-select" @bind="SelectedSort">
+                        <option value="Sort">Sort</option>
+                        <option value="Newest">Newest</option>
+                        <option value="Oldest">Oldest</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Offers Screen -->
+            <div id="offersScreen" class="@(ShowOffers ? "" : "hidden")">
+                <div class="offersWrap">
+
+                    <!-- Static mock offers for layout until offer binding is added -->
+                    <div class="card card-hover border-0 shadow-sm py-1">
+                        <div class="card-img rounded-4" style="background-image: url('images/pic-dinner.jpg');"></div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="fw-semibold mb-0">Crunchy Burger CHECK ELPSISE Sample TEXT</h6>
+                                <span class="heart"><i class="fa-regular fa-heart"></i></span>
+                            </div>
+                            <p class="small">Max Value $15.00</p>
+                            <div class="d-flex gap-3 offers-icons">
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                                    <span class="view_num">3</span> <span class="view_txt">Redemptions</span>
+                                </small>
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                                    <span class="view_num">77</span> <span class="view_txt">Views</span>
+                                </small>
+                                <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-hover border-0 shadow-sm py-1">
+                        <div class="card-img rounded-4" style="background-image: url('images/pic-health.jpg');"></div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="fw-semibold mb-0">Health Care</h6>
+                                <span class="heart"><i class="fa-regular fa-heart"></i></span>
+                            </div>
+                            <p class="small">Healthcare</p>
+                            <div class="d-flex gap-3 offers-icons">
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                                    <span class="view_num">15</span> <span class="view_txt">Redemptions</span>
+                                </small>
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                                    <span class="view_num">36</span> <span class="view_txt">Views</span>
+                                </small>
+                                <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-suggested">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="fw-semibold m-0">Suggested Restaurants</h5>
+                            <small class="see-all mt-1">
+                                <a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a>
+                            </small>
+                        </div>
+
+                        <div class="owl-carousel suggested-slider">
+                            @if (businessList != null && businessList.Count > 0)
+                            {
+                                foreach (var group in businessList.Chunk(2).Take(4))
+                                {
+                                    <div class="item">
+                                        <div class="suggested-column">
+                                            @foreach (var item in group)
+                                            {
+                                                <a href="#" class="suggested-link">
+                                                    <div class="suggested-card">
+                                                        <img src="@item.ProfileImagePath" alt="@GetBusinessTitle(item)">
+                                                        <div>
+                                                            <h6 class="text-truncate">@GetBusinessTitle(item)</h6>
+                                                            <p class="location"><i class="fa-solid fa-location-dot"></i>@GetBusinessLocation(item)</p>
+                                                            <span class="badge-offer">@GetOfferCount(item) Offers</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
-    <!-- ========== HEADER END ========== -->
-    <!-- ========== MAIN CONTENT START ========== -->
-    <main class="flex-shrink-0 py-0">
-        <div class="container">
-            <div class="row">
 
-                <!-- Glide Categories Main -->
-                <div class="sliding-tabs bus-cat-main">
-                    <div id="owl-tabs" class="owl-carousel owl-theme">
-                            @if (mainCategories != null && mainCategories.Count > 0)
-                            {
-                                foreach (var item in mainCategories)
-                                {
-                                    <CategoryCapsule Category="item" OnSelected="HandleSelectedCategory"></CategoryCapsule>
-                                }
-                            }
-                            else
-                            {
-                                            <div class="loading">
-                                              <div></div>
-                                              <div></div>
-                                              <div></div>
-                                              <div></div>
-                                            </div> 
-                            }
-                    </div>
-                </div>
+            <!-- Business Screen -->
+            <div id="businessScreen" class="@(!ShowOffers ? "" : "hidden")">
+                <div class="business-accordion">
 
-                @* <!-- Glide Categories Sub -->
-                <div class="glide bus-cat-sub">
-                    <div class="glide__track" data-glide-el="track">
-                        <ul class="glide__slides">
-                            <li class="glide__slide"><a href="business-list.html"><div class="bus-label">Sub-Cat 01 <span>1 offers</span></div></a></li>
-                            <li class="glide__slide"><a href="business-list.html"><div class="bus-label">Sub-Cat 02 <span>4 offers</span></div></a></li>
-                            <li class="glide__slide"><a href="business-list.html"><div class="bus-label">Sub-Cat 03 <span>2 offers</span></div></a></li>
-                        </ul>
-                    </div>
-                </div>
- *@
-                <h1 class="d-none d-lg-block text-center mb-4">Ventura City</h1>
-
-                <!-- Action List -->
-                <div class="action-list">
-                    <div class="dropdown  d-none">
-                        <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sort by: <i class="bi bi-filter-left"></i></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="" class="dropdown-item active">Coming First</a></li>
-                            <li><a href="" class="dropdown-item">Coming Last</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="form-check form-check-reverse form-switch">
-                        <label for="card_toggle" class="form-check-label">Grid View</label>
-                        <input id="card_toggle" class="form-check-input" type="checkbox" @bind="IsGrid" />
-                    </div>
-                </div>
-
-                <!-- Business Cards -->
-                <ul id="card_container" class="card-group card-list">
                     @if (businessList != null && businessList.Count > 0)
                     {
                         foreach (var item in businessList)
                         {
-                            <BusinessCard Business="item" IsGridView="IsGrid"></BusinessCard>
+                            <BusinessCard item="item"></BusinessCard>
                         }
                     }
                     else
                     {
                         <LoadingCard></LoadingCard>
-
                     }
-                </ul>
-
+                </div>
             </div>
-        </div>
-    </main>
-    <!-- ========== MAIN CONTENT END ========== -->
 
+        </div>
+    </div>
 </div>
 
 @code {
@@ -136,6 +387,8 @@
     public string? CategoryId { get; set; }
 
     private bool IsGrid;
+    private bool ShowOffers = true;
+    private string SelectedSort = "Sort";
 
     #endregion
 
@@ -152,7 +405,9 @@
     private List<BusinessItem>? businessList;
     private string CategoryName = string.Empty;
     private string CategoryKey = string.Empty;
- 
+
+    private string DisplayHeaderTitle => string.IsNullOrWhiteSpace(CategoryName) ? "Explore Restaurants" : CategoryName;
+
     #endregion
 
     #region Lifecycle Methods
@@ -164,26 +419,25 @@
 
         businessesDotnetReference = DotNetObjectReference.Create(this);
 
-        var DataArray = CategoryId.Split(',');
-
-        if (DataArray[0] == "City")
+        if (!string.IsNullOrWhiteSpace(CategoryId))
         {
-            // CategoryKey = DataArray[0];
-            GetCityBusiness(DataArray[1], string.Empty);
+            var DataArray = CategoryId.Split(',');
 
+            if (DataArray[0] == "City")
+            {
+                GetCityBusiness(DataArray[1], string.Empty);
+            }
+            else if (DataArray[0] == "Search")
+            {
+                GetCityBusiness(string.Empty, DataArray[1]);
+            }
+            else
+            {
+                CategoryKey = DataArray[0];
+                await GetBusiness(CategoryKey);
+                CategoryName = DataArray.Length > 1 ? DataArray[1] : string.Empty;
+            }
         }
-        else if (DataArray[0] == "Search")
-        {
-            GetCityBusiness(string.Empty, DataArray[1]);
-        }
-        else
-        {
-            CategoryKey = DataArray[0];
-            await GetBusiness(CategoryKey);
-            CategoryName = DataArray[1];
-        }
-
-
 
         GetMainCategories();
     }
@@ -192,8 +446,8 @@
     {
         if (firstRender)
         {
-            await Task.Delay(2000);
-            SetupTabs();
+            await Task.Delay(1500);
+            await SetupTabs();
         }
     }
 
@@ -201,11 +455,34 @@
 
     #region JS Setup
 
-    private async void SetupTabs()
+    private async Task SetupTabs()
     {
-        //await businessesJsRefernce.InvokeVoidAsync("initCatSlider");
-        await businessesJsRefernce.InvokeVoidAsync("initToggleSwitch");
+        if (businessesJsRefernce is null)
+            return;
 
+        // try
+        // {
+        //     await businessesJsRefernce.InvokeVoidAsync("owlCarouselstart");
+        // }
+        // catch { }
+
+        // try
+        // {
+        //     await businessesJsRefernce.InvokeVoidAsync("initToggleSwitch");
+        // }
+        // catch { }
+
+        // try
+        // {
+        //     await businessesJsRefernce.InvokeVoidAsync("initBusinessAccordion");
+        // }
+        // catch { }
+
+        // try
+        // {
+        //     await businessesJsRefernce.InvokeVoidAsync("initHeartToggle");
+        // }
+        // catch { }
     }
 
     #endregion
@@ -219,19 +496,23 @@
 
         try
         {
-            if (output.Success && output.Data != null)
+            if (output.Success && output.Data != null && output.Data.Count > 0)
             {
                 output.Data.RemoveAt(0);
                 var main_categories = output.Data;
 
                 var diningcategory = main_categories.FirstOrDefault(x => x.Name == "Dining");
-                main_categories.Remove(diningcategory);
-                main_categories.Insert(0, diningcategory);
+                if (diningcategory != null)
+                {
+                    main_categories.Remove(diningcategory);
+                    main_categories.Insert(0, diningcategory);
+                }
 
                 mainCategories = main_categories;
                 await InvokeAsync(StateHasChanged);
-                await businessesJsRefernce.InvokeVoidAsync("owlCarouselstart");
 
+                if (businessesJsRefernce != null)
+                    await businessesJsRefernce.InvokeVoidAsync("owlCarouselstart");
             }
         }
         catch (Exception ex)
@@ -244,18 +525,18 @@
     {
         try
         {
-            
             var businessCategoryRequest = new CategoryBusinessRequest(category);
             var output = await apiService.GetBusinessBasedonSubCategory(businessCategoryRequest);
             businessList = output.Data;
             await InvokeAsync(StateHasChanged);
-
+            await SetupTabs();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching categories: {ex.Message}");
         }
     }
+
     private async void GetCityBusiness(string city, string searchterm)
     {
         try
@@ -264,48 +545,116 @@
             var output = await apiService.GetCityBusiness(cityBusinessRequest);
             businessList = output.Data;
             await InvokeAsync(StateHasChanged);
-
+            await SetupTabs();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching categories: {ex.Message}");
         }
     }
- 
 
     #endregion
 
     #region Navigation
 
-    private async void HandleSelectedCategory(CategoryItem categoryItem)
+    private async Task HandleSelectedCategory(CategoryItem categoryItem)
     {
-        if (categoryItem.Category_Sub_Key == CategoryKey) return;
-        else
-        {
-            CategoryName = categoryItem.Name;
-            businessList.Clear();
-            await InvokeAsync(StateHasChanged);
-            await GetBusiness(categoryItem.Category_Sub_Key);
-            await InvokeAsync(StateHasChanged);
-        }
+        if (categoryItem.Category_Sub_Key == CategoryKey)
+            return;
+
+        CategoryKey = categoryItem.Category_Sub_Key;
+        CategoryName = categoryItem.Name;
+
+        businessList?.Clear();
+        await InvokeAsync(StateHasChanged);
+        await GetBusiness(categoryItem.Category_Sub_Key);
+        await InvokeAsync(StateHasChanged);
     }
 
     public async void GoBack()
     {
-
         await Shell.Current.GoToAsync("..");
     }
 
-
     private async void HandleCategorySelected(CategoryItem categoryItem)
     {
-        if (categoryItem.Category_Sub_Key == CategoryKey) return;
-        else
-        {
-            businessList.Clear(); 
-            await InvokeAsync(StateHasChanged);
-            GetBusiness(categoryItem.Category_Sub_Key); 
-        }
+        if (categoryItem.Category_Sub_Key == CategoryKey)
+            return;
+
+        CategoryKey = categoryItem.Category_Sub_Key;
+        businessList?.Clear();
+        await InvokeAsync(StateHasChanged);
+        await GetBusiness(categoryItem.Category_Sub_Key);
+    }
+
+    private void ToggleScreen(bool showOffers)
+    {
+        ShowOffers = showOffers;
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private string GetCategoryIcon(CategoryItem cat)
+    {
+        var name = cat?.Name?.Trim().ToLowerInvariant() ?? string.Empty;
+
+        if (name.Contains("bogo")) return "images/icon-bogo.svg";
+        if (name.Contains("perk")) return "images/icon-perk.svg";
+        if (name.Contains("health")) return "images/icon-health.svg";
+        if (name.Contains("travel")) return "images/icon-travel.svg";
+        if (name.Contains("entertainment")) return "images/icon-entertainment.svg";
+        if (name.Contains("house") || name.Contains("home")) return "images/icon-home.svg";
+        if (name.Contains("kid")) return "images/icon-kids.svg";
+        if (name.Contains("pet")) return "images/icon-pet.svg";
+        if (name.Contains("care") || name.Contains("beauty")) return "images/icon-care.svg";
+        if (name.Contains("automotive") || name.Contains("car")) return "images/icon-automotive.svg";
+        if (name.Contains("shop")) return "images/icon-shops.svg";
+        if (name.Contains("eat") || name.Contains("dining") || name.Contains("restaurant")) return "images/icon-eat.svg";
+        if (name.Contains("drink") || name.Contains("wine")) return "images/icon-drink.svg";
+        if (name.Contains("business")) return "images/icon-business.svg";
+
+        return "images/icon-business.svg";
+    }
+
+    private string GetBusinessTitle(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("Name")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("BusinessName")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Title")?.GetValue(item)?.ToString()
+            ?? "Business";
+    }
+
+    private string GetBusinessLocation(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("City")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Location")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Address")?.GetValue(item)?.ToString()
+            ?? "Ventura, CA";
+    }
+
+    private string GetBusinessImage(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("ImageUrl")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Image")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Logo")?.GetValue(item)?.ToString()
+            ?? "images/pic-business01.jpg";
+    }
+
+    private string GetOfferCount(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("ActiveOffersCount")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("OffersCount")?.GetValue(item)?.ToString()
+            ?? "0";
     }
 
     #endregion

@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+        <TargetFrameworks>net9.0-android;</TargetFrameworks>
         <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -21,7 +21,7 @@
         <Nullable>enable</Nullable>
 
         <!-- Display name -->
-        <ApplicationTitle>EnetCNMAUI</ApplicationTitle>
+        <ApplicationTitle>ConnectNow</ApplicationTitle>
 
         <!-- App Identifier -->
         <ApplicationId>com.companyname.EnetCNMAUI</ApplicationId>
@@ -42,6 +42,11 @@
      <AndroidCreateNativeLibraryArchive>true</AndroidCreateNativeLibraryArchive>
     <PublishTrimmed>False</PublishTrimmed>
     <RunAOTCompilation>False</RunAOTCompilation>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DOTNET_HOST_PATH Condition="'$(DOTNET_HOST_PATH)' == ''">
+      C:\Program Files\dotnet\dotnet.exe
+    </DOTNET_HOST_PATH>
   </PropertyGroup>
  
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
@@ -69,7 +74,7 @@
         <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#000000" />
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#52297a" BaseSize="200,200" />
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#ffffff" BaseSize="200,200" />
 
       <!-- Images -->
         <MauiImage Include="Resources\Images\*" />

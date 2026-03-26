@@ -1,9 +1,32 @@
 ﻿ 
-<a @onclick="@(async () => await OnSelected.InvokeAsync(Category))" href="">
-    <div class="bus-icon"><img src="@GetCategoryIcon(Category)" alt="" /></div>
-    <div class="bus-label">@Category.Name  <span>@Category.ActiveOffersCount</span></div>
-</a>
+@* <div class="cat-item">
+    <a href="#"
+           class="hover-underline-animation center"
+           @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+           @onclick:preventDefault>
 
+        <images src="@GetCategoryIcon(Category)" alt="@Category.Name" />
+
+        <p>
+            @Category.Name
+            @if (Category.ActiveOffersCount > 0)
+            {
+                <span>@Category.ActiveOffersCount</span>
+            }
+        </p>
+
+    </a>
+</div>
+ *@
+
+<div class="cat-item">
+    <a href="#" class="hover-underline-animation center"
+           @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
+           @onclick:preventDefault>
+        <img src="@GetCategoryIcon(Category)" />
+        <p>@Category.Name</p>
+    </a>
+</div>
 
 @code {
 
@@ -13,21 +36,21 @@
 
     private  string GetCategoryIcon(CategoryItem cat)
     {
-        if (cat.Name == CategoryConstants.Cities) return "img/cities.svg";
-        if (cat.Name == CategoryConstants.EatAndTreat) return "img/eats.svg";
-        if (cat.Name == CategoryConstants.Dining) return "img/dining.svg";
-        if (cat.Name == CategoryConstants.WineAndSpirits) return "img/dine-wine.svg";
-        if (cat.Name == CategoryConstants.HealthAndFitness) return "img/health.svg";
-        if (cat.Name == CategoryConstants.Automotive) return "img/automotive.svg";
-        if (cat.Name == CategoryConstants.Shops) return "img/shop.svg";
-        if (cat.Name == CategoryConstants.Pets) return "img/pets.svg";
-        if (cat.Name == CategoryConstants.BeautyAndSpas) return "img/beauty.svg";
-        if (cat.Name == CategoryConstants.Entertainment) return "img/entertainment.svg";
-        if (cat.Name == CategoryConstants.Kids) return "img/kids.svg";
-        if (cat.Name == CategoryConstants.BusinessServices) return "img/business-services.svg";
-        if (cat.Name == CategoryConstants.Home) return "img/home.svg";
-        if (cat.Name == CategoryConstants.Bogo) return "img/bogo.svg";
-        if (cat.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks) return "img/perks.svg";
+        if (cat.Name == CategoryConstants.Cities) return "images/icon_home.svg";
+        if (cat.Name == CategoryConstants.EatAndTreat) return "images/icon_eat.svg";
+        if (cat.Name == CategoryConstants.Dining) return "images/icon_eat.svg";
+        if (cat.Name == CategoryConstants.WineAndSpirits) return "images/icon_drink.svg";
+        if (cat.Name == CategoryConstants.HealthAndFitness) return "images/icon_health.svg";
+        if (cat.Name == CategoryConstants.Automotive) return "images/icon_automotive.svg";
+        if (cat.Name == CategoryConstants.Shops) return "images/icon_shops.svg";
+        if (cat.Name == CategoryConstants.Pets) return "images/icon_pet.svg";
+        if (cat.Name == CategoryConstants.BeautyAndSpas) return "images/icon_care.svg";
+        if (cat.Name == CategoryConstants.Entertainment) return "images/icon_entertainment.svg";
+        if (cat.Name == CategoryConstants.Kids) return "images/icon_kids.svg";
+        if (cat.Name == CategoryConstants.BusinessServices) return "images/icon_business.svg";
+        if (cat.Name == CategoryConstants.Home) return "images/icon_home.svg";
+        if (cat.Name == CategoryConstants.Bogo) return "images/icon_bogo.svg";
+        if (cat.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks) return "images/icon_perk.svg";
 
         return "img/shop.svg"; // fallback
     }

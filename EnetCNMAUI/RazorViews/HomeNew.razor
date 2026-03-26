@@ -1,995 +1,1284 @@
 ﻿@page "/homenew"
+@implements IAsyncDisposable
+
 @inject IJSRuntime JS
+@inject ICNApiService apiService
+@inject ILocalCache localCache
+
+@using EnetCNMAUI.ApiService.Requests.MVC
+@using EnetCNMAUI.Domain.Models.MVC
+@using System.Collections.ObjectModel
+@using EnetCNMAUI.Views
 
 <div class="offcanvas offcanvas-top h-100" tabindex="-1" id="offcanvasFullscreen" aria-labelledby="offcanvasFullscreenLabel">
+    <div class="offcanvas-body">
+        <div class="search-wrapper">
 
-        <div class="offcanvas-body">
-            <div class="search-wrapper">
-
-                <!-- Search Bar -->
-                <div class="search-bar d-flex align-items-center mb-4">
-                    <span class="search-icon"><lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></span>
-                    <input type="text" class="form-control border-0" placeholder="Search for Offer / Food / Beauty etc.">
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-
-     
-     
-    
-     
-     
-     
-
-   
-   
-    
-                <!-- Popular Categories -->
-                <h5 class="section-title">Popular Categories</h5>
-                <div class="row text-center g-3 categories">
-                    <div class="owl-carousel categories-slider top-categories">
-
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/201307/health-care-diet.svg">
-                                <p>Health</p>
-                            </a>
-                        </div>
-
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/530617/air-ticket.svg">
-                                <p>Travel</p>
-                            </a>
-                        </div>
-      
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/502425/entertainment.svg">
-                                <p>Entertainment</p>
-                            </a>
-                        </div>
-
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/474354/house-to-rent.svg">
-                                <p>House</p>
-                            </a>
-                        </div>
-
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/284428/crayons-crayon.svg">
-                                <p>Kids</p>
-                            </a>
-                        </div>
-
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/405231/dog-face.svg">
-                                <p>Pets</p>
-                            </a>
-                        </div>
-      
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/287186/cream-beauty.svg">
-                                <p>Care</p>
-                            </a>
-                        </div>
-     
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/490919/car.svg">
-                                <p>Automotive</p>
-                            </a>
-                        </div>
-      
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/474987/shop.svg">
-                                <p>Shops</p>
-                            </a>
-                        </div>
-      
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/165157/dinner.svg">
-                                <p>Eat</p>
-                            </a>
-                        </div>
-      
-                        <div class="cat-item">
-                            <a href="#" class="hover-underline-animation center">
-                                <img src="https://www.svgrepo.com/show/276779/wine.svg">
-                                <p>Drink</p>
-                            </a>
-                        </div>
-      
-                    </div>
-                </div>
-
-                <!-- Recent Search -->
-                <h5 class="section-title mt-4">Recent Search</h5>
-                <ul class="recent-search list-unstyled">
-                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Plumber</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Burger</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Pet Food</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                    <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Movie</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                </ul>
-
-                <!-- Popular Offers -->
-                <h5 class="section-title mt-4">Popular Offers</h5>
-                <div class="row g-3 offer-cards">
-      
-                    <div class="owl-carousel offers-slider">
-                        <!-- each card -->
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-health.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>TEST elpsis Buy One Menu item, Get one Buy One Menu item, Get one ...</h6>
-                                        <small>Nearby 5mi</small>
-                                    </div>
-                                </a>
-                            </div>
-           
-                        </div>
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-kids02.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>Expert Plumber on Call...</h6>
-                                        <small>Nearby 4.3mi</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-pizza-small.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>Cat Lover Food Fish</h6>
-                                        <small>Nearby 1.3mi</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-dinner.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>Evil Death Horror Movie</h6>
-                                        <small>Nearby 1.2mi</small>
-                                    </div>
-                                </a>
-                            </div>
-      
-                        </div>
-                    </div>
-                </div>
-
-   
-   
-                <!-- Popular Business -->
-                <h5 class="section-title mt-4">Popular Businesses</h5>
-                <div class="row g-3 offer-cards">
-      
-                    <div class="owl-carousel offers-slider">
-                        <!-- each card -->
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-business01.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>TEST elpsis Buy One Menu item, Get one Buy One Menu item, Get one ...</h6>
-                                        <small>Nearby 5mi</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-business02.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>Expert Plumber on Call...</h6>
-                                        <small>Nearby 4.3mi</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-business03.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>Cat Lover Food Fish</h6>
-                                        <small>Nearby 1.3mi</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="card custom-card">
-                                <a href="#" class="hover-underline-animation">
-                                    <img src="images/pic-business04.jpg" class="card-img-top">
-                                    <div class="card-body">
-                                        <h6>Evil Death Horror Movie</h6>
-                                        <small>Nearby 1.2mi</small>
-                                    </div>
-                                </a>
-                            </div>
-      
-                        </div>
-                    </div>
-                </div>
-   
-                <!-- Nearby Range -->
-                <h5 class="section-title mt-4">Nearby Range</h5>
-                <div class="range-wrapper">
-                    <div class="d-flex justify-content-between">
-                        <span>0.5mi</span>
-                        <span>10mi</span>
-                    </div>
-
-                    <input type="range" min="0" max="10" step="0.1" value="3.5"
-                           class="form-range custom-range" id="distanceRange">
-
-                    <div class="text-center mt-2">
-                        <span id="rangeValue">3.5</span>mi
-                    </div>
-                </div>
-
-    
-                <!-- Button -->
-                <div class="text-center mt-4">
-                    <button class="btn filter-btn">Filter Now</button>
-                </div>
-
+            <!-- Search Bar -->
+            <div class="search-bar d-flex align-items-center mb-4">
+                <span class="search-icon">
+                    <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
+                               trigger="loop"
+                               delay="2000"
+                               colors="primary:#121331,secondary:#ff9935"
+                               class="top-icon-animated"></lord-icon>
+                </span>
+                <input type="text" 
+                       class="form-control border-0" 
+                       placeholder="Search for Offer / Food / Beauty etc."
+                       @bind-value="SearchText"
+                       @bind-value:event="oninput"
+                       @onkeydown="OnSearchKey"
+                       @onkeydown:preventDefault />
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
+
+            <!-- Popular Categories -->
+            <h5 class="section-title">Popular Categories</h5>
+            <div class="row text-center g-3 categories">
+                @if (mainCategories != null && mainCategories.Any())
+                {
+                    <div class="owl-carousel offcanvas-categories-slider top-categories">
+                        @foreach (var cat in mainCategories)
+                        {
+                            <CategoryCapsule Category="cat" OnSelected="HandleCategorySelected" />
+                        }
+                    </div>
+                }
+                else if (isCategoriesLoading)
+                {
+                    <div class="col-12 text-muted">Loading categories...</div>
+                }
+            </div>
+
+            <!-- Recent Search -->
+            <h5 class="section-title mt-4">Recent Search</h5>
+            <ul class="recent-search list-unstyled">
+                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Plumber</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Burger</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Pet Food</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Movie</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+            </ul>
+
+            <!-- Popular Offers -->
+            <h5 class="section-title mt-4">Popular Offers</h5>
+            <div class="row g-3 offer-cards">
+                @if (featuredOffers != null && featuredOffers.Any())
+                {
+                    <div class="owl-carousel offers-slider">
+                        @foreach (var offer in featuredOffers)
+                        {
+                            <div class="item">
+                                <div class="card custom-card">
+                                    <a href="#"
+                                           class="hover-underline-animation"
+                                           @onclick="async () => await OpenFeaturedOfferAsync(offer)"
+                                           @onclick:preventDefault>
+                                        <img src="@GetOfferImage(offer)" class="card-img-top" alt="@offer.Heading">
+                                        <div class="card-body">
+                                            <h6>@GetOfferHeading(offer)</h6>
+                                            <small>@GetOfferSubTitle(offer)</small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else if (isFeaturedOffersLoading)
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">Loading featured offers...</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">No featured offers available.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Popular Business -->
+            <h5 class="section-title mt-4">Popular Businesses</h5>
+            <div class="row g-3 offer-cards">
+                @if (featuredOffers != null && featuredOffers.Any())
+                {
+                    <div class="owl-carousel offers-slider businesses-slider">
+                        @foreach (var offer in featuredOffers.Take(8))
+                        {
+                            <div class="item">
+                                <div class="card custom-card">
+                                    <a href="#"
+                                           class="hover-underline-animation"
+                                           @onclick="async () => await OpenFeaturedOfferAsync(offer)"
+                                           @onclick:preventDefault>
+                                        <img src="@GetBusinessImage(offer)" class="card-img-top" alt="@offer.BusinessName">
+                                        <div class="card-body">
+                                            <h6>@(string.IsNullOrWhiteSpace(offer.BusinessName) ? "Business" : offer.BusinessName)</h6>
+                                            <small>@GetOfferHeading(offer)</small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else if (isFeaturedOffersLoading)
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">Loading businesses...</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">No businesses available.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Nearby Range -->
+            <h5 class="section-title mt-4">Nearby Range</h5>
+            <div class="range-wrapper">
+                <div class="d-flex justify-content-between">
+                    <span>0.5mi</span>
+                    <span>10mi</span>
+                </div>
+
+                <input type="range" min="0" max="10" step="0.1" value="3.5"
+                       class="form-range custom-range" id="distanceRange">
+
+                <div class="text-center mt-2">
+                    <span id="rangeValue">3.5</span>mi
+                </div>
+            </div>
+
+            <!-- Button -->
+            <div class="text-center mt-4">
+                <button class="btn filter-btn">Filter Now</button>
+            </div>
+
         </div>
     </div>
+</div>
 
+<!-- ================= HEADER ================= -->
+<header class="header bg-white sticky-top">
+    <div class="container d-flex justify-content-end top-links gap-3 mt-2 d-xs-none d-sm-none d-md-none d-lg-flex">
+        <a href="#" class="hover-underline-animation left">Events</a>
+        <a href="#" class="hover-underline-animation left">Favorites</a>
+        <a href="#" class="hover-underline-animation left">Map</a>
+        <a href="#" class="hover-underline-animation left">Login / Signup</a>
+    </div>
 
+    <div class="container d-flex justify-content-between align-items-center border-bottom pt-3 pb-3 pt-md-3 pt-lg-1">
+        <a href="index.html" class="logo d-xs-none d-sm-none d-md-none d-lg-block">
+            <img src="images/logo-connect-local.svg" alt="" />
+        </a>
 
-
-
-
-
-    <!-- ================= HEADER ================= -->
-    <header class="header bg-white sticky-top">
-
-  
-   
-        <div class="container d-flex justify-content-end top-links gap-3 mt-2 d-xs-none d-sm-none d-md-none d-lg-flex">
-     
-            <a href="#" class="hover-underline-animation left">Events</a> <a href="#" class="hover-underline-animation left">Favorites</a> <a href="#" class="hover-underline-animation left">Map</a> <a href="#" class="hover-underline-animation left">Login / Signup</a>
-     
+        <div class="top-search-field d-lg-none d-md-block">
+            <a href="#"
+                   class="form-control"
+                   data-bs-toggle="offcanvas"
+                   data-bs-target="#offcanvasFullscreen"
+                   aria-controls="offcanvasFullscreen">
+                <span id="basic-addon1">
+                    <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
+                               trigger="loop"
+                               delay="2000"
+                               colors="primary:#121331,secondary:#ff9935"
+                               class="top-icon-animated"></lord-icon>
+                </span>
+                Search for Offer / Food / Beauty etc.
+            </a>
         </div>
-     
-        <div class="container d-flex justify-content-between align-items-center border-bottom pt-3 pb-3 pt-md-3 pt-lg-1">
 
-   
-            <a href="index.html" class="logo d-xs-none d-sm-none d-md-none d-lg-block"><img src="images/logo-connect-local.svg" alt="" /></a>
+        <div class="d-flex gap-4 g-md-3">
+            <a href="#"
+                   class="d-xs-none d-sm-none d-md-none d-lg-block"
+                   data-bs-toggle="offcanvas"
+                   data-bs-target="#offcanvasFullscreen"
+                   aria-controls="offcanvasFullscreen">
+                <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
+                           trigger="loop"
+                           delay="2000"
+                           colors="primary:#121331,secondary:#ff9935"
+                           class="top-icon-animated"></lord-icon>
+            </a>
+            <a href="#"><lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+            <a href="#"><lord-icon src="https://cdn.lordicon.com/jdgfsfzr.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+            <a href="#"><lord-icon src="https://cdn.lordicon.com/onmwuuox.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+        </div>
+    </div>
+</header>
 
-    
-            <div class="top-search-field  d-lg-none d-md-block">
- 
-                <a href="#" class="form-control" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFullscreen" aria-controls="offcanvasFullscreen">
-                    <span class="" id="basic-addon1"><lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon>  </span> Search for Offer / Food / Beauty etc.
+<!-- ================= QUICK LINKS ================= -->
+<section class="bg-white d-lg-none d-md-block">
+    <div class="container border-bottom pt-3 pb-1">
+        <div class="row row-cols-4 row-cols-sm-4 row-cols-lg-4 g-1 top-offers text-center">
+            <div class="col">
+                <a href="offers.html" class="hover-underline-animation center">
+                    <img src="https://www.svgrepo.com/show/276618/badge-discount.svg">
+                    <p>Deals</p>
                 </a>
             </div>
 
-	  
-     
-            <div class="d-flex gap-4 g-md-3">
-    
-                <a href="#" class=" d-xs-none d-sm-none d-md-none d-lg-block" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFullscreen" aria-controls="offcanvasFullscreen"><lord-icon src="https://cdn.lordicon.com/wjyqkiew.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"> </lord-icon></a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/jdgfsfzr.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"> </lord-icon></a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/onmwuuox.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
-
-    
+            <div class="col">
+                <a href="offers.html" class="hover-underline-animation center">
+                    <img src="https://www.svgrepo.com/show/215200/badge-new.svg">
+                    <p>Whats New?</p>
+                </a>
             </div>
 
-     
-     
-      
-      
-        </div>
+            <div class="col">
+                <a href="offers.html" class="hover-underline-animation center">
+                    <img src="https://www.svgrepo.com/show/397713/party-popper.svg">
+                    <p>Celebrate</p>
+                </a>
+            </div>
 
-  
-    </header>
-
-    <!-- ================= OFFER (OWL) ================= -->
-    <section class="bg-white d-lg-none d-md-block">
-        <div class="container border-bottom pt-3 pb-1">
-            <div class="row row-cols-4 row-cols-sm-4 row-cols-lg-4 g-1 top-offers text-center">
-
-                <div class="col">
-      
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/276618/badge-discount.svg">
-                        <p>Deals</p>
-                    </a>
-
-                </div>
-    
-                <div class="col">
-     
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/215200/badge-new.svg">
-                        <p>Whats New?</p>
-                    </a>
-   
-                </div>
-
-    
-                <div class="col">
-
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/397713/party-popper.svg">
-                        <p>Celebrate</p>
-                    </a>
-     
-                </div>
-
-    
-                <div class="col">
-
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/269440/placeholder-wedding.svg">
-                        <p>Near Me</p>
-                    </a>
-
-                </div>
-
-    
-
+            <div class="col">
+                <a href="offers.html" class="hover-underline-animation center">
+                    <img src="https://www.svgrepo.com/show/269440/placeholder-wedding.svg">
+                    <p>Near Me</p>
+                </a>
             </div>
         </div>
+    </div>
+</section>
 
-
-    </section>
-
-    <!-- ================= OFFER (OWL) ================= -->
-    <!-- ================= CATEGORIES (OWL) ================= -->
-    <section class="bg-white pt-3 pb-2">
-        <div class="container">
+<!-- ================= CATEGORIES ================= -->
+<section class="bg-white pt-3 pb-2">
+    <div class="container">
+        @if (mainCategories != null && mainCategories.Any())
+        {
             <div class="owl-carousel categories-slider top-categories">
-
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/201307/health-care-diet.svg">
-                        <p>Health</p>
-                    </a>
-                </div>
-
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/530617/air-ticket.svg">
-                        <p>Travel</p>
-                    </a>
-                </div>
-      
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/502425/entertainment.svg">
-                        <p>Entertainment</p>
-                    </a>
-                </div>
-
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/474354/house-to-rent.svg">
-                        <p>House</p>
-                    </a>
-                </div>
-
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/284428/crayons-crayon.svg">
-                        <p>Kids</p>
-                    </a>
-                </div>
-
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/405231/dog-face.svg">
-                        <p>Pets</p>
-                    </a>
-                </div>
-      
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/287186/cream-beauty.svg">
-                        <p>Care</p>
-                    </a>
-                </div>
-     
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/490919/car.svg">
-                        <p>Automotive</p>
-                    </a>
-                </div>
-      
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/474987/shop.svg">
-                        <p>Shops</p>
-                    </a>
-                </div>
-      
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/165157/dinner.svg">
-                        <p>Eat</p>
-                    </a>
-                </div>
-      
-                <div class="cat-item">
-                    <a href="offers.html" class="hover-underline-animation center">
-                        <img src="https://www.svgrepo.com/show/276779/wine.svg">
-                        <p>Drink</p>
-                    </a>
-                </div>
-      
+                @foreach (var cat in mainCategories)
+                {
+                    <CategoryCapsule Category="cat" OnSelected="HandleCategorySelected" />
+                }
             </div>
+        }
+        else if (isCategoriesLoading)
+        {
+            <div class="text-muted">Loading categories...</div>
+        }
+    </div>
+</section>
+
+<!-- ================= HERO SLIDER ================= -->
+@* <section class="container">
+    <div class="owl-carousel hero-slider rounded-4 overflow-hidden">
+        <div class="hero-slide slide-image d-flex align-items-center">
+            <img src="images/slide01.jpg" alt="" />
         </div>
-    </section>
-
-    <!-- ================= HERO SLIDER (OWL) ================= -->
-    <section class="container">
-        <div class="owl-carousel hero-slider rounded-4 overflow-hidden">
-
-   
-    
-
-    
-            <div class="hero-slide slide-image d-flex align-items-center">
-        
-                <img src="images/slide01.jpg" alt="" />
-
-            </div>
-    
-            <div class="hero-slide slide-image d-flex align-items-center">
-        
-                <img src="images/slide02.jpg" alt="" />
-
-            </div>
-    
-            <div class="hero-slide slide-image d-flex align-items-center">
-        
-                <img src="images/slide03.jpg" alt="" />
-
-            </div>
-
-    
-     
-    
-    
-
-   
+        <div class="hero-slide slide-image d-flex align-items-center">
+            <img src="images/slide02.jpg" alt="" />
         </div>
-    </section>
-
-    <!-- ================= TOP REDEEMED ================= -->
-    <section class="container mt-5 redeemed-offers">
-        <div class="d-flex justify-content-between mb-3">
-            <h5 class="main-heading text-truncate">Top Redeemed</h5>
-            <small class="see-all"><a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a></small>
+        <div class="hero-slide slide-image d-flex align-items-center">
+            <img src="images/slide03.jpg" alt="" />
         </div>
+    </div>
+</section> *@
 
-        <div class="redeemed-wrapper">
+<!-- ================= TOP REDEEMED ================= -->
+<section class="container mt-5 redeemed-offers">
+    <div class="d-flex justify-content-between mb-3">
+        <h5 class="main-heading text-truncate">Featured</h5>
+        <small class="see-all">
+            <a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a>
+        </small>
+    </div>
+
+    <div class="redeemed-wrapper">
+        @if (featuredOfferstop != null && featuredOfferstop.Any())
+        {
             <div class="owl-carousel redeemed-slider">
+                @foreach (var offer in featuredOfferstop)
+                {
+                    <div class="card border-0 shadow-sm card-hover py-1">
+                        <div class="card-img rounded-4" style="background-image: url('@GetOfferImage(offer)');"></div>
+                        <div class="card-body">
+                            <h6>@GetOfferHeading(offer)</h6>
+                            <p class="small">@GetOfferSubTitle(offer)</p>
 
-  
-      
-       
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-dinner.jpg');"></div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="fw-semibold mb-0">Crunchy Burger CHECK ELPSISE Sample TEXT </h6>
-                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
-                        </div>
-                        <p class="small">Max Value $15.00</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">3</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">77</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
+                            <div class="d-flex gap-3 offers-icons">
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                               trigger="loop"
+                                               delay="2000"
+                                               colors="primary:#ff9935,secondary:#ff9935">
+                                    </lord-icon>
+                                    <span class="view_num">@offer.RedemptionsCount</span>
+                                    <span class="view_txt">Redemptions</span>
+                                </small>
+
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                               trigger="loop"
+                                               delay="2000"
+                                               colors="primary:#ff9935,secondary:#ff9935">
+                                    </lord-icon>
+                                    <span class="view_num">@offer.OfferViews</span>
+                                    <span class="view_txt">Views</span>
+                                </small>
+
+                                <button class="btn btn-primary btn-sm px-3 ms-auto"
+                                        @onclick="async () => await OpenFeaturedOfferAsync(offer)">
+                                    Redeem Now
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-      
-      
-      
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-health.jpg');"></div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="fw-semibold mb-0">Health Care</h6>
-                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
-                        </div>
-                        <p class="small">Healthcare</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">46</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">739</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-pizza-small.jpg');"></div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="fw-semibold mb-0">Spicy Pizza </h6>
-                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
-                        </div>
-                        <p class="small">Food</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">41</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">536</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-pizza.jpg');"></div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="fw-semibold mb-0">Bogo Pizza Offer </h6>
-                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
-                        </div>
-                        <p class="small">Value $15.00</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">49</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">736</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-skin.jpg');"></div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="fw-semibold mb-0">100$ SKin Care</h6>
-                            <span class="heart" id="heart"><i class="fa-regular fa-heart"></i></span>
-                        </div>
-                        <p class="small">Skin Care</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">19</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">536</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
+                }
+        
             </div>
-        </div>
-    </section>
+        }
+        else if (isRedemptionsLoading)
+        {
+            <div class="text-muted">Loading redemptions...</div>
+        }
+        else
+        {
+            <div class="text-muted">No redeemed offers available.</div>
+        }
+    </div>
+</section>
 
+<!-- ================= FEATURED OFFERS ================= -->
+<section class="container mt-4 redeemed-offers">
+    <div class="d-flex justify-content-between mb-3">
+        <h5 class="main-heading text-truncate">More around </h5>
+        <small class="see-all">
+            <a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a>
+        </small>
+    </div>
 
-    <!-- ================= TOP REDEEMED ================= -->
-    <section class="container mt-4 redeemed-offers">
-        <div class="d-flex justify-content-between mb-3">
-            <h5 class="main-heading text-truncate">Move More, Live Healthier</h5>
-            <small class="see-all"><a href="#" class="hover-underline-animation left">See All <i class="fa-solid fa-chevron-right"></i></a></small>
-        </div>
+    <div class="redeemed-wrapper">
+        @if (featuredOffers != null && featuredOffers.Any())
+        {
+            <div class="owl-carousel featured-offers-slider">
+                @foreach (var offer in featuredOffers)
+                {
+                    <div class="card border-0 shadow-sm card-hover py-1">
+                        <div class="card-img rounded-4" style="background-image: url('@GetOfferImage(offer)');"></div>
+                        <div class="card-body">
+                            <h6>@GetOfferHeading(offer)</h6>
+                            <p class="small">@GetOfferSubTitle(offer)</p>
 
-        <div class="redeemed-wrapper">
-            <div class="owl-carousel redeemed-slider">
+                            <div class="d-flex gap-3 offers-icons">
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
+                                               trigger="loop"
+                                               delay="2000"
+                                               colors="primary:#ff9935,secondary:#ff9935">
+                                    </lord-icon>
+                                    <span class="view_num">@offer.RedemptionsCount</span>
+                                    <span class="view_txt">Redemptions</span>
+                                </small>
 
-  
-      
-       
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids01.jpg');"></div>
-                    <div class="card-body">
-                        <h6>Jamboo Jump</h6>
-                        <p class="small">$12.99</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">5</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">96</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
+                                <small>
+                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                                               trigger="loop"
+                                               delay="2000"
+                                               colors="primary:#ff9935,secondary:#ff9935">
+                                    </lord-icon>
+                                    <span class="view_num">@offer.OfferViews</span>
+                                    <span class="view_txt">Views</span>
+                                </small>
+
+                                <button class="btn btn-primary btn-sm px-3 ms-auto"
+                                        @onclick="async () => await OpenFeaturedOfferAsync(offer)">
+                                    Redeem Now
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-     
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids02.jpg');"></div>
-                    <div class="card-body">
-                        <h6>Trampoline</h6>
-                        <p class="small">JumpStudio</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">15</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">286</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids03.jpg');"></div>
-                    <div class="card-body">
-                        <h6>Jump $ jump</h6>
-                        <p class="small">Float area</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">563</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">856</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids04.jpg');"></div>
-                    <div class="card-body">
-                        <h6>Area51</h6>
-                        <p class="small">Blue Area for kids</p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">86</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">167</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
-                <div class="card border-0 shadow-sm card-hover py-1">
-                    <div class="card-img rounded-4" style="background-image: url('images/pic-kids05.jpg');"></div>
-                    <div class="card-body">
-                        <h6>Kids Enjoy Land</h6>
-                        <p class="small">Kids zone </p>
-                        <div class="d-flex gap-3 offers-icons">
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">159</span> <span class="view_txt">Redemptions</span>
-                            </small>
-                            <small>
-                                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           colors="primary:#ff9935,secondary:#ff9935">
-                                </lord-icon> <span class="view_num">456</span> <span class="view_txt">Views</span>
-                            </small>
-                            <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-         
-                        </div>
-                    </div>
-                </div>
-
-      
+                }
             </div>
-        </div>
-    </section>
+        }
+        else if (isFeaturedOffersLoading)
+        {
+            <div class="text-muted">Loading featured offers...</div>
+        }
+        else
+        {
+            <div class="text-muted">No featured offers available.</div>
+        }
+   
+    </div>
+</section>
 
+<div class="mt-5 pt-1 d-lg-none d-md-block"></div>
 
-
-
-    <div class="mt-5 pt-1 d-lg-none d-md-block"></div>
-
-
-    <!-- ================= FOOTER ================= -->
-    <footer class=" mt-5  d-xs-none d-sm-none d-md-none d-lg-block">
-        <div class="container footer">
-            <div class="row p-5">
-
-                <div class="col-md-3 newsletter-subscription">
-                    <h6 class="mb-3">Get Today's Top Offers</h6>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control " placeholder="Email Address *">
-                        <button class="btn btn-warning">Subscribe</button>
-                    </div>
-                    <div class="text-subscription">
-                        Save every day by signing up for All About Local newsletter. By signing up, you agree to All About Local terms of service and privacy policy You may unsubscribe from the newsletters at any time.
-                    </div>
+<!-- ================= FOOTER ================= -->
+<footer class="mt-5 d-xs-none d-sm-none d-md-none d-lg-block">
+    <div class="container footer">
+        <div class="row p-5">
+            <div class="col-md-3 newsletter-subscription">
+                <h6 class="mb-3">Get Today's Top Offers</h6>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Email Address *">
+                    <button class="btn btn-warning">Subscribe</button>
                 </div>
-
-                <div class="col-md-3">
-                    <h6 class="mb-3">Get savings on the go!</h6>
-                    <div class=" gap-2 app-stores">
-                        <a href="#"><img src="images/App_Store.svg" alt="" /> </a>
-                        <a href="#"><img src="images/Google_Play.svg" alt="" /></a>
-                    </div>
+                <div class="text-subscription">
+                    Save every day by signing up for All About Local newsletter. By signing up, you agree to All About Local terms of service and privacy policy You may unsubscribe from the newsletters at any time.
                 </div>
-
-                <div class="col-md-3">
-                    <h6 class="mb-3">Company</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="hover-underline-animation left">About Us</a></li>
-                        <li><a href="#" class="hover-underline-animation left">Privacy Policy</a></li>
-                        <li><a href="#" class="hover-underline-animation left">Get Full Access</a></li>
-                        <li><a href="#" class="hover-underline-animation left">My Saving</a></li>
-                    </ul>
-                </div>
-      
-                <div class="col-md-3">
- 
-                    <div class="footer-card-social ">
-                        <a href="#" class="fa-brands fa-instagram"></a>
-                        <a href="#" class="fa-brands fa-facebook"></a>
-
-                        <small class="d-block">We Accept Cards </small>
-                        <img src="images/secure_payment.svg" alt="" />
-                    </div>
-     
-                </div>
-
             </div>
-        </div>
-        <div class="container">
-            <div class="row py-3">
-                <div class="copyright">
-                    <div class="float-start">© 2026 All About Local, Inc. All Rights Reserved.</div>
-                    <div class="float-end"><a href="#" class="hover-underline-animation left">Terms of Use</a> | <a href="#" class="hover-underline-animation left">Privacy Statement</a> | <a href="#" class="hover-underline-animation left">Licenses</a> | <a href="#" class="hover-underline-animation left">Accessibility</a> | <a href="#" class="hover-underline-animation left">Do Not Sell My Personal Information</a></div>
+
+            <div class="col-md-3">
+                <h6 class="mb-3">Get savings on the go!</h6>
+                <div class="gap-2 app-stores">
+                    <a href="#"><img src="images/App_Store.svg" alt="" /></a>
+                    <a href="#"><img src="images/Google_Play.svg" alt="" /></a>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <h6 class="mb-3">Company</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="hover-underline-animation left">About Us</a></li>
+                    <li><a href="#" class="hover-underline-animation left">Privacy Policy</a></li>
+                    <li><a href="#" class="hover-underline-animation left">Get Full Access</a></li>
+                    <li><a href="#" class="hover-underline-animation left">My Saving</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3">
+                <div class="footer-card-social">
+                    <a href="#" class="fa-brands fa-instagram"></a>
+                    <a href="#" class="fa-brands fa-facebook"></a>
+
+                    <small class="d-block">We Accept Cards</small>
+                    <img src="images/secure_payment.svg" alt="" />
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
 
+    <div class="container">
+        <div class="row py-3">
+            <div class="copyright">
+                <div class="float-start">© 2026 All About Local, Inc. All Rights Reserved.</div>
+                <div class="float-end">
+                    <a href="#" class="hover-underline-animation left">Terms of Use</a> |
+                    <a href="#" class="hover-underline-animation left">Privacy Statement</a> |
+                    <a href="#" class="hover-underline-animation left">Licenses</a> |
+                    <a href="#" class="hover-underline-animation left">Accessibility</a> |
+                    <a href="#" class="hover-underline-animation left">Do Not Sell My Personal Information</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
-    <!-- ================= FOOTER SPACE ON MOBILE ONLY ================= -->
-    <div class="mt-5 pt-4 d-lg-none d-md-block"></div>
+<!-- ================= MOBILE FOOTER SPACE ================= -->
+<div class="mt-5 pt-4 d-lg-none d-md-block"></div>
 
-    <ul class="nav nav-foot d-flex flex-row flex-nowrap flex-lg-wrap justify-content-lg-end align-content-lg-between flex-lg-fill shadow mt-auto mt-lg-0 ">
-        <li>
-            <a href="index-user.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
-                <lord-icon src="https://cdn.lordicon.com/jeuxydnh.json"
-                           trigger="loop"
-                           delay="2000"
-                           colors="primary:#121331,secondary:#ff9935">
-                </lord-icon> Directory
-            </a>
-        </li>
-        <li>
-            <a href="events.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
-                <lord-icon src="https://cdn.lordicon.com/uphbloed.json"
-                           trigger="loop"
-                           colors="primary:#121331,secondary:#ff9935">
-                </lord-icon> Events
-            </a>
-        </li>
-        <li>
-            <a href="favorites.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
-                <lord-icon src="https://cdn.lordicon.com/nvsfzbop.json"
-                           trigger="loop"
-                           delay="2000"
-                           colors="primary:#121331,secondary:#ff9935">
-                </lord-icon> Favorites
-            </a>
-        </li>
-        <li>
-            <a href="maps.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
-                <lord-icon src="https://cdn.lordicon.com/onmwuuox.json"
-                           trigger="loop"
-                           delay="2000"
-                           colors="primary:#121331,secondary:#ff9935">
-                </lord-icon> Map
-            </a>
-        </li>
-        <li>
-            <a href="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMore" aria-controls="offcanvasMore" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">            
-                <lord-icon src="https://cdn.lordicon.com/feyvdmcx.json"
-                           trigger="loop"
-                           delay="2000"
-                           colors="primary:#121331,secondary:#ff9935">
-                </lord-icon> More
-            </a>
-        </li>
-    </ul>
-<!--More -->
-<div class="offcanvas offcanvas-end more-links " tabindex="-1" id="offcanvasMore" aria-labelledby="offcanvasMoreLabel">
+<ul class="nav nav-foot d-flex flex-row flex-nowrap flex-lg-wrap justify-content-lg-end align-content-lg-between flex-lg-fill shadow mt-auto mt-lg-0">
+    <li>
+        <a href="index-user.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+            <lord-icon src="https://cdn.lordicon.com/jeuxydnh.json"
+                       trigger="hover"
+                       delay="2000"
+                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+            Directory
+        </a>
+    </li>
+    <li>
+        <a href="events.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+            <lord-icon src="https://cdn.lordicon.com/uphbloed.json"
+                       trigger="hover"
+                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+            Events
+        </a>
+    </li>
+    <li>
+        <a href="favorites.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+            <lord-icon src="https://cdn.lordicon.com/nvsfzbop.json"
+                       trigger="hover"
+                       delay="2000"
+                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+            Favorites
+        </a>
+    </li>
+    <li>
+        <a href="maps.html" class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2">
+            <lord-icon src="https://cdn.lordicon.com/onmwuuox.json"
+                       trigger="hover"
+                       delay="2000"
+                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+            Map
+        </a>
+    </li>
+    <li>
+        <a href=""
+               data-bs-toggle="offcanvas"
+               data-bs-target="#offcanvasMore"
+               aria-controls="offcanvasMore"
+               class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">
+            <lord-icon src="https://cdn.lordicon.com/feyvdmcx.json"
+                       trigger="hover"
+                       delay="2000"
+                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+            More
+        </a>
+    </li>
+</ul>
+
+<!-- More -->
+<div class="offcanvas offcanvas-end more-links" tabindex="-1" id="offcanvasMore" aria-labelledby="offcanvasMoreLabel">
     <div class="offcanvas-header px-4 pt-4 pb-0">
-        <h5 class="offcanvas-title section-title">
-            More Links
-        </h5>
+        <h5 class="offcanvas-title section-title">More Links</h5>
         <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-  
+
     <div class="offcanvas-body">
-    
         <main class="flex-shrink-0 py-0">
             <div class="container">
                 <div class="row">
-
                     <div class="list-group list-group-flush px-0 py-2">
 
-                        <a href="subscription-manage.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon> Manage Subscription</a>
-                        <a href="" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/fgxwhgfp.json" trigger="loop" delay="2000"></lord-icon> Get Full Access</a>
-                        <a href="my-saving.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/eaegfqtv.json" trigger="loop" delay="2000"></lord-icon> My Savings</a>
-                        <a href="notifications.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000"></lord-icon> Notifications</a>
-                        <a href="about-us.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/ozlkyfxg.json" trigger="loop" delay="2000"></lord-icon> About Us</a>
-                        <a href="tips-help.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/lltgvngb.json" trigger="loop" delay="2000"></lord-icon> Tips &amp; Help</a>
-                        <a href="privacy-policy.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/apbwvyeg.json" trigger="loop" delay="2000"></lord-icon><i class="bi bi-shield-lock"></i> Privacy Statement</a>
-                        <a href="terms-of-service.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/hmpomorl.json" trigger="loop" delay="2000"></lord-icon> Terms of Use</a>
-                        <a href="licenses.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/mqgegihh.json" trigger="loop" delay="2000"></lord-icon> Licenses</a>
-                        <a href="accessibility.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/weehpyrf.json" trigger="loop" delay="2000"></lord-icon> Accessibility</a>
-                        <a href="selling-personal-info.html" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon> Do Not Sell My Personal Information</a>
-                        <a href="#" class="list-group-item list-group-item-action d-flex gap-2"><lord-icon src="https://cdn.lordicon.com/orgpczfu.json" trigger="loop" delay="2000"></lord-icon> Logout</a>
-        
-                        <h5 class="offcanvas-title section-title  px-2 pt-4 pb-0">Theme Settings</h5>
+                        <a href=""
+                               class="list-group-item list-group-item-action @(IsManageGridVisible ? "d-flex" : "d-none") gap-2"
+                               @onclick="GotoManageSubscription"
+                               @onclick:preventDefault>
+                            <lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon>
+                            Manage Subscription
+                        </a>
+
+                        <a href=""
+                               class="list-group-item list-group-item-action d-flex gap-2"
+                               @onclick="GotoSignUp"
+                               @onclick:preventDefault>
+                            <lord-icon src="https://cdn.lordicon.com/fgxwhgfp.json" trigger="loop" delay="2000"></lord-icon>
+                            @UserSubscriptionStatus
+                        </a>
+
+                        <a href=""
+                               class="list-group-item list-group-item-action d-flex gap-2"
+                               @onclick="GotoSavingsPage"
+                               @onclick:preventDefault>
+                            <lord-icon src="https://cdn.lordicon.com/eaegfqtv.json" trigger="loop" delay="2000"></lord-icon>
+                            My Savings
+                        </a>
+
+                        <a href=""
+                               class="list-group-item list-group-item-action d-none gap-2"
+                               @onclick="GotoNotificationsPage"
+                               @onclick:preventDefault>
+                            <lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000"></lord-icon>
+                            Notifications
+                        </a>
+
+                        <a href="https://allaboutlocal.com/about-us"
+                               class="list-group-item list-group-item-action d-flex gap-2">
+                            <lord-icon src="https://cdn.lordicon.com/ozlkyfxg.json" trigger="hover" delay="2000"></lord-icon>
+                            About Us
+                        </a>
+
+                        <a href="tips-help.html"
+                               class="list-group-item list-group-item-action d-none gap-2">
+                            <lord-icon src="https://cdn.lordicon.com/lltgvngb.json" trigger="hover" delay="2000"></lord-icon>
+                            Tips &amp; Help
+                        </a>
+
+                        <a href="https://allaboutlocal.com/privacy-policy"
+                               class="list-group-item list-group-item-action d-flex gap-2">
+                            <lord-icon src="https://cdn.lordicon.com/apbwvyeg.json" trigger="hover" delay="2000"></lord-icon>
+                            Privacy Statement
+                        </a>
+
+                        <a href="https://allaboutlocal.com/terms-of-service"
+                               class="list-group-item list-group-item-action d-flex gap-2">
+                            <lord-icon src="https://cdn.lordicon.com/hmpomorl.json" trigger="hover" delay="2000"></lord-icon>
+                            Terms of Use
+                        </a>
+
+                        <a href=""
+                               class="list-group-item list-group-item-action d-flex gap-2"
+                               @onclick="() => logOut()"
+                               @onclick:preventDefault>
+                            <lord-icon src="https://cdn.lordicon.com/orgpczfu.json" trigger="hover" delay="2000"></lord-icon>
+                            Logout
+                        </a>
+
+                        <a href=""
+                               class="list-group-item list-group-item-action d-flex gap-2"
+                               @onclick:preventDefault>
+                            <lord-icon src="https://cdn.lordicon.com/mqgegihh.json" trigger="loop" delay="2000"></lord-icon>
+                            @AppVersionAndCopyrightText
+                        </a>
+
+                        <h5 class="offcanvas-title section-title px-2 pt-4 pb-0">Theme Settings</h5>
                         <div class="d-flex justify-content-between justify-content-center px-2">
-                            <a href="" class="dropdown-item d-flex gap-2" data-theme-value="auto"><lord-icon src="https://cdn.lordicon.com/bjxtqill.json" trigger="loop" delay="2000"></lord-icon> Default</a>
-                            <a href="" class="dropdown-item d-flex gap-2" data-theme-value="light"><lord-icon src="https://cdn.lordicon.com/iwjzoila.json" trigger="loop" delay="2000"></lord-icon> Light</a>
-                            <a href="" class="dropdown-item d-flex gap-2" data-theme-value="dark"><lord-icon src="https://cdn.lordicon.com/yodwgokk.json" trigger="loop" delay="2000"></lord-icon> Dark</a>
+
+                           @*  <a href=""
+                                   class="dropdown-item d-flex gap-2"
+                                   data-theme-value="auto"
+                                   @onclick="() => ChangeTheme(\" auto\")"
+                                   @onclick:preventDefault>
+                                <lord-icon src="https://cdn.lordicon.com/bjxtqill.json" trigger="loop" delay="2000"></lord-icon>
+                                Default
+                            </a>
+
+                            <a href=""
+                                   class="dropdown-item d-flex gap-2"
+                                   data-theme-value="light"
+                                   @onclick="() => ChangeTheme(\" light\")"
+                                   @onclick:preventDefault>
+                                <lord-icon src="https://cdn.lordicon.com/iwjzoila.json" trigger="loop" delay="2000"></lord-icon>
+                                Light
+                            </a>
+
+                            <a href=""
+                                   class="dropdown-item d-flex gap-2"
+                                   data-theme-value="dark"
+                                   @onclick="() => ChangeTheme(\" dark\")"
+                                   @onclick:preventDefault>
+                                <lord-icon src="https://cdn.lordicon.com/yodwgokk.json" trigger="loop" delay="2000"></lord-icon>
+                                Dark
+                            </a> *@
+
                         </div>
                     </div>
-
                 </div>
             </div>
         </main>
     </div>
 </div>
-<!--More -->
 
-
- @code {
-
+ <!-- /More -->
+@code {
     private IJSObjectReference? _module;
+
+    private List<CategoryItem>? mainCategories;
+    private List<RedemptionsItem>? topRedemptions;
+    private List<BusinessOfferItem>? featuredOffers;
+    private List<BusinessOfferItem>? featuredOfferstop;
+
+    private bool isCategoriesLoading;
+    private bool isRedemptionsLoading;
+    private bool isFeaturedOffersLoading;
+    private bool isFeaturedtopOffersLoading;
+
+    private string? SearchText;
+
+    private bool IsLoading { get; set; }
+    private bool IsLoadingMore { get; set; }
+    private bool IsSummaryLoading { get; set; }
+    private string? Error { get; set; }
+    private DateTime DefaultStartDate { get; set; } = DateTime.Today;
+
+    private ObservableCollection<RedemptionsItem> redemptions = new();
+    public ObservableCollection<RedemptionsItem> Redemptions
+    {
+        get => redemptions;
+        set
+        {
+            redemptions = value;
+            StateHasChanged();
+        }
+    }
+
+    private RedemptionSummaryItem? RedemptionSummary { get; set; }
+
+    private int Page { get; set; } = 1;
+    private int PageSize { get; set; } = 20;
+    private bool HasMore { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetSavingsAsync();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!firstRender)
+            return;
+
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/HomeNew.razor.js");
+
+        await _module.InvokeVoidAsync("initHeroSlider");
+        await _module.InvokeVoidAsync("initToggle");
+        await _module.InvokeVoidAsync("initBusinessAccordion");
+        await _module.InvokeVoidAsync("initHeartAnimation");
+
+        await GetMainCategoriesAsync();
+        await GetRedemptionsAsync();
+        await GetFeaturedOffersAsync();
+    }
+
+    #region API Calls
+
+    private async Task GetSavingsAsync(bool append = false)
+    {
+        try
         {
-            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/HomeNew.razor.js");
-            await _module.InvokeVoidAsync("initCategoriesSlider");
+            Error = null;
+
+            if (!append)
+                IsLoading = true;
+            else
+                IsLoadingMore = true;
+
+            IsSummaryLoading = !append && Page == 1;
+
+            var redemptionRequest = new GetUserRedemptionRequest(App.CurrentUser.UserKey);
+
+            var redemptionsResp = await apiService.GetUserRedemptions(redemptionRequest);
+            var summaryResp = await apiService.GetUserRedemptionSummary(redemptionRequest);
+
+            if (redemptionsResp?.Success == true && redemptionsResp.Data is not null)
+            {
+                if (append)
+                {
+                    foreach (var item in redemptionsResp.Data)
+                        Redemptions.Add(item);
+                }
+                else
+                {
+                    Redemptions = new ObservableCollection<RedemptionsItem>(redemptionsResp.Data);
+                }
+
+                HasMore = redemptionsResp.Data.Count >= PageSize;
+            }
+            else
+            {
+                if (!append)
+                    Redemptions.Clear();
+
+                HasMore = false;
+            }
+
+            if (summaryResp?.Success == true && summaryResp.Data is not null)
+            {
+                RedemptionSummary = summaryResp.Data;
+            }
         }
-        else
+        catch (Exception ex)
         {
-          //  if (_module != null)
-             //   await _module.InvokeVoidAsync("HomeNew.refresh");
+            Error = ex.Message;
+            HasMore = false;
+        }
+        finally
+        {
+            IsLoading = false;
+            IsLoadingMore = false;
+            IsSummaryLoading = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
+
+    private async Task GetMainCategoriesAsync()
+    {
+        try
+        {
+            isCategoriesLoading = true;
+
+            var categoryRequest = new CategoryRequest();
+            var output = await apiService.GetAppMainCategories(categoryRequest);
+
+            if (output?.Success == true && output.Data is not null && output.Data.Any())
+            {
+                var categories = output.Data.ToList();
+
+                if (categories.Count > 0)
+                    categories.RemoveAt(0);
+
+                var diningCategory = categories.FirstOrDefault(x => x.Name == "Dining");
+                if (diningCategory != null)
+                {
+                    categories.Remove(diningCategory);
+                    categories.Insert(0, diningCategory);
+                }
+
+                mainCategories = categories;
+
+                await InvokeAsync(StateHasChanged);
+
+                if (_module != null)
+                {
+                    await _module.InvokeVoidAsync("initCategoriesSlider");
+                    await _module.InvokeVoidAsync("initOffcanvasCategoriesSlider");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching main categories: {ex.Message}");
+        }
+        finally
+        {
+            isCategoriesLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task GetRedemptionsAsync()
+    {
+        try
+        {
+            isRedemptionsLoading = true;
+
+            var redemptionRequest = new GetUserRedemptionRequest(App.CurrentUser.UserKey);
+            var redemptionsResp = await apiService.GetUserRedemptions(redemptionRequest);
+
+            if (redemptionsResp?.Success == true && redemptionsResp.Data is not null)
+            {
+                topRedemptions = redemptionsResp.Data.Take(10).ToList();
+
+                await InvokeAsync(StateHasChanged);
+
+                if (_module != null)
+                    await _module.InvokeVoidAsync("initRedeemedSlider");
+            }
+            else
+            {
+                topRedemptions = new List<RedemptionsItem>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching redemptions: {ex.Message}");
+            topRedemptions = new List<RedemptionsItem>();
+        }
+        finally
+        {
+            isRedemptionsLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task GetFeaturedOffersAsync()
+    {
+        try
+        {
+            isFeaturedOffersLoading = true;
+
+            var request = new OffersFeaturedRequest(App.CurrentUser.UserKey.ToString());
+            
+
+            var response = await apiService.GetOffersFeaturedRandom(request);
+
+            if (response?.Success == true && response.Data is not null)
+            {
+                featuredOffers = response.Data
+                    .Where(x => x.IsActive)
+                    .ToList();
+
+                await InvokeAsync(StateHasChanged);
+
+                if (_module != null)
+                {
+                    await _module.InvokeVoidAsync("initOffersSlider");
+                    await _module.InvokeVoidAsync("initFeaturedOffersSlider");
+                    await _module.InvokeVoidAsync("initRedeemedSlider");
+
+                }
+            }
+            var responsetop = await apiService.GetOffersFeaturedRandom(request);
+
+            if (responsetop?.Success == true && responsetop.Data is not null)
+            {
+                featuredOfferstop = responsetop.Data
+                    .Where(x => x.IsActive)
+                    .ToList();
+
+                await InvokeAsync(StateHasChanged);
+
+                if (_module != null)
+                {
+                    await _module.InvokeVoidAsync("initOffersSlider");
+                    await _module.InvokeVoidAsync("initFeaturedOffersSlider");
+                    await _module.InvokeVoidAsync("initRedeemedSlider");
+                }
+            }
+            else
+            {
+                featuredOfferstop = new List<BusinessOfferItem>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching featured offers: {ex.Message}");
+            featuredOffers = new List<BusinessOfferItem>();
+        }
+        finally
+        {
+            isFeaturedOffersLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    #endregion
+
+    #region Handlers
+
+    private async Task OnSearchKey(KeyboardEventArgs e)
+    {
+        // Android "Next"/"Done"/"Search" generally arrives as Enter
+        if (e.Key == "Enter")
+        {
+            await DoSearchAsync(SearchText);
+        }
+    }
+
+    private async Task DoSearchAsync(string? q)
+    {
+        if (string.IsNullOrWhiteSpace(q))
+            return;
+
+        var route = RouteHelper.BuildRoute(nameof(BusinessesPage),
+            new Dictionary<string, string>
+            {
+                { "CategoryId", $"Search,{q}" }
+            });
+        await Shell.Current.GoToAsync(route);
+    }
+
+    private async Task HandleCategorySelected(CategoryItem categoryItem)
+    {
+
+        if (categoryItem.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks)
+        {
+            await Launcher.Default.OpenAsync("https://allaboutlocal.benefithub.com/");
+            return;
+        }
+        var route = RouteHelper.BuildRoute(nameof(BusinessesPage),
+        new Dictionary<string, string>
+        {
+            { "CategoryId", $"{categoryItem.Category_Sub_Key},{categoryItem.Name}" }
+        });
+        await Shell.Current.GoToAsync(route);
+
+    }
+
+    private async Task OpenFeaturedOfferAsync(BusinessOfferItem offer)
+    {
+        if (offer is null)
+            return;
+
+        // Update this route if your app uses a different details route.
+        await Shell.Current.GoToAsync($"offerdetails/{offer.BusinessOffersKey}");
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private string GetOfferHeading(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "Featured Offer";
+
+        if (!string.IsNullOrWhiteSpace(offer.Heading))
+            return offer.Heading;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessName))
+            return offer.BusinessName;
+
+        return "Featured Offer";
+    }
+
+    private string GetOfferSubTitle(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "Featured";
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessName))
+            return offer.BusinessName;
+
+        if (!string.IsNullOrWhiteSpace(offer.Description))
+            return offer.Description.Length > 40
+                ? offer.Description[..40] + "..."
+                : offer.Description;
+
+        return $"Views {offer.OfferViews}";
+    }
+
+    private string GetOfferImage(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "images/pic-health.jpg";
+
+        if (!string.IsNullOrWhiteSpace(offer.ThumbnailPath))
+            return offer.ThumbnailPath;
+
+        if (!string.IsNullOrWhiteSpace(offer.ImagePath))
+            return offer.ImagePath;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessProfileImagePath))
+            return offer.BusinessProfileImagePath;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessLogoPath))
+            return offer.BusinessLogoPath;
+
+        return "images/pic-health.jpg";
+    }
+
+    private string GetBusinessImage(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "images/pic-business01.jpg";
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessProfileImagePath))
+            return offer.BusinessProfileImagePath;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessLogoPath))
+            return offer.BusinessLogoPath;
+
+        if (!string.IsNullOrWhiteSpace(offer.ThumbnailPath))
+            return offer.ThumbnailPath;
+
+        if (!string.IsNullOrWhiteSpace(offer.ImagePath))
+            return offer.ImagePath;
+
+        return "images/pic-business01.jpg";
+    }
+
+    private string GetRedemptionImage(RedemptionsItem? item)
+    {
+        try
+        {
+            if (item == null)
+                return "images/pic-dinner.jpg";
+
+            var imagePathProp = item.GetType().GetProperty("ImagePath");
+            if (imagePathProp != null)
+            {
+                var imagePath = imagePathProp.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(imagePath))
+                    return imagePath;
+            }
+
+            var thumbnailProp = item.GetType().GetProperty("ThumbnailPath");
+            if (thumbnailProp != null)
+            {
+                var thumbnail = thumbnailProp.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(thumbnail))
+                    return thumbnail;
+            }
+        }
+        catch
+        {
+        }
+
+        return "images/pic-dinner.jpg";
+    }
+
+    private string GetRedemptionHeading(RedemptionsItem? item)
+    {
+        try
+        {
+            if (item == null)
+                return "Redeemed Offer";
+
+            var headingProp = item.GetType().GetProperty("Heading");
+            if (headingProp != null)
+            {
+                var heading = headingProp.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(heading))
+                    return heading;
+            }
+
+            var nameProp = item.GetType().GetProperty("Name");
+            if (nameProp != null)
+            {
+                var name = nameProp.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(name))
+                    return name;
+            }
+        }
+        catch
+        {
+        }
+
+        return "Redeemed Offer";
+    }
+
+    private string GetRedemptionDescription(RedemptionsItem? item)
+    {
+        try
+        {
+            if (item == null)
+                return "Recently redeemed";
+
+            var descProp = item.GetType().GetProperty("Description");
+            if (descProp != null)
+            {
+                var desc = descProp.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(desc))
+                    return desc;
+            }
+
+            var businessProp = item.GetType().GetProperty("BusinessName");
+            if (businessProp != null)
+            {
+                var business = businessProp.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(business))
+                    return business;
+            }
+        }
+        catch
+        {
+        }
+
+        return "Recently redeemed";
+    }
+
+    private int GetRedemptionCount(RedemptionsItem? item)
+    {
+        try
+        {
+            if (item == null)
+                return 0;
+
+            var prop = item.GetType().GetProperty("RedemptionsCount");
+            if (prop != null && int.TryParse(prop.GetValue(item)?.ToString(), out var count))
+                return count;
+        }
+        catch
+        {
+        }
+
+        return 0;
+    }
+
+    private int GetRedemptionViews(RedemptionsItem? item)
+    {
+        try
+        {
+            if (item == null)
+                return 0;
+
+            var prop = item.GetType().GetProperty("OfferViews");
+            if (prop != null && int.TryParse(prop.GetValue(item)?.ToString(), out var count))
+                return count;
+        }
+        catch
+        {
+        }
+
+        return 0;
+    }
+
+    #endregion
 
     public async ValueTask DisposeAsync()
     {
         try
         {
             if (_module != null)
-            {
-               // await _module.InvokeVoidAsync("HomeNew.destroy");
                 await _module.DisposeAsync();
-            }
         }
         catch
         {
         }
     }
+
+    <!-- ========================================================= -->
+    <!-- #region More Tab (Method  - State)                        -->
+    <!-- ========================================================= -->
+    private PlanDetails planDetails;
+    public bool IsManageGridVisible = false;
+    public string UserSubscriptionStatus { get; set; } = string.Empty;
+    string AppVersionAndCopyrightText;
+
+    private string AccountActivationVerbage = "Gain all the benefits, activate your account now.";
+
+    private async Task GetSubscription()
+    {
+        try
+        {
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var output = await apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
+            if (output.Success && output.Data != null && output.Data.Count > 0)
+            {
+                planDetails = output.Data[0];
+                await localCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
+                Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
+ 
+                if (planDetails.IsActive)
+                {
+                    UserSubscriptionStatus = $"Current Plan is {planDetails.PlanName}";
+                    IsManageGridVisible = true;
+                }
+                else
+                {
+                    IsManageGridVisible = false;
+                    UserSubscriptionStatus = AccountActivationVerbage;
+                }
+            }
+            else
+            {
+                UserSubscriptionStatus = AccountActivationVerbage;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void GotoEComerce()
+    {
+        if (planDetails != null && !planDetails.IsActive)
+        {
+
+            // NavigationParameters keyValuePairs = new NavigationParameters();
+            // keyValuePairs.Add("FromMore", "FromMore");
+            // var result = await NavigationService.NavigateAsync(nameof(SignUpPlansPage), keyValuePairs);
+        }
+    }
+
+    private async void GotoSignUp()
+    {
+        if (planDetails != null && !planDetails.IsActive)
+        {
+            var route = RouteHelper.BuildRoute(nameof(SignUpPlanPage),
+             new Dictionary<string, string>
+             {
+                    { "NavigateFrom", $"fromMore" }
+             });
+
+            await Shell.Current.GoToAsync(route);
+            // NavigationParameters keyValuePairs = new NavigationParameters();
+            // keyValuePairs.Add("FromMore", "FromMore");
+            // var result = await NavigationService.NavigateAsync(nameof(SignUpPlansPage), keyValuePairs);
+        }
+    }
+    private async void GotoManageSubscription()
+    {
+        await Shell.Current.GoToAsync(nameof(ManageSubscriptionPage));
+    }
+    private async void GotoSavingsPage()
+    {
+        await Shell.Current.GoToAsync(nameof(MySavingsPage));
+    }
+    private async void GotoNotificationsPage()
+    {
+        await Shell.Current.GoToAsync(nameof(MySavingsPage));
+    }
+    
+    
+    private async Task logOut()
+    {
+        // Simulate an exception that can be caught
+
+        Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
+        await localCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, new AALUser());
+        await localCache.ClearAllAsync();
+ 
+        await Shell.Current.GoToAsync("//LoginPage");
+    }
+    <!-- ========================================================= -->
+    <!-- #region End  More Tab (Markup - Mobile)                        -->
+    <!-- ========================================================= -->
 }

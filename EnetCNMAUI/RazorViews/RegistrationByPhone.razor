@@ -59,15 +59,18 @@
       </div> <!--/\Mobile TOP END/\-->
     </header> <!--/\header END/\-->
     <!--\/main content START\/-->
-    <main class="flex-shrink-0 mb-0">
+    <main class="flex-shrink-0 mb-0 login-signup-card">
         <div class="container-fluid">
 
             <div class="row justify-content-center">
-                <div class="col-lg-5 d-none d-lg-block vh-100 bg-no-repeat bg-size-cover bg-position-center p-0" style="background-image:url('img/login-bg.jpg');"></div>
+                <div class="col-lg-5 d-none d-lg-block vh-100 bg-no-repeat bg-size-cover bg-position-center p-0" style="background-image:url('images/login-bg.jpg');"></div>
                 <div class="col-lg-7 d-flex align-items-center vh-100">
                     <div class="card shadow-none border-0 ms-auto me-auto login-card">
                         <div class="card-body text-left pt-0">
-                            <h3 class="login d-block d-lg-block">Create Account</h3>
+                            <img src="images/logo-connect-local.svg" alt="" class="pb-4" />
+               
+                            <h3 class="login d-block d-lg-block border-top pt-3">Create Account</h3>
+
 
                             <form id="regForm" action="#">
 
@@ -142,11 +145,11 @@
                                 </div> <!-- .tab -->
                                 <!-- Screen NAVIGATION -->
                                 <div class="d-flex flex-row flex-nowrap justify-content-between">
-                                        <button type="button" id="prevBtn" @onclick="() => nextPrev(-1)" class="btn btn-secondary ms-auto p-2 px-3">Previous</button>
+                                    <button type="button" id="prevBtn" @onclick="() => nextPrev(-1)" class="btn btn-primary p-2 px-3">Previous</button>
                                         <button type="button"
                                                 id="nextBtn"
                                                 @onclick="() => nextPrev(1)"
-                                                class="btn btn-secondary ms-auto p-2 px-3 @(isNextDisabled ? "disabled" : "")">
+                                                class="btn btn-primary ms-auto p-2 px-3 @(isNextDisabled ? "disabled" : "" )">
                                             Next
                                         </button>
                                 </div>

@@ -3,7 +3,59 @@
 
 <!-- ================= Card ================= -->
 
-@if (IsGridView)
+
+<div class="business-item">
+    <div class="business-header">
+        <a href="#" @onclick="@(async () => await OnItemCardClick(item))"  class="d-flex align-items-center gap-3">
+            <img src="@item.ProfileImagePath" class="biz-img" alt="@GetBusinessTitle(item)">
+
+            <div class="accordion-businesses">
+                <h6 class="text-truncate">@GetBusinessTitle(item)</h6>
+                <p class="location">
+                    <lord-icon src="https://cdn.lordicon.com/onmwuuox.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                    @GetBusinessLocation(item)
+                </p>
+                <p class="offers">
+                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                    @GetOfferCount(item) Offers
+                </p>
+            </div>
+        </a>
+
+        <div class="arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2">
+                <polyline points="9 6 15 12 9 18" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="business-body">
+        <div class="owl-carousel redeemed-slider">
+            <div class="card border-0 shadow-sm card-hover py-1">
+                <div class="card-img rounded-4" style="background-image: url('@item.ProfileImagePath');"></div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-semibold mb-0">@GetBusinessTitle(item)</h6>
+                        <span class="heart"><i class="fa-regular fa-heart"></i></span>
+                    </div>
+                    <p class="small">@GetBusinessLocation(item)</p>
+                    <div class="d-flex gap-3 offers-icons">
+                        <small>
+                            <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                            <span class="view_num">@GetOfferCount(item)</span> <span class="view_txt">Offers</span>
+                        </small>
+                        <small>
+                            <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                            <span class="view_num">0</span> <span class="view_txt">Views</span>
+                        </small>
+                        <button class="btn btn-primary btn-sm px-3 ms-auto">View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* @if (IsGridView)
 {
     <li class="card">
         <a href=""
@@ -51,7 +103,7 @@ else
         </a>
     </li>
 }
-
+ *@
 
 <!-- =============== /Card ================== -->
 @code
@@ -59,10 +111,10 @@ else
     #region Parameters
 
     [Parameter, EditorRequired]
-    public BusinessItem Business { get; set; } = null!;
+    public BusinessItem item { get; set; } = null!;
 
-    [Parameter, EditorRequired]
-    public bool IsGridView { get; set; }
+    // [Parameter, EditorRequired]
+    // public bool IsGridView { get; set; }
 
 
     #endregion
@@ -71,7 +123,7 @@ else
 
     private async Task OnItemCardClick(BusinessItem item)
     {
-        var ite = IsGridView;
+       // var ite = IsGridView;
         var route = RouteHelper.BuildRoute(nameof(BusinessProfilePage),
           new Dictionary<string, string>
           {
@@ -82,6 +134,43 @@ else
 
         await Shell.Current.GoToAsync(route);
     }
+    private string GetBusinessTitle(BusinessItem item)
+    {
+        var type = item.GetType();
 
+        return type.GetProperty("Name")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("BusinessName")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Title")?.GetValue(item)?.ToString()
+            ?? "Business";
+    }
+
+    private string GetBusinessLocation(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("City")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Location")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Address")?.GetValue(item)?.ToString()
+            ?? "Ventura, CA";
+    }
+
+    private string GetBusinessImage(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("ImageUrl")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Image")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("Logo")?.GetValue(item)?.ToString()
+            ?? "images/pic-business01.jpg";
+    }
+
+    private string GetOfferCount(BusinessItem item)
+    {
+        var type = item.GetType();
+
+        return type.GetProperty("ActiveOffersCount")?.GetValue(item)?.ToString()
+            ?? type.GetProperty("OffersCount")?.GetValue(item)?.ToString()
+            ?? "0";
+    }
     #endregion
 }

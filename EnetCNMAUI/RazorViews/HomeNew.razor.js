@@ -1,20 +1,42 @@
 export class Helpers {
-	static dotNetHelper;
-	static setDotNetHelper(value) {
-		Helpers.dotNetHelper = value;
-	}
-	static async setItemsOnSelectDate(sdate) {
-		await Helpers.dotNetHelper.invokeMethodAsync('SetItemsOnSelectDate', sdate);
-	}
-	static async openDetailModal(id) {
-		await Helpers.dotNetHelper.invokeMethodAsync('OpenDetailModal', id);
-	}
+    static dotNetHelper;
+
+    static setDotNetHelper(value) {
+        Helpers.dotNetHelper = value;
+    }
+
+    static async setItemsOnSelectDate(sdate) {
+        await Helpers.dotNetHelper.invokeMethodAsync('SetItemsOnSelectDate', sdate);
+    }
+
+    static async openDetailModal(id) {
+        await Helpers.dotNetHelper.invokeMethodAsync('OpenDetailModal', id);
+    }
 }
+
 window.Helpers = Helpers;
 
-// OwlCarousel Initializations - Export functions to be called on demand
+function initOwl(selector, options) {
+    const $elements = typeof selector === "string" ? $(selector) : selector;
+
+    if (!$elements || !$elements.length) return;
+
+    $elements.each(function () {
+        const $this = $(this);
+
+        if ($this.hasClass('owl-loaded')) {
+            $this.trigger('destroy.owl.carousel');
+            $this.removeClass('owl-loaded');
+            $this.find('.owl-stage-outer').children().unwrap();
+            $this.find('.owl-stage').children().unwrap();
+        }
+
+        $this.owlCarousel(options);
+    });
+}
+
 export function initCategoriesSlider() {
-    $('.categories-slider').owlCarousel({
+    initOwl('.categories-slider', {
         loop: true,
         margin: 30,
         nav: false,
@@ -33,8 +55,24 @@ export function initCategoriesSlider() {
     });
 }
 
+export function initOffcanvasCategoriesSlider() {
+    initOwl('.offcanvas-categories-slider', {
+        loop: true,
+        margin: 20,
+        nav: false,
+        dots: false,
+        autoplay: false,
+        smartSpeed: 800,
+        responsive: {
+            0: { items: 3 },
+            480: { items: 4 },
+            768: { items: 5 }
+        }
+    });
+}
+
 export function initHeroSlider() {
-    $('.hero-slider').owlCarousel({
+    initOwl('.hero-slider', {
         items: 1,
         loop: true,
         nav: false,
@@ -51,7 +89,7 @@ export function initHeroSlider() {
 }
 
 export function initRedeemedSlider() {
-    $('.redeemed-slider').owlCarousel({
+    initOwl('.redeemed-slider', {
         loop: true,
         margin: 20,
         nav: false,
@@ -70,7 +108,7 @@ export function initRedeemedSlider() {
 }
 
 export function initOffersSlider() {
-    $('.offers-slider').owlCarousel({
+    initOwl('.offers-slider', {
         loop: true,
         margin: 20,
         nav: false,
@@ -83,14 +121,32 @@ export function initOffersSlider() {
         responsive: {
             0: { items: 2 },
             576: { items: 3 },
-            768: { items: 5 },
-            1200: { items: 6 }
+            768: { items: 4 },
+            1200: { items: 5 }
+        }
+    });
+}
+
+export function initFeaturedOffersSlider() {
+    initOwl('.featured-offers-slider', {
+        loop: true,
+        margin: 20,
+        nav: false,
+        dots: false,
+        autoplay: false,
+        autoplayTimeout: 5000,
+        smartSpeed: 900,
+        stagePadding: 80,
+        responsive: {
+            0: { items: 1, stagePadding: 20 },
+            768: { items: 2, stagePadding: 40 },
+            1200: { items: 3, stagePadding: 80 }
         }
     });
 }
 
 export function initSuggestedSlider() {
-    $('.suggested-slider').owlCarousel({
+    initOwl('.suggested-slider', {
         loop: true,
         margin: 15,
         nav: false,
@@ -107,7 +163,8 @@ export function initSuggestedSlider() {
 }
 
 export function initToggle() {
-    $('.toggle-wrapper button').click(function () {
+    $(document).off('click', '.toggle-wrapper button');
+    $(document).on('click', '.toggle-wrapper button', function () {
         $('.toggle-wrapper button').removeClass('active');
         $(this).addClass('active');
         $('#offersScreen, #businessScreen').addClass('hidden');
@@ -115,14 +172,9 @@ export function initToggle() {
     });
 }
 
-export function initHeart() {
-    $(document).on('click', '.heart', function () {
-        $(this).text($(this).text() === "♡" ? "♥" : "♡");
-    });
-}
-
 export function initBusinessAccordion() {
-    $('.business-header').on('click', function () {
+    $(document).off('click', '.business-header');
+    $(document).on('click', '.business-header', function () {
         const parent = $(this).closest('.business-item');
         const body = parent.find('.business-body');
 
@@ -133,7 +185,7 @@ export function initBusinessAccordion() {
             parent.addClass('active');
 
             if (!body.data('owl-initialized')) {
-                body.find('.inner-slider').owlCarousel({
+                initOwl(body.find('.inner-slider'), {
                     loop: true,
                     margin: 15,
                     nav: false,
@@ -146,6 +198,7 @@ export function initBusinessAccordion() {
                         768: { items: 1.2 }
                     }
                 });
+
                 body.data('owl-initialized', true);
             }
         }
@@ -153,8 +206,10 @@ export function initBusinessAccordion() {
 }
 
 export function initHeartAnimation() {
+    $(document).off('click', '.heart');
     $(document).on('click', '.heart', function () {
         $(this).toggleClass('active');
+
         if ($(this).hasClass('active')) {
             $(this).html('<i class="fa-solid fa-heart"></i>');
         } else {
@@ -162,21 +217,3 @@ export function initHeartAnimation() {
         }
     });
 }
-
-// Initialize all sliders and handlers on demand
-export function initAllSliders() {
-    initCategoriesSlider();
-    initHeroSlider();
-    initRedeemedSlider();
-    initOffersSlider();
-    initSuggestedSlider();
-    initToggle();
-    initHeart();
-    initBusinessAccordion();
-    initHeartAnimation();
-}
-
-// Auto-initialize on DOM ready
-$(document).ready(function () {
-    initAllSliders();
-});

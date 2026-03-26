@@ -52,7 +52,7 @@ namespace EnetCNMAUI.Services.Theme
             Application.Current.UserAppTheme = appTheme;
 
             if (jSRuntime != null)
-                await jSRuntime.InvokeVoidAsync("setAppTheme", appTheme.ToString().ToLower());
+               // await jSRuntime.InvokeVoidAsync("setAppTheme", appTheme.ToString().ToLower());
 
           //UpdateNavBar(appTheme);
           //UpdateNavAndStatusBarTheme();

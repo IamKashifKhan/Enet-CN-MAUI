@@ -97,18 +97,6 @@ offersSlider.on('mousedown touchstart', function () {
 	
 	
 	
-	/* Toggle */
-$('.toggle-wrapper button').click(function(){
-  $('.toggle-wrapper button').removeClass('active');
-  $(this).addClass('active');
-  $('#offersScreen, #businessScreen').addClass('hidden');
-  $('#' + $(this).data('target')).removeClass('hidden');
-});
-
-/* Heart */
-$(document).on('click','.heart',function(){
-  $(this).text($(this).text() === "♡" ? "♥" : "♡");
-});
 
 /* Suggested Owl */
 var suggestedSlider = $('.suggested-slider');
@@ -136,8 +124,9 @@ suggestedSlider.on('mousedown touchstart', function () {
 	
 	
 /* Premium Accordion Logic */
+$('.business-header .arrow').on('click', function(e){
 
-$('.business-header').on('click', function(){
+  e.stopPropagation(); // optional: 
 
   const parent = $(this).closest('.business-item');
   const body = parent.find('.business-body');
@@ -170,6 +159,7 @@ $('.business-header').on('click', function(){
           body.data('owl-initialized', true);
       }
   }
+
 });
 
 
@@ -180,18 +170,7 @@ $(window).on('scroll', function(){
 
 
 
-/* Heart Animation */
-$(document).on('click', '.heart', function () {
-  $(this).toggleClass('active');
-
-  if ($(this).hasClass('active')) {
-    $(this).html('<i class="fa-solid fa-heart"></i>');
-  } else {
-    $(this).html('<i class="fa-regular fa-heart"></i>');
-  }
 });
-	
-	 });
 	
 	
 	

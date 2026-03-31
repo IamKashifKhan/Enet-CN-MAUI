@@ -1,4 +1,5 @@
 ﻿@using EnetCNMAUI.Views
+@using EnetCNMAUI.Domain.Models.MVC
 
 @inject ILocalCache localCache
 @inject ICNApiService apiService
@@ -276,50 +277,39 @@
             <div id="offersScreen" class="@(ShowOffers ? "" : "hidden")">
                 <div class="offersWrap">
 
-                    <!-- Static mock offers for layout until offer binding is added -->
-                    <div class="card card-hover border-0 shadow-sm py-1">
-                        <div class="card-img rounded-4" style="background-image: url('images/pic-dinner.jpg');"></div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="fw-semibold mb-0">Crunchy Burger CHECK ELPSISE Sample TEXT</h6>
-                                <span class="heart"><i class="fa-regular fa-heart"></i></span>
+                    @if (categoryOffers != null && categoryOffers.Any())
+                    {
+                        foreach (var offer in categoryOffers)
+                        {
+                            <div class="card card-hover border-0 shadow-sm py-1">
+                                <div class="card-img rounded-4" style="background-image: url('@GetOfferImage(offer)');"></div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="fw-semibold mb-0">@GetOfferHeading(offer)</h6>
+                                        <span class="heart"><i class="fa-regular fa-heart"></i></span>
+                                    </div>
+                                    <p class="small">@GetOfferSubTitle(offer)</p>
+                                    <div class="d-flex gap-3 offers-icons">
+                                        <small>
+                                            <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                                            <span class="view_num">@offer.RedemptionsCount</span> <span class="view_txt">Redemptions</span>
+                                        </small>
+                                        <small>
+                                            <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
+                                            <span class="view_num">@offer.OfferViews</span> <span class="view_txt">Views</span>
+                                        </small>
+                                        <button class="btn btn-primary btn-sm px-3 ms-auto" @onclick="async () => await OpenOfferAsync(offer)">Redeem Now</button>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="small">Max Value $15.00</p>
-                            <div class="d-flex gap-3 offers-icons">
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
-                                    <span class="view_num">3</span> <span class="view_txt">Redemptions</span>
-                                </small>
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
-                                    <span class="view_num">77</span> <span class="view_txt">Views</span>
-                                </small>
-                                <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">No offers available for this category.</p>
                         </div>
-                    </div>
-
-                    <div class="card card-hover border-0 shadow-sm py-1">
-                        <div class="card-img rounded-4" style="background-image: url('images/pic-health.jpg');"></div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="fw-semibold mb-0">Health Care</h6>
-                                <span class="heart"><i class="fa-regular fa-heart"></i></span>
-                            </div>
-                            <p class="small">Healthcare</p>
-                            <div class="d-flex gap-3 offers-icons">
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
-                                    <span class="view_num">15</span> <span class="view_txt">Redemptions</span>
-                                </small>
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
-                                    <span class="view_num">36</span> <span class="view_txt">Views</span>
-                                </small>
-                                <button class="btn btn-primary btn-sm px-3 ms-auto">Redeem Now</button>
-                            </div>
-                        </div>
-                    </div>
+                    }
 
                     <div class="card card-suggested">
                         <div class="d-flex justify-content-between mb-2">
@@ -403,6 +393,7 @@
 
     private List<CategoryItem>? mainCategories;
     private List<BusinessItem>? businessList;
+    private List<BusinessOfferItem>? categoryOffers;  // New: Category-based offers
     private string CategoryName = string.Empty;
     private string CategoryKey = string.Empty;
 
@@ -426,15 +417,18 @@
             if (DataArray[0] == "City")
             {
                 GetCityBusiness(DataArray[1], string.Empty);
+                await GetOffersByCity(DataArray[1]);
             }
             else if (DataArray[0] == "Search")
             {
                 GetCityBusiness(string.Empty, DataArray[1]);
+                await SearchOfferByText(DataArray[1]);
             }
             else
             {
                 CategoryKey = DataArray[0];
                 await GetBusiness(CategoryKey);
+                await GetOffersByCategory(CategoryKey);  // Fetch category-based offers
                 CategoryName = DataArray.Length > 1 ? DataArray[1] : string.Empty;
             }
         }
@@ -553,6 +547,93 @@
         }
     }
 
+    private async Task GetOffersByCategory(string categoryKey, string count = "10")
+    {
+        try
+        {
+            var request = new OffersFeaturedByCategoryRequest(
+                App.CurrentUser.UserKey.ToString(), 
+                categoryKey, 
+                count);
+            
+            var output = await apiService.GetOffersFeaturedByCategory(request);
+            
+            if (output.Success && output.Data != null)
+            {
+                categoryOffers = output.Data;
+            }
+            else
+            {
+                categoryOffers = new List<BusinessOfferItem>();
+            }
+            
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching category offers: {ex.Message}");
+            categoryOffers = new List<BusinessOfferItem>();
+        }
+    }
+
+    private async Task GetOffersByCity(string city, string count = "10")
+    {
+        try
+        {
+            // var request = new OffersFeaturedByCategoryRequest(
+            //     App.CurrentUser.UserKey.ToString(),
+            //     city,
+            //     count);
+            
+            // var output = await apiService.GetOffersFeaturedByCategory(request);
+            
+            // if (output.Success && output.Data != null)
+            // {
+            //     categoryOffers = output.Data;
+            // }
+            // else
+            // {
+            //     categoryOffers = new List<BusinessOfferItem>();
+            // }
+            
+            // await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            // Console.WriteLine($"Error fetching category offers: {ex.Message}");
+            // categoryOffers = new List<BusinessOfferItem>();
+        }
+    }
+    private async Task SearchOfferByText(string categoryKey, string count = "10")
+    {
+        try
+        {
+            var request = new OffersSearchRequest(
+                App.CurrentUser.UserKey.ToString(),
+                categoryKey,
+                count);
+            
+            var output = await apiService.GetOffersSearch(request);
+            
+            if (output.Success && output.Data != null)
+            {
+                categoryOffers = output.Data;
+            }
+            else
+            {
+                categoryOffers = new List<BusinessOfferItem>();
+            }
+            
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching category offers: {ex.Message}");
+            categoryOffers = new List<BusinessOfferItem>();
+        }
+    }
+
+
     #endregion
 
     #region Navigation
@@ -655,6 +736,64 @@
         return type.GetProperty("ActiveOffersCount")?.GetValue(item)?.ToString()
             ?? type.GetProperty("OffersCount")?.GetValue(item)?.ToString()
             ?? "0";
+    }
+
+    private string GetOfferImage(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "images/pic-dinner.jpg";
+
+        if (!string.IsNullOrWhiteSpace(offer.ThumbnailPath))
+            return offer.ThumbnailPath;
+
+        if (!string.IsNullOrWhiteSpace(offer.ImagePath))
+            return offer.ImagePath;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessProfileImagePath))
+            return offer.BusinessProfileImagePath;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessLogoPath))
+            return offer.BusinessLogoPath;
+
+        return "images/pic-dinner.jpg";
+    }
+
+    private string GetOfferHeading(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "Offer";
+
+        if (!string.IsNullOrWhiteSpace(offer.Heading))
+            return offer.Heading;
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessName))
+            return offer.BusinessName;
+
+        return "Offer";
+    }
+
+    private string GetOfferSubTitle(BusinessOfferItem? offer)
+    {
+        if (offer == null)
+            return "Available";
+
+        if (!string.IsNullOrWhiteSpace(offer.BusinessName))
+            return offer.BusinessName;
+
+        if (!string.IsNullOrWhiteSpace(offer.Description))
+            return offer.Description.Length > 40
+                ? offer.Description[..40] + "..."
+                : offer.Description;
+
+        return $"Views {offer.OfferViews}";
+    }
+
+    private async Task OpenOfferAsync(BusinessOfferItem offer)
+    {
+        if (offer == null)
+            return;
+
+        await Shell.Current.GoToAsync($"offerdetails/{offer.BusinessOffersKey}");
     }
 
     #endregion

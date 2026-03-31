@@ -4,10 +4,13 @@
 @inject IJSRuntime JS
 @inject ICNApiService apiService
 @inject ILocalCache localCache
+@inject IOfferService offerService
+@inject ILocationService locationService
 
 @using EnetCNMAUI.ApiService.Requests.MVC
 @using EnetCNMAUI.Domain.Models.MVC
 @using System.Collections.ObjectModel
+@using EnetCNMAUI.Services.Local
 @using EnetCNMAUI.Views
 
 <div class="offcanvas offcanvas-top h-100" tabindex="-1" id="offcanvasFullscreen" aria-labelledby="offcanvasFullscreenLabel">
@@ -29,7 +32,7 @@
                        @bind-value="SearchText"
                        @bind-value:event="oninput"
                        @onkeydown="OnSearchKey"
-                       @onkeydown:preventDefault />
+                         />
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
 
@@ -54,10 +57,20 @@
             <!-- Recent Search -->
             <h5 class="section-title mt-4">Recent Search</h5>
             <ul class="recent-search list-unstyled">
-                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Plumber</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Burger</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Pet Food</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
-                <li><a href="#"><i class="fa-solid fa-clock-rotate-left"> <small>Movie</small></i></a><span class="remove-item"><i class="fa-solid fa-xmark"></i></span></li>
+                @if (RecentSearches != null && RecentSearches.Any())
+                {
+                    @foreach (var search in RecentSearches)
+                    {
+                        <li>
+                            <a href="#" @onclick="() => OnRecentSearchClicked(search)" @onclick:preventDefault>
+                                <i class="fa-solid fa-clock-rotate-left"> <small>@search</small></i>
+                            </a>
+                            <span class="remove-item" @onclick="() => RemoveSearchItem(search)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        </li>
+                    }
+                }
             </ul>
 
             <!-- Popular Offers -->
@@ -68,20 +81,11 @@
                     <div class="owl-carousel offers-slider">
                         @foreach (var offer in featuredOffers)
                         {
-                            <div class="item">
-                                <div class="card custom-card">
-                                    <a href="#"
-                                           class="hover-underline-animation"
-                                           @onclick="async () => await OpenFeaturedOfferAsync(offer)"
-                                           @onclick:preventDefault>
-                                        <img src="@GetOfferImage(offer)" class="card-img-top" alt="@offer.Heading">
-                                        <div class="card-body">
-                                            <h6>@GetOfferHeading(offer)</h6>
-                                            <small>@GetOfferSubTitle(offer)</small>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                            <OfferCard Offer="offer"
+                                       OnSelected="HandleOfferSelected"
+                                       AddRemoveToFavorite="AddRemoveFav"
+                                       isActivePlan="planDetails.IsActive">
+                            </OfferCard>
                         }
                     </div>
                 }
@@ -107,20 +111,11 @@
                     <div class="owl-carousel offers-slider businesses-slider">
                         @foreach (var offer in featuredOffers.Take(8))
                         {
-                            <div class="item">
-                                <div class="card custom-card">
-                                    <a href="#"
-                                           class="hover-underline-animation"
-                                           @onclick="async () => await OpenFeaturedOfferAsync(offer)"
-                                           @onclick:preventDefault>
-                                        <img src="@GetBusinessImage(offer)" class="card-img-top" alt="@offer.BusinessName">
-                                        <div class="card-body">
-                                            <h6>@(string.IsNullOrWhiteSpace(offer.BusinessName) ? "Business" : offer.BusinessName)</h6>
-                                            <small>@GetOfferHeading(offer)</small>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                            <OfferCard Offer="offer"
+                                       OnSelected="HandleOfferSelected"
+                                       AddRemoveToFavorite="AddRemoveFav"
+                                       isActivePlan="planDetails.IsActive">
+                            </OfferCard>
                         }
                     </div>
                 }
@@ -267,20 +262,6 @@
     </div>
 </section>
 
-<!-- ================= HERO SLIDER ================= -->
-@* <section class="container">
-    <div class="owl-carousel hero-slider rounded-4 overflow-hidden">
-        <div class="hero-slide slide-image d-flex align-items-center">
-            <img src="images/slide01.jpg" alt="" />
-        </div>
-        <div class="hero-slide slide-image d-flex align-items-center">
-            <img src="images/slide02.jpg" alt="" />
-        </div>
-        <div class="hero-slide slide-image d-flex align-items-center">
-            <img src="images/slide03.jpg" alt="" />
-        </div>
-    </div>
-</section> *@
 
 <!-- ================= TOP REDEEMED ================= -->
 <section class="container mt-5 redeemed-offers">
@@ -297,40 +278,11 @@
             <div class="owl-carousel redeemed-slider">
                 @foreach (var offer in featuredOfferstop)
                 {
-                    <div class="card border-0 shadow-sm card-hover py-1">
-                        <div class="card-img rounded-4" style="background-image: url('@GetOfferImage(offer)');"></div>
-                        <div class="card-body">
-                            <h6>@GetOfferHeading(offer)</h6>
-                            <p class="small">@GetOfferSubTitle(offer)</p>
-
-                            <div class="d-flex gap-3 offers-icons">
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                               trigger="loop"
-                                               delay="2000"
-                                               colors="primary:#ff9935,secondary:#ff9935">
-                                    </lord-icon>
-                                    <span class="view_num">@offer.RedemptionsCount</span>
-                                    <span class="view_txt">Redemptions</span>
-                                </small>
-
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                               trigger="loop"
-                                               delay="2000"
-                                               colors="primary:#ff9935,secondary:#ff9935">
-                                    </lord-icon>
-                                    <span class="view_num">@offer.OfferViews</span>
-                                    <span class="view_txt">Views</span>
-                                </small>
-
-                                <button class="btn btn-primary btn-sm px-3 ms-auto"
-                                        @onclick="async () => await OpenFeaturedOfferAsync(offer)">
-                                    Redeem Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <OfferCard Offer="offer"
+                               OnSelected="HandleOfferSelected"
+                               AddRemoveToFavorite="AddRemoveFav"
+                               isActivePlan="planDetails.IsActive">
+                    </OfferCard>
 
                 }
         
@@ -362,40 +314,12 @@
             <div class="owl-carousel featured-offers-slider">
                 @foreach (var offer in featuredOffers)
                 {
-                    <div class="card border-0 shadow-sm card-hover py-1">
-                        <div class="card-img rounded-4" style="background-image: url('@GetOfferImage(offer)');"></div>
-                        <div class="card-body">
-                            <h6>@GetOfferHeading(offer)</h6>
-                            <p class="small">@GetOfferSubTitle(offer)</p>
-
-                            <div class="d-flex gap-3 offers-icons">
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                                               trigger="loop"
-                                               delay="2000"
-                                               colors="primary:#ff9935,secondary:#ff9935">
-                                    </lord-icon>
-                                    <span class="view_num">@offer.RedemptionsCount</span>
-                                    <span class="view_txt">Redemptions</span>
-                                </small>
-
-                                <small>
-                                    <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                                               trigger="loop"
-                                               delay="2000"
-                                               colors="primary:#ff9935,secondary:#ff9935">
-                                    </lord-icon>
-                                    <span class="view_num">@offer.OfferViews</span>
-                                    <span class="view_txt">Views</span>
-                                </small>
-
-                                <button class="btn btn-primary btn-sm px-3 ms-auto"
-                                        @onclick="async () => await OpenFeaturedOfferAsync(offer)">
-                                    Redeem Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <OfferCard Offer="offer"
+                               OnSelected="HandleOfferSelected"
+                               AddRemoveToFavorite="AddRemoveFav"
+                               isActivePlan="planDetails.IsActive">
+                    </OfferCard>
+                
                 }
             </div>
         }
@@ -651,6 +575,111 @@
 </div>
 
  <!-- /More -->
+<!-- OffCanvas Redeem -->
+<!-- OffCanvas Redeem -->
+<!-- OffCanvas Redeem -->
+<div id="offcanvasRedeem" class="offcanvas offcanvas-bottom h-1000" data-bs-scroll="false" tabindex="-1">
+
+    <div class="offcanvas-header pt-4 pb-2">
+        <h2 class="offcanvas-title">
+            @SelectedOffer.BusinessName
+        </h2>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="offer-expiry">
+                @if (SelectedOffer.EndDate != default)
+                {
+                    @:Expiry @SelectedOffer.EndDate.ToString("MM/dd/yyyy")
+                }
+            </div>
+
+            <button class="heart d-inline-block ms-auto @(SelectedOffer.isFavorite ? "active" : "")"
+                    @onclick="@(async () => AddRemoveFav(SelectedOffer))"
+                    type="button"
+                    data-bs-toggle="button">
+                <i class="@(SelectedOffer.isFavorite ? "fa-solid fa-heart" : "fa-regular fa-heart")"></i>
+            </button>
+        </div>
+
+        <!-- Card Redeem -->
+        <div class="card redeem">
+            <h2 class="card-header">@SelectedOffer?.Heading</h2>
+
+            <div class="card-body">
+                <h5 class="redeem-desc">@SelectedOffer?.Description</h5>
+                <p>Tap Redeem at checkout to display SKU number for cashier.</p>
+
+                @if (!string.IsNullOrWhiteSpace(SelectedOffer?.ThumbnailPath))
+                {
+                    <div class="card-img" style="background-image: url('@SelectedOffer.ThumbnailPath');"></div>
+                }
+
+                <p>
+                    This coupon is valid only at @(SelectedOffer?.BusinessName ?? "merchant").
+                    @*  @if (!string.IsNullOrWhiteSpace(SelectedOffer?.Disclaimer))
+                    {
+                        <span> @SelectedOffer.Disclaimer</span>
+                    } *@
+                </p>
+            </div>
+
+            <div class="card-footer">
+                <a href="#"
+                       class="btn btn-primary px-5"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modalRedeemCode"
+                       @onclick:preventDefault>
+                    Redeem Offer
+                </a>
+            </div>
+        </div>
+        <!-- /Card Redeem -->
+
+    </div>
+</div>
+<!-- Modal Redeem -->
+<div id="modalRedeemCode" class="modal fade" aria-labelledby="modalRedeemCode" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-body-emphasis">To Redeem this Offer</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Enter code @SelectedOffer.ConfirmationCode to redeem offer at time of checkout</p>
+                <input @bind="Code" class="form-control form-control-lg font-monospace" type="text" minlength="6" maxlength="6" placeholder="Enter Code" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" @onclick="ValidateCode" class="btn btn-primary" data-bs-toggle="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Success -->
+<div id="modalRedeemSuccess" class="modal fade" aria-labelledby="modalRedeemSuccess" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-body-emphasis">Congrats..! Enjoy..!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You have successfully redeemed this offer, thank for your shopping local!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="GotoSavingsPage" data-bs-dismiss="modal">SEE YOUR SAVINGS</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @code {
     private IJSObjectReference? _module;
 
@@ -663,8 +692,9 @@
     private bool isRedemptionsLoading;
     private bool isFeaturedOffersLoading;
     private bool isFeaturedtopOffersLoading;
-
+    public AALUser _user { get; set; } = default!;
     private string? SearchText;
+    private List<string> RecentSearches = new();
 
     private bool IsLoading { get; set; }
     private bool IsLoadingMore { get; set; }
@@ -688,12 +718,41 @@
     private int Page { get; set; } = 1;
     private int PageSize { get; set; } = 20;
     private bool HasMore { get; set; } = true;
+    private DotNetObjectReference<HomeNew>? _self;
+    private bool _favBusy;
+    private bool isActivePlan;
+    [Parameter] public double StartLat { get; set; } = 34.197504;
+    [Parameter] public double StartLng { get; set; } = -119.177052;
+    private List<BusinessOfferItem> _favoriteOffers = new();
 
     protected override async Task OnInitializedAsync()
     {
         await GetSavingsAsync();
+        App.MyPosition = new Location { Latitude = StartLat, Longitude = StartLng };
+        planDetails = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
+        await GetCurrentLocation();
+
+        App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
+
+        _user = App.CurrentUser;
+
+        // Load search history
+        RecentSearches = await localCache.GetCacheItem<List<string>>(LocalCacheKeys.SearchHistory) ?? new List<string>();
     }
 
+    private async Task GetCurrentLocation()
+    {
+        var position = await locationService.GetCurrentLocationAsync();
+        if (position != null)
+        {
+            App.MyPosition = position;
+        }
+        else
+        {
+            App.MyPosition = new Location { Latitude = 34.27851, Longitude = -119.16 };
+        }
+        Console.WriteLine($"Current location: {App.MyPosition.Latitude}, {App.MyPosition.Longitude}");
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -851,6 +910,15 @@
             await InvokeAsync(StateHasChanged);
         }
     }
+    private async void ValidateCode()
+    {
+        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
+        var output = await apiService.RedeemOffer(redeedmOfferRequest);
+        if (output.Success)
+        {
+            _module?.InvokeVoidAsync("showHideModal", true);
+        }
+    }
 
     private async Task GetFeaturedOffersAsync()
     {
@@ -922,14 +990,41 @@
         // Android "Next"/"Done"/"Search" generally arrives as Enter
         if (e.Key == "Enter")
         {
+            // Hide keyboard on Android and iOS
+            await JS.InvokeVoidAsync("eval", "document.activeElement.blur()");
             await DoSearchAsync(SearchText);
         }
+    }
+
+    private async Task OnRecentSearchClicked(string searchTerm)
+    {
+        SearchText = searchTerm;
+        await DoSearchAsync(searchTerm);
+    }
+
+    private async Task RemoveSearchItem(string searchTerm)
+    {
+        RecentSearches.Remove(searchTerm);
+        await localCache.SaveItemInCache(LocalCacheKeys.SearchHistory, RecentSearches);
+        StateHasChanged();
     }
 
     private async Task DoSearchAsync(string? q)
     {
         if (string.IsNullOrWhiteSpace(q))
             return;
+
+        // Add to search history
+        if (!RecentSearches.Contains(q))
+        {
+            RecentSearches.Insert(0, q);
+            // Keep only last 4 searches
+            if (RecentSearches.Count > 4)
+            {
+                RecentSearches = RecentSearches.Take(4).ToList();
+            }
+            await localCache.SaveItemInCache(LocalCacheKeys.SearchHistory, RecentSearches);
+        }
 
         var route = RouteHelper.BuildRoute(nameof(BusinessesPage),
             new Dictionary<string, string>
@@ -1178,6 +1273,44 @@
         {
         }
     }
+    private BusinessOfferItem? SelectedOffer = new();
+    public string Code { get; set; } = string.Empty;
+
+    
+    private async Task HandleOfferSelected(BusinessOfferItem offer)
+    {
+        SelectedOffer = offer;
+        StateHasChanged();
+        await EnsureJsModuleAsync();
+        await _module!.InvokeVoidAsync("showOffcanvas", "#offcanvasRedeem");
+    }
+
+    private async Task EnsureJsModuleAsync()
+    {
+        if (_module is null)
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/HomeNew.razor.js");
+        _self ??= DotNetObjectReference.Create(this);
+    }
+
+    private async Task AddRemoveFav(BusinessOfferItem offer)
+    {
+        if (_favBusy) return;
+        _favBusy = true;
+        try
+        {
+            var response = await offerService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, _user.UserKey);
+
+            if (response.Success)
+                _favoriteOffers.RemoveAll(o => o.BusinessOffersKey == offer.BusinessOffersKey);
+        }
+        catch { }
+        finally
+        {
+            _favBusy = false;
+            StateHasChanged();
+        }
+    }
+
 
     <!-- ========================================================= -->
     <!-- #region More Tab (Method  - State)                        -->
@@ -1270,6 +1403,9 @@
     
     private async Task logOut()
     {
+        // Clear search history on logout
+        await localCache.DeleteItem<List<string>>(LocalCacheKeys.SearchHistory);
+
         // Simulate an exception that can be caught
 
         Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);

@@ -5,6 +5,7 @@ namespace EnetCNMAUI.LocalCache
     {
    
         public static string PlanDetails = "PlanDetails";
+        public static string SearchHistory = "SearchHistory";
 
         public static string BusinessItem(int businessKey)
         {

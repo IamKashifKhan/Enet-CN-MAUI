@@ -31,6 +31,12 @@ namespace EnetCNMAUI.ApiService
         [Post("/App_Offers_Featured_Random5")]
         Task<HttpResponseMessage> GetOffersFeaturedRandom([Body(BodySerializationMethod.UrlEncoded)] OffersFeaturedRequest offersFeaturedRequest);
 
+        [Post("/App_Offers_By_SubCategory_Random")]
+        Task<HttpResponseMessage> GetOffersFeaturedByCategory([Body(BodySerializationMethod.UrlEncoded)] OffersFeaturedByCategoryRequest offersFeaturedByCategoryRequest);
+
+        [Post("/App_Offers_Search")]
+        Task<HttpResponseMessage> GetOffersSearch([Body(BodySerializationMethod.UrlEncoded)] OffersSearchRequest offersSearchRequest);
+
         [Post("/App_User_Subscription_Transaction_Direct")]
         Task<HttpResponseMessage> UserSubscriptionTransactionDirect([Body(BodySerializationMethod.UrlEncoded)] SubscriptionTransactionRequest subscriptionTransactionRequest);
 

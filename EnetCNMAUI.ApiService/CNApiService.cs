@@ -389,6 +389,40 @@ public class CNApiService : ICNApiService
         return result;
     }
 
+    public async Task<ApiResult<List<BusinessOfferItem>>> GetOffersFeaturedByCategory(OffersFeaturedByCategoryRequest offersFeaturedByCategoryRequest)
+    {
+        ApiResult<List<BusinessOfferItem>> result;
+
+        try
+        {
+            var response = await AllAboutLocalApi.GetOffersFeaturedByCategory(offersFeaturedByCategoryRequest);
+            result = await response.ToServiceResult<List<BusinessOfferItem>>();
+        }
+        catch (Exception ex)
+        {
+            result = new ApiResult<List<BusinessOfferItem>>(false, $"GetOffersFeaturedByCategory failed, {ex.Message}.", null);
+        }
+
+        return result;
+    }
+
+    public async Task<ApiResult<List<BusinessOfferItem>>> GetOffersSearch(OffersSearchRequest offersSearchRequest)
+    {
+        ApiResult<List<BusinessOfferItem>> result;
+
+        try
+        {
+            var response = await AllAboutLocalApi.GetOffersSearch(offersSearchRequest);
+            result = await response.ToServiceResult<List<BusinessOfferItem>>();
+        }
+        catch (Exception ex)
+        {
+            result = new ApiResult<List<BusinessOfferItem>>(false, $"GetOffersSearch failed, {ex.Message}.", null);
+        }
+
+        return result;
+    }
+
     public async Task<ApiResult<SubscriptionDetails>> UserSubscriptionTransactionDirect(SubscriptionTransactionRequest subscriptionTransactionRequest)
     {
         ApiResult<SubscriptionDetails> result;

@@ -54,6 +54,10 @@ namespace EnetCNMAUI.ApiService
 
             Task<ApiResult<List<BusinessOfferItem>>> GetOffersFeaturedRandom(OffersFeaturedRequest offersFavoriteRequest);
 
+            Task<ApiResult<List<BusinessOfferItem>>> GetOffersFeaturedByCategory(OffersFeaturedByCategoryRequest offersFeaturedByCategoryRequest);
+
+            Task<ApiResult<List<BusinessOfferItem>>> GetOffersSearch(OffersSearchRequest offersSearchRequest);
+
             Task<ApiResult<SubscriptionDetails>> UserSubscriptionTransactionDirect(SubscriptionTransactionRequest subscriptionTransactionRequest);
 
             Task<ApiResult<string>> EventMarkUnmarkFavorite(EventMarkUnmarkFavRequest redeemOfferRequest);

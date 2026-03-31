@@ -1,0 +1,12 @@
+Name: ConnectNow
+Alias: ConnectNow
+Password: 123456789
+
+
+
+ dotnet publish "/Users/kashif/Documents/GitHub/CN-MAUI/Con
+nectNowMaui/EnetCNMAUI.csproj" -f net9.0-ios -c Release -p:ArchiveOnBuild=true -p:RuntimeIdenti
+fier=ios-arm64  -p:CodesignKey="Apple Distribution: All About Local LLC (JPCJ4632U5)" -p:Codesi
+gnProvision="AllAboutLocalDist24Jun2025"
+
+dotnet publish -f net9.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=ConnectNowKeystore/ConnectNow.keystore -p:AndroidSigningKeyAlias=ConnectNow -p:AndroidSigningKeyPass=123456789 -p:AndroidSigningStorePass=123456789

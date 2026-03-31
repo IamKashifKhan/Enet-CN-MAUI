@@ -134,7 +134,7 @@
             </div>
 
             <!-- Nearby Range -->
-            <h5 class="section-title mt-4">Nearby Range</h5>
+           @*  <h5 class="section-title mt-4">Nearby Range</h5>
             <div class="range-wrapper">
                 <div class="d-flex justify-content-between">
                     <span>0.5mi</span>
@@ -148,11 +148,11 @@
                     <span id="rangeValue">3.5</span>mi
                 </div>
             </div>
-
+ *@
             <!-- Button -->
-            <div class="text-center mt-4">
+        @*     <div class="text-center mt-4">
                 <button class="btn filter-btn">Filter Now</button>
-            </div>
+            </div> *@
 
         </div>
     </div>
@@ -463,111 +463,130 @@
         <main class="flex-shrink-0 py-0">
             <div class="container">
                 <div class="row">
-                    <div class="list-group list-group-flush px-0 py-2">
+                
 
-                        <a href=""
-                               class="list-group-item list-group-item-action @(IsManageGridVisible ? "d-flex" : "d-none") gap-2"
-                               @onclick="GotoManageSubscription"
-                               @onclick:preventDefault>
-                            <lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon>
-                            Manage Subscription
-                        </a>
+                            <div class="list-group list-group-flush px-0 py-2">
 
-                        <a href=""
-                               class="list-group-item list-group-item-action d-flex gap-2"
-                               @onclick="GotoSignUp"
-                               @onclick:preventDefault>
-                            <lord-icon src="https://cdn.lordicon.com/fgxwhgfp.json" trigger="loop" delay="2000"></lord-icon>
-                            @UserSubscriptionStatus
-                        </a>
+                                <a href=""
+                                       class="list-group-item list-group-item-action @(IsManageGridVisible ? "d-flex" : "d-none") gap-2"
+                                       @onclick="GotoManageSubscription"
+                                       @onclick:preventDefault>
+                                    <lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon>
+                                    Manage Subscription
+                                </a>
 
-                        <a href=""
-                               class="list-group-item list-group-item-action d-flex gap-2"
-                               @onclick="GotoSavingsPage"
-                               @onclick:preventDefault>
-                            <lord-icon src="https://cdn.lordicon.com/eaegfqtv.json" trigger="loop" delay="2000"></lord-icon>
-                            My Savings
-                        </a>
+                                <a href=""
+                                       class="list-group-item list-group-item-action d-flex gap-2"
+                                       @onclick="GotoSignUp"
+                                       @onclick:preventDefault>
+                                    <lord-icon src="https://cdn.lordicon.com/fgxwhgfp.json" trigger="loop" delay="2000"></lord-icon>
+                                    @UserSubscriptionStatus
+                                </a>
 
-                        <a href=""
-                               class="list-group-item list-group-item-action d-none gap-2"
-                               @onclick="GotoNotificationsPage"
-                               @onclick:preventDefault>
-                            <lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000"></lord-icon>
-                            Notifications
-                        </a>
+                                <a href=""
+                                       class="list-group-item list-group-item-action d-flex gap-2"
+                                       @onclick="GotoSavingsPage"
+                                       @onclick:preventDefault>
+                                    <lord-icon src="https://cdn.lordicon.com/eaegfqtv.json" trigger="loop" delay="2000"></lord-icon>
+                                    My Savings
+                                </a>
 
-                        <a href="https://allaboutlocal.com/about-us"
-                               class="list-group-item list-group-item-action d-flex gap-2">
-                            <lord-icon src="https://cdn.lordicon.com/ozlkyfxg.json" trigger="hover" delay="2000"></lord-icon>
-                            About Us
-                        </a>
+                                <a href=""
+                                       class="list-group-item list-group-item-action d-none gap-2"
+                                       @onclick="GotoNotificationsPage"
+                                       @onclick:preventDefault>
+                                    <lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000"></lord-icon>
+                                    Notifications
+                                </a>
 
-                        <a href="tips-help.html"
-                               class="list-group-item list-group-item-action d-none gap-2">
-                            <lord-icon src="https://cdn.lordicon.com/lltgvngb.json" trigger="hover" delay="2000"></lord-icon>
-                            Tips &amp; Help
-                        </a>
+                                <a href="https://allaboutlocal.com/about-us"
+                                       class="list-group-item list-group-item-action d-flex gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/ozlkyfxg.json" trigger="loop" delay="2000"></lord-icon>
+                                    About Us
+                                </a>
 
-                        <a href="https://allaboutlocal.com/privacy-policy"
-                               class="list-group-item list-group-item-action d-flex gap-2">
-                            <lord-icon src="https://cdn.lordicon.com/apbwvyeg.json" trigger="hover" delay="2000"></lord-icon>
-                            Privacy Statement
-                        </a>
+                                <a href="tips-help.html"
+                                       class="list-group-item list-group-item-action d-none gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/lltgvngb.json" trigger="loop" delay="2000"></lord-icon>
+                                    Tips &amp; Help
+                                </a>
 
-                        <a href="https://allaboutlocal.com/terms-of-service"
-                               class="list-group-item list-group-item-action d-flex gap-2">
-                            <lord-icon src="https://cdn.lordicon.com/hmpomorl.json" trigger="hover" delay="2000"></lord-icon>
-                            Terms of Use
-                        </a>
+                                <a href="https://allaboutlocal.com/privacy-policy"
+                                       class="list-group-item list-group-item-action d-flex gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/apbwvyeg.json" trigger="loop" delay="2000"></lord-icon>
+                                    Privacy Statement
+                                </a>
 
-                        <a href=""
-                               class="list-group-item list-group-item-action d-flex gap-2"
-                               @onclick="() => logOut()"
-                               @onclick:preventDefault>
-                            <lord-icon src="https://cdn.lordicon.com/orgpczfu.json" trigger="hover" delay="2000"></lord-icon>
-                            Logout
-                        </a>
+                                <a href="https://allaboutlocal.com/terms-of-service"
+                                       class="list-group-item list-group-item-action d-flex gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/hmpomorl.json" trigger="loop" delay="2000"></lord-icon>
+                                    Terms of Use
+                                </a>
 
-                        <a href=""
-                               class="list-group-item list-group-item-action d-flex gap-2"
-                               @onclick:preventDefault>
-                            <lord-icon src="https://cdn.lordicon.com/mqgegihh.json" trigger="loop" delay="2000"></lord-icon>
-                            @AppVersionAndCopyrightText
-                        </a>
+                                <a href="licenses.html"
+                                       class="list-group-item list-group-item-action d-flex gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/mqgegihh.json" trigger="loop" delay="2000"></lord-icon>
+                                    Licenses
+                                </a>
 
-                        <h5 class="offcanvas-title section-title px-2 pt-4 pb-0">Theme Settings</h5>
-                        <div class="d-flex justify-content-between justify-content-center px-2">
+                                <a href="accessibility.html"
+                                       class="list-group-item list-group-item-action d-flex gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/weehpyrf.json" trigger="loop" delay="2000"></lord-icon>
+                                    Accessibility
+                                </a>
 
-                           @*  <a href=""
-                                   class="dropdown-item d-flex gap-2"
-                                   data-theme-value="auto"
-                                   @onclick="() => ChangeTheme(\" auto\")"
-                                   @onclick:preventDefault>
-                                <lord-icon src="https://cdn.lordicon.com/bjxtqill.json" trigger="loop" delay="2000"></lord-icon>
-                                Default
-                            </a>
+                                <a href="selling-personal-info.html"
+                                       class="list-group-item list-group-item-action d-flex gap-2">
+                                    <lord-icon src="https://cdn.lordicon.com/warimioc.json" trigger="loop" delay="2000"></lord-icon>
+                                    Do Not Sell My Personal Information
+                                </a>
 
-                            <a href=""
-                                   class="dropdown-item d-flex gap-2"
-                                   data-theme-value="light"
-                                   @onclick="() => ChangeTheme(\" light\")"
-                                   @onclick:preventDefault>
-                                <lord-icon src="https://cdn.lordicon.com/iwjzoila.json" trigger="loop" delay="2000"></lord-icon>
-                                Light
-                            </a>
+                                <a href=""
+                                       class="list-group-item list-group-item-action d-flex gap-2"
+                                       @onclick="() => logOut()"
+                                       @onclick:preventDefault>
+                                    <lord-icon src="https://cdn.lordicon.com/orgpczfu.json" trigger="loop" delay="2000"></lord-icon>
+                                    Logout
+                                </a>
 
-                            <a href=""
-                                   class="dropdown-item d-flex gap-2"
-                                   data-theme-value="dark"
-                                   @onclick="() => ChangeTheme(\" dark\")"
-                                   @onclick:preventDefault>
-                                <lord-icon src="https://cdn.lordicon.com/yodwgokk.json" trigger="loop" delay="2000"></lord-icon>
-                                Dark
-                            </a> *@
+                                <a href=""
+                                       class="list-group-item list-group-item-action d-flex gap-2"
+                                       @onclick:preventDefault>
+                                    <lord-icon src="https://cdn.lordicon.com/mqgegihh.json" trigger="loop" delay="2000"></lord-icon>
+                                    @AppVersionAndCopyrightText
+                                </a>
 
-                        </div>
-                    </div>
+                                <h5 class="offcanvas-title section-title px-2 pt-4 pb-0">Theme Settings</h5>
+
+                                <div class="d-flex justify-content-between justify-content-center px-2">
+                                    <a href=""
+                                           class="dropdown-item d-flex gap-2"
+                                           data-theme-value="auto"
+                                           @onclick:preventDefault>
+                                        <lord-icon src="https://cdn.lordicon.com/bjxtqill.json" trigger="loop" delay="2000"></lord-icon>
+                                        Default
+                                    </a>
+
+                                    <a href=""
+                                           class="dropdown-item d-flex gap-2"
+                                           data-theme-value="light"
+                                           @onclick:preventDefault>
+                                        <lord-icon src="https://cdn.lordicon.com/iwjzoila.json" trigger="loop" delay="2000"></lord-icon>
+                                        Light
+                                    </a>
+
+                                    <a href=""
+                                           class="dropdown-item d-flex gap-2"
+                                           data-theme-value="dark"
+                                           @onclick:preventDefault>
+                                        <lord-icon src="https://cdn.lordicon.com/yodwgokk.json" trigger="loop" delay="2000"></lord-icon>
+                                        Dark
+                                    </a>
+                                </div>
+
+                            </div>
+
+                     
                 </div>
             </div>
         </main>
@@ -680,27 +699,22 @@
 </div>
 
 
-@code {
+@code
+{
+    #region JS / References
+
     private IJSObjectReference? _module;
+    private DotNetObjectReference<HomeNew>? _self;
+
+    #endregion
+
+    #region Collections / Data Sources
 
     private List<CategoryItem>? mainCategories;
     private List<RedemptionsItem>? topRedemptions;
     private List<BusinessOfferItem>? featuredOffers;
     private List<BusinessOfferItem>? featuredOfferstop;
-
-    private bool isCategoriesLoading;
-    private bool isRedemptionsLoading;
-    private bool isFeaturedOffersLoading;
-    private bool isFeaturedtopOffersLoading;
-    public AALUser _user { get; set; } = default!;
-    private string? SearchText;
-    private List<string> RecentSearches = new();
-
-    private bool IsLoading { get; set; }
-    private bool IsLoadingMore { get; set; }
-    private bool IsSummaryLoading { get; set; }
-    private string? Error { get; set; }
-    private DateTime DefaultStartDate { get; set; } = DateTime.Today;
+    private List<BusinessOfferItem> _favoriteOffers = new();
 
     private ObservableCollection<RedemptionsItem> redemptions = new();
     public ObservableCollection<RedemptionsItem> Redemptions
@@ -713,46 +727,88 @@
         }
     }
 
-    private RedemptionSummaryItem? RedemptionSummary { get; set; }
+    #endregion
+
+    #region Loading / State Flags
+
+    private bool isCategoriesLoading;
+    private bool isRedemptionsLoading;
+    private bool isFeaturedOffersLoading;
+    private bool isFeaturedtopOffersLoading;
+
+    private bool IsLoading { get; set; }
+    private bool IsLoadingMore { get; set; }
+    private bool IsSummaryLoading { get; set; }
+    private bool HasMore { get; set; } = true;
+    private bool _favBusy;
+    private bool isActivePlan;
+
+    #endregion
+
+    #region Paging / Filters / Search
 
     private int Page { get; set; } = 1;
     private int PageSize { get; set; } = 20;
-    private bool HasMore { get; set; } = true;
-    private DotNetObjectReference<HomeNew>? _self;
-    private bool _favBusy;
-    private bool isActivePlan;
+    private DateTime DefaultStartDate { get; set; } = DateTime.Today;
+
+    private string? SearchText;
+    private List<string> RecentSearches = new();
+    private string? Error { get; set; }
+
+    #endregion
+
+    #region User / Plan / Location
+
+    public AALUser _user { get; set; } = default!;
+
     [Parameter] public double StartLat { get; set; } = 34.197504;
     [Parameter] public double StartLng { get; set; } = -119.177052;
-    private List<BusinessOfferItem> _favoriteOffers = new();
+
+    private PlanDetails planDetails;
+    private RedemptionSummaryItem? RedemptionSummary { get; set; }
+
+    public bool IsManageGridVisible = false;
+    public string UserSubscriptionStatus { get; set; } = string.Empty;
+    private string AccountActivationVerbage = "Gain all the benefits, activate your account now.";
+    string AppVersionAndCopyrightText;
+
+    #endregion
+
+    #region Offer Redeem / Modal State
+
+    private BusinessOfferItem? SelectedOffer = new();
+    public string Code { get; set; } = string.Empty;
+
+    #endregion
+
+     private bool _favLoading;
+    private bool _favLoadFailed;
+     private string? _favError;
+ 
+    #region Lifecycle
 
     protected override async Task OnInitializedAsync()
     {
         await GetSavingsAsync();
-        App.MyPosition = new Location { Latitude = StartLat, Longitude = StartLng };
+
+        App.MyPosition = new Location
+        {
+            Latitude = StartLat,
+            Longitude = StartLng
+        };
+        WeakReferenceMessenger.Default.Register<RefreshFavorites>(this, (r, m) => { LoadFavoritesAsync(); });
+        WeakReferenceMessenger.Default.Register<UpdatePlaneDetails>(this, (r, m) => { GetSubscription(); });
         planDetails = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
+
         await GetCurrentLocation();
-
+      
         App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
-
         _user = App.CurrentUser;
-
-        // Load search history
-        RecentSearches = await localCache.GetCacheItem<List<string>>(LocalCacheKeys.SearchHistory) ?? new List<string>();
+        var getsubscription = GetSubscription();
+        RecentSearches = await localCache.GetCacheItem<List<string>>(LocalCacheKeys.SearchHistory)
+                         ?? new List<string>();
     }
 
-    private async Task GetCurrentLocation()
-    {
-        var position = await locationService.GetCurrentLocationAsync();
-        if (position != null)
-        {
-            App.MyPosition = position;
-        }
-        else
-        {
-            App.MyPosition = new Location { Latitude = 34.27851, Longitude = -119.16 };
-        }
-        Console.WriteLine($"Current location: {App.MyPosition.Latitude}, {App.MyPosition.Longitude}");
-    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -769,6 +825,44 @@
         await GetRedemptionsAsync();
         await GetFeaturedOffersAsync();
     }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            if (_module != null)
+                await _module.DisposeAsync();
+        }
+        catch
+        {
+        }
+    }
+
+    #endregion
+
+    #region Location
+
+    private async Task GetCurrentLocation()
+    {
+        var position = await locationService.GetCurrentLocationAsync();
+
+        if (position != null)
+        {
+            App.MyPosition = position;
+        }
+        else
+        {
+            App.MyPosition = new Location
+            {
+                Latitude = 34.27851,
+                Longitude = -119.16
+            };
+        }
+
+        Console.WriteLine($"Current location: {App.MyPosition.Latitude}, {App.MyPosition.Longitude}");
+    }
+
+    #endregion
 
     #region API Calls
 
@@ -910,15 +1004,6 @@
             await InvokeAsync(StateHasChanged);
         }
     }
-    private async void ValidateCode()
-    {
-        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
-        var output = await apiService.RedeemOffer(redeedmOfferRequest);
-        if (output.Success)
-        {
-            _module?.InvokeVoidAsync("showHideModal", true);
-        }
-    }
 
     private async Task GetFeaturedOffersAsync()
     {
@@ -927,7 +1012,6 @@
             isFeaturedOffersLoading = true;
 
             var request = new OffersFeaturedRequest(App.CurrentUser.UserKey.ToString());
-            
 
             var response = await apiService.GetOffersFeaturedRandom(request);
 
@@ -944,9 +1028,9 @@
                     await _module.InvokeVoidAsync("initOffersSlider");
                     await _module.InvokeVoidAsync("initFeaturedOffersSlider");
                     await _module.InvokeVoidAsync("initRedeemedSlider");
-
                 }
             }
+
             var responsetop = await apiService.GetOffersFeaturedRandom(request);
 
             if (responsetop?.Success == true && responsetop.Data is not null)
@@ -981,16 +1065,69 @@
         }
     }
 
+    private async Task GetSubscription()
+    {
+        try
+        {
+           
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var output = await apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
+
+            if (output.Success && output.Data != null && output.Data.Count > 0)
+            {
+                planDetails = output.Data[0];
+                await localCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
+                Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
+
+                if (planDetails.IsActive)
+                {
+                    UserSubscriptionStatus = $"Current Plan is {planDetails.PlanName}";
+                    IsManageGridVisible = true;
+                }
+                else
+                {
+                    IsManageGridVisible = false;
+                    UserSubscriptionStatus = AccountActivationVerbage;
+                }
+            }
+            else
+            {
+                UserSubscriptionStatus = AccountActivationVerbage;
+            }
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task ValidateCode()
+    {
+        var redeedmOfferRequest = new RedeemOfferRequest(
+            App.CurrentUser.UserKey.ToString(),
+            SelectedOffer.BusinessOffersKey.ToString(),
+            Code);
+
+        var output = await apiService.RedeemOffer(redeedmOfferRequest);
+
+        if (output.Success)
+        {
+            if (_module != null)
+                await _module.InvokeVoidAsync("showHideModal", true);
+        }
+    }
+
     #endregion
 
-    #region Handlers
+    #region Search / Input Handlers
 
     private async Task OnSearchKey(KeyboardEventArgs e)
     {
-        // Android "Next"/"Done"/"Search" generally arrives as Enter
         if (e.Key == "Enter")
         {
-            // Hide keyboard on Android and iOS
             await JS.InvokeVoidAsync("eval", "document.activeElement.blur()");
             await DoSearchAsync(SearchText);
         }
@@ -1014,41 +1151,55 @@
         if (string.IsNullOrWhiteSpace(q))
             return;
 
-        // Add to search history
         if (!RecentSearches.Contains(q))
         {
             RecentSearches.Insert(0, q);
-            // Keep only last 4 searches
+
             if (RecentSearches.Count > 4)
-            {
                 RecentSearches = RecentSearches.Take(4).ToList();
-            }
+
             await localCache.SaveItemInCache(LocalCacheKeys.SearchHistory, RecentSearches);
         }
 
-        var route = RouteHelper.BuildRoute(nameof(BusinessesPage),
+        var route = RouteHelper.BuildRoute(
+            nameof(BusinessesPage),
             new Dictionary<string, string>
             {
                 { "CategoryId", $"Search,{q}" }
             });
+
         await Shell.Current.GoToAsync(route);
     }
 
+    #endregion
+
+    #region Offer / Category Actions
+
     private async Task HandleCategorySelected(CategoryItem categoryItem)
     {
-
         if (categoryItem.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks)
         {
             await Launcher.Default.OpenAsync("https://allaboutlocal.benefithub.com/");
             return;
         }
-        var route = RouteHelper.BuildRoute(nameof(BusinessesPage),
-        new Dictionary<string, string>
-        {
-            { "CategoryId", $"{categoryItem.Category_Sub_Key},{categoryItem.Name}" }
-        });
-        await Shell.Current.GoToAsync(route);
 
+        var route = RouteHelper.BuildRoute(
+            nameof(BusinessesPage),
+            new Dictionary<string, string>
+            {
+                { "CategoryId", $"{categoryItem.Category_Sub_Key},{categoryItem.Name}" }
+            });
+
+        await Shell.Current.GoToAsync(route);
+    }
+
+    private async Task HandleOfferSelected(BusinessOfferItem offer)
+    {
+        SelectedOffer = offer;
+        StateHasChanged();
+
+        await EnsureJsModuleAsync();
+        await _module!.InvokeVoidAsync("showOffcanvas", "#offcanvasRedeem");
     }
 
     private async Task OpenFeaturedOfferAsync(BusinessOfferItem offer)
@@ -1056,13 +1207,101 @@
         if (offer is null)
             return;
 
-        // Update this route if your app uses a different details route.
         await Shell.Current.GoToAsync($"offerdetails/{offer.BusinessOffersKey}");
+    }
+
+    private async Task AddRemoveFav(BusinessOfferItem offer)
+    {
+        if (_favBusy)
+            return;
+
+        _favBusy = true;
+
+        try
+        {
+            var response = await offerService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, _user.UserKey);
+
+            if (response.Success)
+                _favoriteOffers.RemoveAll(o => o.BusinessOffersKey == offer.BusinessOffersKey);
+        }
+        catch
+        {
+        }
+        finally
+        {
+            _favBusy = false;
+            StateHasChanged();
+        }
     }
 
     #endregion
 
-    #region Helpers
+    #region Navigation / More Tab Actions
+
+    private async void GotoEComerce()
+    {
+        if (planDetails != null && !planDetails.IsActive)
+        {
+            // Intentionally kept as-is to avoid changing behavior
+        }
+    }
+
+    private async void GotoSignUp()
+    {
+        if (planDetails != null && !planDetails.IsActive)
+        {
+            var route = RouteHelper.BuildRoute(
+                nameof(SignUpPlanPage),
+                new Dictionary<string, string>
+                {
+                    { "NavigateFrom", "fromMore" }
+                });
+
+            await Shell.Current.GoToAsync(route);
+        }
+    }
+
+    private async void GotoManageSubscription()
+    {
+        await Shell.Current.GoToAsync(nameof(ManageSubscriptionPage));
+    }
+
+    private async void GotoSavingsPage()
+    {
+        await Shell.Current.GoToAsync(nameof(MySavingsPage));
+    }
+
+    private async void GotoNotificationsPage()
+    {
+        await Shell.Current.GoToAsync(nameof(MySavingsPage));
+    }
+
+    private async Task logOut()
+    {
+        await localCache.DeleteItem<List<string>>(LocalCacheKeys.SearchHistory);
+
+        Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
+        await localCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, new AALUser());
+        await localCache.ClearAllAsync();
+
+        await Shell.Current.GoToAsync("//LoginPage");
+    }
+
+    #endregion
+
+    #region JS Helpers
+
+    private async Task EnsureJsModuleAsync()
+    {
+        if (_module is null)
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/HomeNew.razor.js");
+
+        _self ??= DotNetObjectReference.Create(this);
+    }
+
+    #endregion
+
+    #region UI Helper Methods
 
     private string GetOfferHeading(BusinessOfferItem? offer)
     {
@@ -1262,159 +1501,42 @@
 
     #endregion
 
-    public async ValueTask DisposeAsync()
+    private async Task LoadFavoritesAsync(bool append = false)
     {
-        try
-        {
-            if (_module != null)
-                await _module.DisposeAsync();
-        }
-        catch
-        {
-        }
-    }
-    private BusinessOfferItem? SelectedOffer = new();
-    public string Code { get; set; } = string.Empty;
+        if (_favLoading) return;
 
-    
-    private async Task HandleOfferSelected(BusinessOfferItem offer)
-    {
-        SelectedOffer = offer;
+        _favLoading = true;
+        _favLoadFailed = false;
+        _favError = null;
         StateHasChanged();
-        await EnsureJsModuleAsync();
-        await _module!.InvokeVoidAsync("showOffcanvas", "#offcanvasRedeem");
-    }
 
-    private async Task EnsureJsModuleAsync()
-    {
-        if (_module is null)
-            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./RazorViews/HomeNew.razor.js");
-        _self ??= DotNetObjectReference.Create(this);
-    }
-
-    private async Task AddRemoveFav(BusinessOfferItem offer)
-    {
-        if (_favBusy) return;
-        _favBusy = true;
         try
         {
-            var response = await offerService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, _user.UserKey);
+            var req = new OffersFavoriteRequest(App.CurrentUser.UserKey.ToString());
+            var result = await apiService.GetFavoriteOffers(req);
 
-            if (response.Success)
-                _favoriteOffers.RemoveAll(o => o.BusinessOffersKey == offer.BusinessOffersKey);
-        }
-        catch { }
-        finally
-        {
-            _favBusy = false;
-            StateHasChanged();
-        }
-    }
-
-
-    <!-- ========================================================= -->
-    <!-- #region More Tab (Method  - State)                        -->
-    <!-- ========================================================= -->
-    private PlanDetails planDetails;
-    public bool IsManageGridVisible = false;
-    public string UserSubscriptionStatus { get; set; } = string.Empty;
-    string AppVersionAndCopyrightText;
-
-    private string AccountActivationVerbage = "Gain all the benefits, activate your account now.";
-
-    private async Task GetSubscription()
-    {
-        try
-        {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
-            var output = await apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
-            if (output.Success && output.Data != null && output.Data.Count > 0)
+            if (result.Success)
             {
-                planDetails = output.Data[0];
-                await localCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
-                Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
- 
-                if (planDetails.IsActive)
-                {
-                    UserSubscriptionStatus = $"Current Plan is {planDetails.PlanName}";
-                    IsManageGridVisible = true;
-                }
-                else
-                {
-                    IsManageGridVisible = false;
-                    UserSubscriptionStatus = AccountActivationVerbage;
-                }
+                var incoming = result.Data;
+                _favoriteOffers = incoming.ToList();
             }
             else
             {
-                UserSubscriptionStatus = AccountActivationVerbage;
+                _favLoadFailed = true;
+                _favError = result.Message;
             }
         }
         catch (Exception ex)
         {
-
+            _favLoadFailed = true;
+            _favError = ex.Message;
         }
         finally
         {
+            _favLoading = false;
             StateHasChanged();
         }
     }
 
-    private async void GotoEComerce()
-    {
-        if (planDetails != null && !planDetails.IsActive)
-        {
-
-            // NavigationParameters keyValuePairs = new NavigationParameters();
-            // keyValuePairs.Add("FromMore", "FromMore");
-            // var result = await NavigationService.NavigateAsync(nameof(SignUpPlansPage), keyValuePairs);
-        }
-    }
-
-    private async void GotoSignUp()
-    {
-        if (planDetails != null && !planDetails.IsActive)
-        {
-            var route = RouteHelper.BuildRoute(nameof(SignUpPlanPage),
-             new Dictionary<string, string>
-             {
-                    { "NavigateFrom", $"fromMore" }
-             });
-
-            await Shell.Current.GoToAsync(route);
-            // NavigationParameters keyValuePairs = new NavigationParameters();
-            // keyValuePairs.Add("FromMore", "FromMore");
-            // var result = await NavigationService.NavigateAsync(nameof(SignUpPlansPage), keyValuePairs);
-        }
-    }
-    private async void GotoManageSubscription()
-    {
-        await Shell.Current.GoToAsync(nameof(ManageSubscriptionPage));
-    }
-    private async void GotoSavingsPage()
-    {
-        await Shell.Current.GoToAsync(nameof(MySavingsPage));
-    }
-    private async void GotoNotificationsPage()
-    {
-        await Shell.Current.GoToAsync(nameof(MySavingsPage));
-    }
     
-    
-    private async Task logOut()
-    {
-        // Clear search history on logout
-        await localCache.DeleteItem<List<string>>(LocalCacheKeys.SearchHistory);
-
-        // Simulate an exception that can be caught
-
-        Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
-        await localCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, new AALUser());
-        await localCache.ClearAllAsync();
- 
-        await Shell.Current.GoToAsync("//LoginPage");
-    }
-    <!-- ========================================================= -->
-    <!-- #region End  More Tab (Markup - Mobile)                        -->
-    <!-- ========================================================= -->
 }

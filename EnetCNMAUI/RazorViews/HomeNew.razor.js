@@ -25,10 +25,7 @@ function initOwl(selector, options) {
         const $this = $(this);
 
         if ($this.hasClass('owl-loaded')) {
-            $this.trigger('destroy.owl.carousel');
-            $this.removeClass('owl-loaded');
-            $this.find('.owl-stage-outer').children().unwrap();
-            $this.find('.owl-stage').children().unwrap();
+            return;
         }
 
         $this.owlCarousel(options);

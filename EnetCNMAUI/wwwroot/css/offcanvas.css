@@ -1,0 +1,204 @@
+﻿/* =========================================================
+   OFFCANVAS VARIABLES
+   ========================================================= */
+
+.offcanvas {
+    --bs-offcanvas-zindex: 1045;
+    --bs-offcanvas-width: 400px;
+    --bs-offcanvas-height: 30vh;
+    --bs-offcanvas-padding-x: 1rem;
+    --bs-offcanvas-padding-y: 1rem;
+    --bs-offcanvas-color: #212529;
+    --bs-offcanvas-bg: #ffffff;
+    --bs-offcanvas-border-width: 1px;
+    --bs-offcanvas-border-color: #dee2e6;
+    --bs-offcanvas-box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    --bs-offcanvas-transition: transform 0.3s ease-in-out;
+    --bs-offcanvas-title-line-height: 1.5;
+}
+
+/* =========================================================
+   BASE OFFCANVAS
+   ========================================================= */
+
+.offcanvas {
+    position: fixed;
+    bottom: 0;
+    z-index: var(--bs-offcanvas-zindex);
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    color: var(--bs-offcanvas-color);
+    visibility: hidden;
+    background-color: var(--bs-offcanvas-bg);
+    background-clip: padding-box;
+    outline: 0;
+    box-shadow: var(--bs-offcanvas-box-shadow);
+    transition: var(--bs-offcanvas-transition);
+}
+
+/* =========================================================
+   POSITIONS
+   ========================================================= */
+
+.offcanvas-start {
+    top: 0;
+    left: 0;
+    width: var(--bs-offcanvas-width);
+    border-right: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
+    transform: translateX(-100%);
+}
+
+.offcanvas-end {
+    top: 0;
+    right: 0;
+    width: var(--bs-offcanvas-width);
+    border-left: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
+    transform: translateX(100%);
+}
+
+.offcanvas-top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--bs-offcanvas-height);
+    max-height: 100%;
+    border-bottom: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
+    transform: translateY(-100%);
+}
+
+.offcanvas-bottom {
+    left: 0;
+    right: 0;
+    height: var(--bs-offcanvas-height);
+    max-height: 75%;
+    border-top: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
+    transform: translateY(100%);
+}
+
+/* =========================================================
+   STATES
+   ========================================================= */
+
+.offcanvas.show,
+.offcanvas.showing {
+    transform: none;
+}
+
+.offcanvas.show,
+.offcanvas.showing,
+.offcanvas.hiding {
+    visibility: visible;
+}
+
+/* =========================================================
+   BACKDROP
+   ========================================================= */
+
+.offcanvas-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    opacity: 0.5;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.offcanvas-header {
+    display: flex;
+    align-items: center;
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+}
+
+    .offcanvas-header .btn-close {
+        padding: calc(var(--bs-offcanvas-padding-y) * 0.5) calc(var(--bs-offcanvas-padding-x) * 0.5);
+        margin: calc(-0.5 * var(--bs-offcanvas-padding-y)) calc(-0.5 * var(--bs-offcanvas-padding-x)) calc(-0.5 * var(--bs-offcanvas-padding-y)) auto;
+    }
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.offcanvas-title {
+    margin-bottom: 0;
+    line-height: var(--bs-offcanvas-title-line-height);
+}
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.offcanvas-body {
+    flex-grow: 1;
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+    overflow-y: auto;
+}
+
+/* =========================================================
+   RESPONSIVE (Bootstrap breakpoints)
+   ========================================================= */
+
+/* sm and below */
+@media (max-width: 576px) {
+    .offcanvas-sm {
+        position: fixed;
+    }
+}
+
+/* md and below */
+@media (max-width: 768px) {
+    .offcanvas-md {
+        position: fixed;
+    }
+}
+
+/* lg and below */
+@media (max-width: 992px) {
+    .offcanvas-lg {
+        position: fixed;
+    }
+}
+
+/* xl and below */
+@media (max-width: 1200px) {
+    .offcanvas-xl {
+        position: fixed;
+    }
+}
+
+/* xxl and below */
+@media (max-width: 1400px) {
+    .offcanvas-xxl {
+        position: fixed;
+    }
+}
+
+/* =========================================================
+   DESKTOP OVERRIDE (like Bootstrap behavior)
+   ========================================================= */
+
+@media (min-width: 992px) {
+    .offcanvas-lg {
+        --bs-offcanvas-height: auto;
+        --bs-offcanvas-border-width: 0;
+        background-color: transparent !important;
+    }
+
+        .offcanvas-lg .offcanvas-header {
+            display: none;
+        }
+
+        .offcanvas-lg .offcanvas-body {
+            display: flex;
+            flex-grow: 0;
+            padding: 0;
+            overflow-y: visible;
+            background-color: transparent !important;
+        }
+}

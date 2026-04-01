@@ -382,9 +382,10 @@
     private async void HandleOfferSelected(BusinessOfferItem offer)
     {
         SelectedOffer = offer;
-        if (IsPlanActive)
-        {
-        }
+        Code = string.Empty;
+        StateHasChanged();
+        
+        await jSRuntime.InvokeVoidAsync("eval", "const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRedeem')); offcanvas.show();");
     }
 
     private async void AddRemoveFav(BusinessOfferItem offer)
@@ -411,7 +412,9 @@
         var output = await apiService.RedeemOffer(redeedmOfferRequest);
         if (output.Success)
         {
-            _routeMapModule.InvokeVoidAsync("showHideModal", true);
+            await jSRuntime.InvokeVoidAsync("eval", "$('#modalRedeemCode').modal('hide');");
+            await Task.Delay(300);
+            await jSRuntime.InvokeVoidAsync("eval", "const modal = new bootstrap.Modal(document.getElementById('modalRedeemSuccess')); modal.show();");
         }
     }
 

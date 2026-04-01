@@ -1,29 +1,15 @@
-﻿ 
-@* <div class="cat-item">
+﻿<div class="cat-item">
     <a href="#"
            class="hover-underline-animation center"
            @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
            @onclick:preventDefault>
 
-        <images src="@GetCategoryIcon(Category)" alt="@Category.Name" />
+        <lord-icon src="@GetLordIcon(Category)"
+                   trigger="loop"
+                   delay="1500"
+                   colors="@GetLordIconColors(Category)">
+        </lord-icon>
 
-        <p>
-            @Category.Name
-            @if (Category.ActiveOffersCount > 0)
-            {
-                <span>@Category.ActiveOffersCount</span>
-            }
-        </p>
-
-    </a>
-</div>
- *@
-
-<div class="cat-item">
-    <a href="#" class="hover-underline-animation center"
-           @onclick="@(async () => await OnSelected.InvokeAsync(Category))"
-           @onclick:preventDefault>
-        <img src="@GetCategoryIcon(Category)" />
         <p>@Category.Name</p>
     </a>
 </div>
@@ -33,26 +19,55 @@
     [Parameter, EditorRequired] public CategoryItem Category { get; set; } = null!;
     [Parameter, EditorRequired] public EventCallback<CategoryItem> OnSelected { get; set; }
 
-
-    private  string GetCategoryIcon(CategoryItem cat)
+    private string GetLordIcon(CategoryItem cat)
     {
-        if (cat.Name == CategoryConstants.Cities) return "images/icon_home.svg";
-        if (cat.Name == CategoryConstants.EatAndTreat) return "images/icon_eat.svg";
-        if (cat.Name == CategoryConstants.Dining) return "images/icon_eat.svg";
-        if (cat.Name == CategoryConstants.WineAndSpirits) return "images/icon_drink.svg";
-        if (cat.Name == CategoryConstants.HealthAndFitness) return "images/icon_health.svg";
-        if (cat.Name == CategoryConstants.Automotive) return "images/icon_automotive.svg";
-        if (cat.Name == CategoryConstants.Shops) return "images/icon_shops.svg";
-        if (cat.Name == CategoryConstants.Pets) return "images/icon_pet.svg";
-        if (cat.Name == CategoryConstants.BeautyAndSpas) return "images/icon_care.svg";
-        if (cat.Name == CategoryConstants.Entertainment) return "images/icon_entertainment.svg";
-        if (cat.Name == CategoryConstants.Kids) return "images/icon_kids.svg";
-        if (cat.Name == CategoryConstants.BusinessServices) return "images/icon_business.svg";
-        if (cat.Name == CategoryConstants.Home) return "images/icon_home.svg";
-        if (cat.Name == CategoryConstants.Bogo) return "images/icon_bogo.svg";
-        if (cat.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks) return "images/icon_perk.svg";
+        if (cat.Name == CategoryConstants.Cities) return "images/fanxffgh.json";
+        if (cat.Name == CategoryConstants.Entertainment) return "images/zhtppwci.json";
+        if (cat.Name == CategoryConstants.Home) return "https://cdn.lordicon.com/pgirtdfe.json";
+        if (cat.Name == CategoryConstants.Kids) return "https://cdn.lordicon.com/zhwhmicc.json";
+        if (cat.Name == CategoryConstants.Pets) return "https://cdn.lordicon.com/vapsxmqa.json";
+        if (cat.Name == CategoryConstants.BeautyAndSpas) return "https://cdn.lordicon.com/bcvnrgum.json";
+        if (cat.Name == CategoryConstants.Automotive) return "https://cdn.lordicon.com/cxjgyfql.json";
+        if (cat.Name == CategoryConstants.Shops) return "https://cdn.lordicon.com/wlciwoip.json";
+        if (cat.Name == CategoryConstants.EatAndTreat || cat.Name == CategoryConstants.Dining)
+            return "https://cdn.lordicon.com/jlyweivo.json";
+        if (cat.Name == CategoryConstants.WineAndSpirits)
+            return "https://cdn.lordicon.com/rtxxzbbh.json";
+        if (cat.Name == CategoryConstants.BusinessServices)
+            return "https://cdn.lordicon.com/obyhgzls.json";
 
-        return "img/shop.svg"; // fallback
+        return "https://cdn.lordicon.com/wlciwoip.json"; // fallback
     }
 
+    private string GetLordIconColors(CategoryItem cat)
+    {
+        if (cat.Name == CategoryConstants.Cities)
+            return "primary:#121331,secondary:#4bb3fd,tertiary:#e83a30,quaternary:#ffc738";
+
+        if (cat.Name == CategoryConstants.Entertainment)
+            return "primary:#121331,secondary:#ebe6ef,tertiary:#f24c00,quaternary:#ffc738";
+
+        if (cat.Name == CategoryConstants.Home)
+            return "primary:#000000,secondary:#4bb3fd,tertiary:#b26836,quaternary:#f24c00";
+
+        if (cat.Name == CategoryConstants.Kids)
+            return "primary:#121331,secondary:#b26836,tertiary:#3a3347";
+
+        if (cat.Name == CategoryConstants.Pets)
+            return "primary:#121331,secondary:#c67d53,tertiary:#f4f19c";
+
+        if (cat.Name == CategoryConstants.BeautyAndSpas)
+            return "primary:#121331,secondary:#f28ba8,tertiary:#e8308c";
+
+        if (cat.Name == CategoryConstants.Shops)
+            return "primary:#121331,secondary:#ebe6ef,tertiary:#3a3347";
+
+        if (cat.Name == CategoryConstants.EatAndTreat || cat.Name == CategoryConstants.Dining)
+            return "primary:#121331,secondary:#e4e4e4,tertiary:#c67d53";
+
+        if (cat.Name == CategoryConstants.WineAndSpirits)
+            return "primary:#121331,secondary:#f2e2d9,tertiary:#e83a30";
+
+        return "primary:#121331,secondary:#4bb3fd";
+    }
 }

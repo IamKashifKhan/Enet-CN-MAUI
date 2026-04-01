@@ -264,7 +264,7 @@
 
 
 <!-- ================= TOP REDEEMED ================= -->
-<section class="container mt-5 redeemed-offers">
+<section class="container mt-1 redeemed-offers">
     <div class="d-flex justify-content-between mb-3">
         <h5 class="main-heading text-truncate">Featured</h5>
         <small class="see-all">
@@ -296,6 +296,7 @@
         {
             <div class="text-muted">No redeemed offers available.</div>
         }
+ 
     </div>
 </section>
 
@@ -1026,6 +1027,7 @@
                 if (_module != null)
                 {
                     await _module.InvokeVoidAsync("initOffersSlider");
+                    await Task.Delay(500); // Small delay to ensure the first slider initializes properly before initializing the next one
                     await _module.InvokeVoidAsync("initFeaturedOffersSlider");
                     await _module.InvokeVoidAsync("initRedeemedSlider");
                 }

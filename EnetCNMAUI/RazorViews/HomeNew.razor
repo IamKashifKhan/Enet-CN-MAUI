@@ -6,9 +6,11 @@
 @inject ILocalCache localCache
 @inject IOfferService offerService
 @inject ILocationService locationService
+@inject IMapConfig MapConfig
 
 @using EnetCNMAUI.ApiService.Requests.MVC
 @using EnetCNMAUI.Domain.Models.MVC
+@using EnetCNMAUI.Domain.Models
 @using System.Collections.ObjectModel
 @using EnetCNMAUI.Services.Local
 @using EnetCNMAUI.Views
@@ -302,8 +304,21 @@ else
              hidden="@(selectedTab != NavTab.Map ? "hidden" : null)"
              aria-hidden="@(selectedTab != NavTab.Map ? "true" : "false")">
             <div class="container-fluid map-wrapper">
-                <div class="text-center py-5">
-                    <p class="text-muted">Map view</p>
+                <GoogleMap Width="100%" Height="100%" 
+                           ApiKey="@MapConfig.GoogleMapsApiKey"
+                           StartLat="StartLat"
+                           StartLng="StartLng"
+                           StartZoom="12"
+                           CssClass="business-map"
+                           OnViewChanged="OnMapChanged"
+                           OnMapPinTapped="OnPinTapped"
+                           @ref="_map" />
+                <div class="maps-over justify-content-end">
+                    <div class="slide-cards">
+                        <button class="btn btn-secondary rounded-circle shadow-sm mb-5 btn-nearby" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNearby" aria-controls="offcanvasNearby">
+                            <img src="img/nearby.svg" alt="" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -785,6 +800,21 @@ else
     </div>
 </div>
 
+<div id="offcanvasNearby" class="offcanvas offcanvas-bottom rounded-4 rounded-bottom-0 px-0 shadow" data-bs-scroll="false" tabindex="-1">
+    <div class="offcanvas-body d-flex flex-column justify-content-between">
+        <h5 class="text-center mb-3">Offers in @tempRangeDisplay miles</h5>
+        <div class="range-wrapper">
+            <input id="customRange" class="form-range" type="range" min="1000" max="20000" step="1000" value="@_fixedRadius"
+                   @oninput="OnRadiusInput" />
+            <output id="rangeValue" for="customRange" aria-hidden="true"></output>
+        </div>
+        <div class="container d-flex justify-content-between mt-2">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+            <button @onclick="OnRangeSave" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Save</button>
+        </div>
+    </div>
+</div>
+
 @code
 {
     #region JS / References
@@ -920,6 +950,17 @@ else
 
     private BusinessOfferItem? SelectedOffer = new();
     public string Code { get; set; } = string.Empty;
+
+    #endregion
+
+    #region Map
+
+    private GoogleMap? _map;
+    private List<BusinessItem> AllMapBusinessItems = new();
+    private List<BusinessItem> CurrentShowingMapOffersItems = new();
+    private bool _mapOffersLoading;
+    private int _fixedRadius = 5000;
+    private string tempRangeDisplay => (_fixedRadius / 1000).ToString() + " miles";
 
     #endregion
 
@@ -1075,6 +1116,10 @@ else
                     await _module.InvokeVoidAsync("initOffcanvasCategoriesSlider");
                     _offcanvasCategoriesSliderInitialized = true;
                 }
+            }
+            else if (selectedTab == NavTab.Map)
+            {
+                await GetandSetPins();
             }
         }
         catch
@@ -1601,6 +1646,148 @@ else
             await InvokeAsync(StateHasChanged);
         }
     }
+
+    #endregion
+
+    #region Map Methods
+
+    private async Task UpdateMapListItemsAsync(Location center, double radiusKm)
+    {
+        if (_mapOffersLoading) return;
+        _mapOffersLoading = true;
+        if (AllMapBusinessItems == null) return;
+        var radiusMeters = radiusKm * 1000.0;
+
+        var filtered = AllMapBusinessItems
+            .Where(x => TryMakeLocation(x, out var offerLoc)
+                     && locationService.IsOfferInRange(offerLoc, center, radiusMeters))
+            .ToList();
+
+        CurrentShowingMapOffersItems = filtered;
+
+        if (_map is not null)
+        {
+            await _map.ClearMarkersAsync();
+            if (CurrentShowingMapOffersItems.Count > 0)
+                await AddMapMarkers(CurrentShowingMapOffersItems);
+        }
+
+        await InvokeAsync(StateHasChanged);
+        _mapOffersLoading = false;
+    }
+
+    private static bool TryMakeLocation(BusinessItem item, out Location loc)
+    {
+        loc = default!;
+        if (item == null) return false;
+        if (!double.TryParse(item.Latitude?.ToString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var lat)) return false;
+        if (!double.TryParse(item.Longitude?.ToString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var lng)) return false;
+        loc = new Location(lat, lng);
+        return true;
+    }
+
+    private async Task LockCircleAt(double lat, double lng)
+    {
+        if (_map is null) return;
+        await _map.SetFixCenterAsync(lat, lng);
+        await _map.SetRadiusAsync(_fixedRadius);
+    }
+
+    private async Task OnRadiusInput(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var m))
+        {
+            _fixedRadius = m;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task OnRangeCancel()
+    {
+        if (_map is not null)
+        {
+            await _map.SetRadiusAsync(_fixedRadius);
+        }
+    }
+
+    private async Task OnRangeSave()
+    {
+        if (_map is not null)
+        {
+            await _map.SetRadiusAsync(_fixedRadius);
+            if (App.MyPosition != null)
+            {
+                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
+            }
+        }
+    }
+
+    private Task OnMapChanged(GoogleMap.MapViewChangedArgs args)
+    {
+        return Task.CompletedTask;
+    }
+
+    private async Task OnPinTapped(int businessKey)
+    {
+    }
+
+    private async Task AddMapMarkers(List<BusinessItem> offersMapItems)
+    {
+        if (offersMapItems is null || _map is null) return;
+        await _map.ClearMarkersAsync();
+
+        foreach (var item in offersMapItems)
+        {
+            if (item.Latitude != null && item.Longitude != null)
+            {
+                double lat = Convert.ToDouble(item.Latitude, System.Globalization.CultureInfo.InvariantCulture);
+                double lng = Convert.ToDouble(item.Longitude, System.Globalization.CultureInfo.InvariantCulture);
+                await _map.AddMarkerAsync(lat, lng, item.BusinessKey, item.Name, item.ActiveOffersCount.ToString());
+            }
+        }
+
+        await _map.SetRadiusAsync(_fixedRadius);
+    }
+
+    private async Task GetandSetPins()
+    {
+        try
+        {
+            // First set the circle center to user's current position
+            if (App.MyPosition != null)
+            {
+                await LockCircleAt(App.MyPosition.Latitude, App.MyPosition.Longitude);
+            }
+
+            // Try loading from cache first
+            AllMapBusinessItems = await localCache.GetCacheItem<List<BusinessItem>>(StringConstants.MapBusinessItems);
+            if (AllMapBusinessItems != null && AllMapBusinessItems.Count > 0)
+            {
+                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
+                return;
+            }
+
+            // Fetch from API
+            var businessMapRequest = new BusinessMapRequest();
+            var output = await apiService.GetAppBusinessesMap(businessMapRequest);
+            if (output.Success)
+            {
+                AllMapBusinessItems = output.Data?.ToList() ?? new List<BusinessItem>();
+                await localCache.SaveItemInCache(StringConstants.MapBusinessItems, AllMapBusinessItems);
+                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+
+    #endregion
+
+    #region Map Offcanvas
+
+    private int _tempRadius;
 
     #endregion
 }

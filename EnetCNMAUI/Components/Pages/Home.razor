@@ -10,9 +10,12 @@
 @inject IThemeManager themeManager
 @inject IFirstPaintNotifier FirstPaintNotifier
 @inject IMapConfig MapConfig
+@inject IUserSession UserSession
+@inject ILocationState LocationState
 
 @using EnetCNMAUI.ApiService.Requests.MVC
 @using EnetCNMAUI.Domain.Models.MVC
+@using EnetCNMAUI.Services.Session
 @using System.Collections.ObjectModel
 @using EnetCNMAUI.Services.Local
 @using EnetCNMAUI.Views
@@ -934,7 +937,7 @@
     {
         await GetSavingsAsync();
 
-        App.MyPosition = new Location
+        LocationState.CurrentPosition = new Location
         {
             Latitude = StartLat,
             Longitude = StartLng
@@ -945,8 +948,8 @@
 
         await GetCurrentLocation();
        
-        App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
-        _user = App.CurrentUser;
+        UserSession.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
+        _user = UserSession.CurrentUser;
         _ = GetSubscription();
         RecentSearches = await localCache.GetCacheItem<List<string>>(LocalCacheKeys.SearchHistory)
                          ?? new List<string>();
@@ -999,18 +1002,14 @@
 
         if (position != null)
         {
-            App.MyPosition = position;
+            LocationState.CurrentPosition = position;
         }
         else
         {
-            App.MyPosition = new Location
-            {
-                Latitude = 34.27851,
-                Longitude = -119.16
-            };
+            LocationState.CurrentPosition = LocationState.DefaultPosition;
         }
 
-        Console.WriteLine($"Current location: {App.MyPosition.Latitude}, {App.MyPosition.Longitude}");
+        Console.WriteLine($"Current location: {LocationState.CurrentPosition.Latitude}, {LocationState.CurrentPosition.Longitude}");
     }
     #endregion
 
@@ -1029,7 +1028,7 @@
 
             IsSummaryLoading = !append && Page == 1;
 
-            var redemptionRequest = new GetUserRedemptionRequest(App.CurrentUser.UserKey);
+            var redemptionRequest = new GetUserRedemptionRequest(UserSession.CurrentUser.UserKey);
 
             var redemptionsResp = await apiService.GetUserRedemptions(redemptionRequest);
             var summaryResp = await apiService.GetUserRedemptionSummary(redemptionRequest);
@@ -1183,7 +1182,7 @@
         {
             isRedemptionsLoading = true;
 
-            var redemptionRequest = new GetUserRedemptionRequest(App.CurrentUser.UserKey);
+            var redemptionRequest = new GetUserRedemptionRequest(UserSession.CurrentUser.UserKey);
             var redemptionsResp = await apiService.GetUserRedemptions(redemptionRequest);
 
             if (redemptionsResp?.Success == true && redemptionsResp.Data is not null)
@@ -1221,7 +1220,7 @@
 
         try
         {
-            var request = new OffersFeaturedRequest(App.CurrentUser.UserKey.ToString());
+            var request = new OffersFeaturedRequest(UserSession.CurrentUser.UserKey.ToString());
 
             var response = await apiService.GetOffersFeaturedRandom(request);
 
@@ -1292,7 +1291,7 @@
 
         try
         {
-            var eventRequest = new EventRequest(App.CurrentUser.UserKey.ToString());
+            var eventRequest = new EventRequest(UserSession.CurrentUser.UserKey.ToString());
             var result = await apiService.GetEvents(eventRequest);
 
             if (result.Success)
@@ -1325,7 +1324,7 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(UserSession.CurrentUser.UserKey);
             var output = await apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
 
             if (output.Success && output.Data != null && output.Data.Count > 0)
@@ -1362,7 +1361,7 @@
     private async Task ValidateCode()
     {
         var redeedmOfferRequest = new RedeemOfferRequest(
-            App.CurrentUser.UserKey.ToString(),
+            UserSession.CurrentUser.UserKey.ToString(),
             SelectedOffer?.BusinessOffersKey.ToString() ?? "",
             Code);
 
@@ -1515,7 +1514,7 @@
 
         try
         {
-            var req = new OffersFavoriteRequest(App.CurrentUser.UserKey.ToString());
+            var req = new OffersFavoriteRequest(UserSession.CurrentUser.UserKey.ToString());
             var result = await apiService.GetFavoriteOffers(req);
 
             if (result.Success)

@@ -7,10 +7,13 @@
 @inject IOfferService offerService
 @inject ILocationService locationService
 @inject IMapConfig MapConfig
+@inject IUserSession UserSession
+@inject ILocationState LocationState
 
 @using EnetCNMAUI.ApiService.Requests.MVC
 @using EnetCNMAUI.Domain.Models.MVC
 @using EnetCNMAUI.Domain.Models
+@using EnetCNMAUI.Services.Session
 @using System.Collections.ObjectModel
 @using EnetCNMAUI.Services.Local
 @using EnetCNMAUI.Views
@@ -972,14 +975,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        App.MyPosition = new Location
+        LocationState.CurrentPosition = new Location
         {
             Latitude = StartLat,
             Longitude = StartLng
         };
 
-        App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser) ?? new AALUser();
-        _user = App.CurrentUser ?? new AALUser();
+        UserSession.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser) ?? new AALUser();
+        _user = UserSession.CurrentUser ?? new AALUser();
 
         planDetails = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails) ?? new PlanDetails();
         RecentSearches = await localCache.GetCacheItem<List<string>>(LocalCacheKeys.SearchHistory) ?? new List<string>();
@@ -1166,19 +1169,11 @@ else
         {
             var position = await locationService.GetCurrentLocationAsync();
 
-            App.MyPosition = position ?? new Location
-            {
-                Latitude = 34.27851,
-                Longitude = -119.16
-            };
+            LocationState.CurrentPosition = position ?? LocationState.DefaultPosition;
         }
         catch
         {
-            App.MyPosition = new Location
-            {
-                Latitude = 34.27851,
-                Longitude = -119.16
-            };
+            LocationState.CurrentPosition = LocationState.DefaultPosition;
         }
     }
 
@@ -1769,9 +1764,9 @@ else
         if (_map is not null)
         {
             await _map.SetRadiusAsync(_fixedRadius);
-            if (App.MyPosition != null)
+            if (LocationState.CurrentPosition != null)
             {
-                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
+                await UpdateMapListItemsAsync(LocationState.CurrentPosition, _fixedRadius / 1000.0);
             }
         }
     }
@@ -1808,16 +1803,16 @@ else
         try
         {
             // First set the circle center to user's current position
-            if (App.MyPosition != null)
+            if (LocationState.CurrentPosition != null)
             {
-                await LockCircleAt(App.MyPosition.Latitude, App.MyPosition.Longitude);
+                await LockCircleAt(LocationState.CurrentPosition.Latitude, LocationState.CurrentPosition.Longitude);
             }
 
             // Try loading from cache first
             AllMapBusinessItems = await localCache.GetCacheItem<List<BusinessItem>>(StringConstants.MapBusinessItems);
             if (AllMapBusinessItems != null && AllMapBusinessItems.Count > 0)
             {
-                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
+                await UpdateMapListItemsAsync(LocationState.CurrentPosition, _fixedRadius / 1000.0);
                 return;
             }
 
@@ -1828,7 +1823,7 @@ else
             {
                 AllMapBusinessItems = output.Data?.ToList() ?? new List<BusinessItem>();
                 await localCache.SaveItemInCache(StringConstants.MapBusinessItems, AllMapBusinessItems);
-                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
+                await UpdateMapListItemsAsync(LocationState.CurrentPosition, _fixedRadius / 1000.0);
             }
         }
         catch (Exception ex)

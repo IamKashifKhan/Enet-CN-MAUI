@@ -49,34 +49,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Toggle Password View (Multiple Fields)
-const togglePassword = document.querySelector('#togglePassword');
-const passwords = document.querySelectorAll('input[type="password"], input[type="text"].password-field');
 
-if (togglePassword && passwords.length > 0) {
-  togglePassword.addEventListener('click', () => {
-
-    let isPassword = passwords[0].getAttribute('type') === 'password';
-
-    passwords.forEach(input => {
-      input.setAttribute('type', isPassword ? 'text' : 'password');
-    });
-
-    togglePassword.classList.toggle('fa-eye');
-    togglePassword.classList.toggle('fa-eye-slash');
-  });
-}
-
-
-
-// jQuery Toggle
-$('.toggle-wrapper button').on('click', function () {
+	/* Toggle */
+$('.toggle-wrapper button').click(function(){
   $('.toggle-wrapper button').removeClass('active');
   $(this).addClass('active');
-
   $('#offersScreen, #businessScreen').addClass('hidden');
   $('#' + $(this).data('target')).removeClass('hidden');
 });
+
+/* Heart */
+$(document).on('click','.heart',function(){
+  $(this).text($(this).text() === "♡" ? "♥" : "♡");
+});
+
+
+/* Heart Animation */
+$(document).on('click', '.heart', function () {
+  $(this).toggleClass('active');
+
+  if ($(this).hasClass('active')) {
+    $(this).html('<i class="fa-solid fa-heart"></i>');
+  } else {
+    $(this).html('<i class="fa-regular fa-heart"></i>');
+  }
+});
+	
+	
+
 
 
 // search list item remove
@@ -188,10 +188,6 @@ filterGroups.forEach((group, index) => {
     updateTags();
 
 });
-
-
-
-
 
 
 

@@ -17,122 +17,7 @@
 @using CommunityToolkit.Mvvm.Messaging
 @using Microsoft.AspNetCore.Components.Web
 
-<div class="offcanvas offcanvas-top h-100" tabindex="-1" id="offcanvasFullscreen" aria-labelledby="offcanvasFullscreenLabel">
-    <div class="offcanvas-body">
-        <div class="search-wrapper">
-            <div class="search-bar d-flex align-items-center mb-4">
-                <span class="search-icon">
-                    <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
-                               trigger="loop"
-                               delay="2000"
-                               colors="primary:#121331,secondary:#ff9935"
-                               class="top-icon-animated"></lord-icon>
-                </span>
-                <input type="text"
-                       class="form-control border-0"
-                       placeholder="Search for Offer / Food / Beauty etc."
-                       @bind-value="SearchText"
-                       @bind-value:event="oninput"
-                       @onkeydown="OnSearchKey" />
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
 
-            <h5 class="section-title">Popular Categories</h5>
-            <div class="row text-center g-3 categories">
-                @if (mainCategories?.Any() == true)
-                {
-                    <div class="owl-carousel offcanvas-categories-slider top-categories">
-                        @foreach (var cat in mainCategories)
-                        {
-                            <CategoryCapsule Category="cat" OnSelected="HandleCategorySelected" />
-                        }
-                    </div>
-                }
-                else if (isCategoriesLoading)
-                {
-                    <div class="col-12 text-muted">Loading categories...</div>
-                }
-            </div>
-
-            <h5 class="section-title mt-4">Recent Search</h5>
-            <ul class="recent-search list-unstyled">
-                @if (RecentSearches?.Any() == true)
-                {
-                    @foreach (var search in RecentSearches)
-                    {
-                        <li>
-                            <a href="#" @onclick="() => OnRecentSearchClicked(search)" @onclick:preventDefault>
-                                <i class="fa-solid fa-clock-rotate-left"> <small>@search</small></i>
-                            </a>
-                            <span class="remove-item" @onclick="() => RemoveSearchItem(search)">
-                                <i class="fa-solid fa-xmark"></i>
-                            </span>
-                        </li>
-                    }
-                }
-            </ul>
-
-            <h5 class="section-title mt-4">Popular Offers</h5>
-            <div class="row g-3 offer-cards">
-                @if (featuredOffers?.Any() == true)
-                {
-                    <div class="owl-carousel offers-slider">
-                        @foreach (var offer in featuredOffers)
-                        {
-                            <OfferCard Offer="offer"
-                                       OnSelected="HandleOfferSelected"
-                                       AddRemoveToFavorite="AddRemoveFav"
-                                       isActivePlan="planDetails?.IsActive == true">
-                            </OfferCard>
-                        }
-                    </div>
-                }
-                else if (isFeaturedOffersLoading)
-                {
-                    <div class="col-12">
-                        <p class="text-muted mb-0">Loading featured offers...</p>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-12">
-                        <p class="text-muted mb-0">No featured offers available.</p>
-                    </div>
-                }
-            </div>
-
-            <h5 class="section-title mt-4">Popular Businesses</h5>
-            <div class="row g-3 offer-cards">
-                @if (featuredOffers?.Any() == true)
-                {
-                    <div class="owl-carousel offers-slider businesses-slider">
-                        @foreach (var offer in featuredOffers.Take(8))
-                        {
-                            <OfferCard Offer="offer"
-                                       OnSelected="HandleOfferSelected"
-                                       AddRemoveToFavorite="AddRemoveFav"
-                                       isActivePlan="planDetails?.IsActive == true">
-                            </OfferCard>
-                        }
-                    </div>
-                }
-                else if (isFeaturedOffersLoading)
-                {
-                    <div class="col-12">
-                        <p class="text-muted mb-0">Loading businesses...</p>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-12">
-                        <p class="text-muted mb-0">No businesses available.</p>
-                    </div>
-                }
-            </div>
-
-        </div>
-    </div>
-</div>
 
 @if (selectedTab == NavTab.Home)
 {
@@ -813,7 +698,122 @@ else
         </div>
     </div>
 </div>
+<div class="offcanvas offcanvas-top h-100" tabindex="-1" id="offcanvasFullscreen" aria-labelledby="offcanvasFullscreenLabel">
+    <div class="offcanvas-body">
+        <div class="search-wrapper">
+            <div class="search-bar d-flex align-items-center mb-4">
+                <span class="search-icon">
+                    <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
+                               trigger="loop"
+                               delay="2000"
+                               colors="primary:#121331,secondary:#ff9935"
+                               class="top-icon-animated"></lord-icon>
+                </span>
+                <input type="text"
+                       class="form-control border-0"
+                       placeholder="Search for Offer / Food / Beauty etc."
+                       @bind-value="SearchText"
+                       @bind-value:event="oninput"
+                       @onkeydown="OnSearchKey" />
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
 
+            <h5 class="section-title">Popular Categories</h5>
+            <div class="row text-center g-3 categories">
+                @if (mainCategories?.Any() == true)
+                {
+                    <div class="owl-carousel offcanvas-categories-slider top-categories">
+                        @foreach (var cat in mainCategories)
+                        {
+                            <CategoryCapsule Category="cat" OnSelected="HandleCategorySelected" />
+                        }
+                    </div>
+                }
+                else if (isCategoriesLoading)
+                {
+                    <div class="col-12 text-muted">Loading categories...</div>
+                }
+            </div>
+
+            <h5 class="section-title mt-4">Recent Search</h5>
+            <ul class="recent-search list-unstyled">
+                @if (RecentSearches?.Any() == true)
+                {
+                    @foreach (var search in RecentSearches)
+                    {
+                        <li>
+                            <a href="#" @onclick="() => OnRecentSearchClicked(search)" @onclick:preventDefault>
+                                <i class="fa-solid fa-clock-rotate-left"> <small>@search</small></i>
+                            </a>
+                            <span class="remove-item" @onclick="() => RemoveSearchItem(search)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        </li>
+                    }
+                }
+            </ul>
+
+            <h5 class="section-title mt-4">Popular Offers</h5>
+            <div class="row g-3 offer-cards">
+                @if (featuredOffers?.Any() == true)
+                {
+                    <div class="owl-carousel offers-slider">
+                        @foreach (var offer in featuredOffers)
+                        {
+                            <OfferCard Offer="offer"
+                                       OnSelected="HandleOfferSelected"
+                                       AddRemoveToFavorite="AddRemoveFav"
+                                       isActivePlan="planDetails?.IsActive == true">
+                            </OfferCard>
+                        }
+                    </div>
+                }
+                else if (isFeaturedOffersLoading)
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">Loading featured offers...</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">No featured offers available.</p>
+                    </div>
+                }
+            </div>
+
+            <h5 class="section-title mt-4">Popular Businesses</h5>
+            <div class="row g-3 offer-cards">
+                @if (featuredOffers?.Any() == true)
+                {
+                    <div class="owl-carousel offers-slider businesses-slider">
+                        @foreach (var offer in featuredOffers.Take(8))
+                        {
+                            <OfferCard Offer="offer"
+                                       OnSelected="HandleOfferSelected"
+                                       AddRemoveToFavorite="AddRemoveFav"
+                                       isActivePlan="planDetails?.IsActive == true">
+                            </OfferCard>
+                        }
+                    </div>
+                }
+                else if (isFeaturedOffersLoading)
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">Loading businesses...</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        <p class="text-muted mb-0">No businesses available.</p>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
 @code
 {
     #region JS / References

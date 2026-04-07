@@ -9,10 +9,8 @@
 @inject IOfferService offerService
 @using EnetCNMAUI.Services.Local
 
-
 <div class="d-flex flex-column business-page-new">
 
-    <!-- Filter Business -->
     <!-- Filter Offer -->
     <div class="offcanvas offcanvas-top h-100 border-0" tabindex="-1" id="filterOffer" aria-labelledby="filterLabel">
         <div class="offcanvas-header px-4 pt-4 pb-2">
@@ -23,12 +21,11 @@
         </div>
 
         <div class="offcanvas-body px-4">
-            <!-- Selected Tags Section -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div id="selectedTags" class="d-flex flex-wrap gap-2">
-                    <!-- JS tags  -->
+                    <!-- JS tags -->
                 </div>
-                <button id="clearAll" class="btn-clear-all p-0">Clear All</button>
+                <button id="clearAll" @onclick="ClearFilters" class="btn-clear-all p-0">Clear All</button>
             </div>
 
             <hr class="divider-line">
@@ -38,55 +35,59 @@
                 <h6 class="section-title">Listing Sort By</h6>
                 <div class="tags-group d-flex flex-wrap gap-2 mt-3">
                     <div class="filter-tag">
-                        <input type="checkbox" id="food" value="Newest">
-                        <label for="Newest">Newest</label>
+                        <input type="radio"
+                               id="sort-newest"
+                               name="sort"
+                               checked="@(selectedSort == "Newest")"
+                               @onchange='@(() => selectedSort = "Newest")'>
+                        <label for="sort-newest">Newest</label>
                     </div>
                     <div class="filter-tag">
-                        <input type="checkbox" id="pet" value="Oldest">
-                        <label for="Oldest">Oldest</label>
+                        <input type="radio"
+                               id="sort-oldest"
+                               name="sort"
+                               checked="@(selectedSort == "Oldest")"
+                               @onchange='@(() => selectedSort = "Oldest")'>
+                        <label for="sort-oldest">Oldest</label>
                     </div>
-           
                 </div>
             </div>
 
-	  
             <!-- Sub Categories -->
             <div class="mt-4">
                 <h6 class="section-title">Sub Categories</h6>
                 <div class="tags-group d-flex flex-wrap gap-2 mt-3">
                     <div class="filter-tag">
-                        <input type="checkbox" id="food" value="FOOD">
-                        <label for="food">Food</label>
+                        <input type="checkbox" id="subcat-food" @bind="subCatFood">
+                        <label for="subcat-food">Food</label>
                     </div>
                     <div class="filter-tag">
-                        <input type="checkbox" id="pet" value="PET" checked>
-                        <label for="pet">Pet</label>
+                        <input type="checkbox" id="subcat-pet" @bind="subCatPet">
+                        <label for="subcat-pet">Pet</label>
                     </div>
                     <div class="filter-tag">
-                        <input type="checkbox" id="movies" value="MOVIES">
-                        <label for="movies">Movies</label>
+                        <input type="checkbox" id="subcat-movies" @bind="subCatMovies">
+                        <label for="subcat-movies">Movies</label>
                     </div>
                     <div class="filter-tag">
-                        <input type="checkbox" id="wine" value="WINE">
-                        <label for="wine">Wine</label>
+                        <input type="checkbox" id="subcat-wine" @bind="subCatWine">
+                        <label for="subcat-wine">Wine</label>
                     </div>
                 </div>
             </div>
 
-     
-            <!-- Sub Categories -->
+            <!-- Top Redeemed Offers -->
             <div class="mt-4">
                 <h6 class="section-title">Top Redeemed Offers</h6>
                 <div class="tags-group d-flex flex-wrap gap-2 mt-3">
                     <div class="filter-tag">
-                        <input type="checkbox" id="yes" value="Yes">
-                        <label for="yes">Yes</label>
+                        <input type="checkbox" id="top-yes" @bind="topRedeemedYes">
+                        <label for="top-yes">Yes</label>
                     </div>
                     <div class="filter-tag">
-                        <input type="checkbox" id="no" value="No">
-                        <label for="no">NO</label>
+                        <input type="checkbox" id="top-no" @bind="topRedeemedNo">
+                        <label for="top-no">NO</label>
                     </div>
-            
                 </div>
             </div>
 
@@ -98,18 +99,16 @@
                     <span>10mi</span>
                 </div>
 
-                <input type="range" min="0" max="10" step="0.1" value="3.5"
+                <input type="range" min="0" max="10" step="0.1" @bind="nearbyRange"
                        class="form-range custom-range" id="distanceRange">
 
                 <div class="text-center mt-2">
-                    <span id="rangeValue">3.5</span>mi
+                    <span id="rangeValue">@nearbyRange.ToString("0.0")</span>mi
                 </div>
             </div>
 
-    
-            <!-- Button -->
             <div class="text-center mt-4">
-                <button class="btn filter-btn">Filter Now</button>
+                <button class="btn filter-btn" @onclick="ApplyFilters">Filter Now</button>
             </div>
         </div>
     </div>
@@ -258,7 +257,6 @@
     <div class="container border-top pt-3">
         <div class="row">
 
-            <!-- Toggle + Filter + Sort -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="toggle-wrapper">
                     <button class="@(ShowOffers ? "active" : "")" @onclick="() => ToggleScreen(true)">Offers</button>
@@ -390,7 +388,7 @@
                 <i class="@(SelectedOffer?.isFavorite == true ? "fa-solid fa-heart" : "fa-regular fa-heart")"></i>
             </button>
         </div>
-        <!-- Card Redeem -->
+
         <div class="card redeem">
             <h2 class="card-header">@SelectedOffer?.Heading</h2>
             <div class="card-body">
@@ -406,15 +404,14 @@
             </div>
             <div class="card-footer">
                 <a href="#"
-                   class="btn btn-primary px-5"
-                   data-bs-toggle="modal"
-                   data-bs-target="#modalRedeemCode"
-                   @onclick:preventDefault>
+                       class="btn btn-primary px-5"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modalRedeemCode"
+                       @onclick:preventDefault>
                     Redeem Offer
                 </a>
             </div>
         </div>
-        <!-- /Card Redeem -->
     </div>
 </div>
 
@@ -464,7 +461,16 @@
 
     private bool IsGrid;
     private bool ShowOffers = true;
-    private string SelectedSort = "Sort";
+
+    private string selectedSort = "Newest";
+
+    private bool subCatFood = false;
+    private bool subCatPet = false;
+    private bool subCatMovies = false;
+    private bool subCatWine = false;
+    private bool topRedeemedYes = false;
+    private bool topRedeemedNo = false;
+    private double nearbyRange = 3.5;
 
     #endregion
 
@@ -479,7 +485,9 @@
 
     private List<CategoryItem>? mainCategories;
     private List<BusinessItem>? businessList;
-    private List<BusinessOfferItem>? categoryOffers;  // New: Category-based offers
+    private List<BusinessOfferItem>? categoryOffers;
+    private List<BusinessOfferItem>? allCategoryOffers;
+
     private string CategoryName = string.Empty;
     private string CategoryKey = string.Empty;
 
@@ -489,14 +497,12 @@
 
     #region Lifecycle Methods
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         businessesJsRefernce = await jSRuntime.InvokeAsync<IJSObjectReference>("import", "./RazorViews/Businesses.razor.js");
         await jSRuntime.InvokeVoidAsync("Helpers.setDotNetHelper", DotNetObjectReference.Create(this));
 
         businessesDotnetReference = DotNetObjectReference.Create(this);
-
-
 
         if (!string.IsNullOrWhiteSpace(CategoryId))
         {
@@ -515,9 +521,10 @@
             else
             {
                 CategoryKey = DataArray[0];
-                await GetBusiness(CategoryKey);
-                await GetOffersByCategory(CategoryKey);  // Fetch category-based offers
                 CategoryName = DataArray.Length > 1 ? DataArray[1] : string.Empty;
+
+                await GetBusiness(CategoryKey);
+                await GetOffersByCategory(CategoryKey);
             }
         }
 
@@ -541,30 +548,6 @@
     {
         if (businessesJsRefernce is null)
             return;
-
-        // try
-        // {
-        //     await businessesJsRefernce.InvokeVoidAsync("owlCarouselstart");
-        // }
-        // catch { }
-
-        // try
-        // {
-        //     await businessesJsRefernce.InvokeVoidAsync("initToggleSwitch");
-        // }
-        // catch { }
-
-        // try
-        // {
-        //     await businessesJsRefernce.InvokeVoidAsync("initBusinessAccordion");
-        // }
-        // catch { }
-
-        // try
-        // {
-        //     await businessesJsRefernce.InvokeVoidAsync("initHeartToggle");
-        // }
-        // catch { }
     }
 
     #endregion
@@ -640,26 +623,29 @@
         try
         {
             var request = new OffersFeaturedByCategoryRequest(
-                App.CurrentUser.UserKey.ToString(), 
-                categoryKey, 
+                App.CurrentUser.UserKey.ToString(),
+                categoryKey,
                 count);
-            
+
             var output = await apiService.GetOffersFeaturedByCategory(request);
-            
+
             if (output.Success && output.Data != null)
             {
-                categoryOffers = output.Data;
+                allCategoryOffers = output.Data.ToList();
+                categoryOffers = output.Data.ToList();
             }
             else
             {
+                allCategoryOffers = new List<BusinessOfferItem>();
                 categoryOffers = new List<BusinessOfferItem>();
             }
-            
+
             await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching category offers: {ex.Message}");
+            allCategoryOffers = new List<BusinessOfferItem>();
             categoryOffers = new List<BusinessOfferItem>();
         }
     }
@@ -668,30 +654,18 @@
     {
         try
         {
-            // var request = new OffersFeaturedByCategoryRequest(
-            //     App.CurrentUser.UserKey.ToString(),
-            //     city,
-            //     count);
-            
-            // var output = await apiService.GetOffersFeaturedByCategory(request);
-            
-            // if (output.Success && output.Data != null)
-            // {
-            //     categoryOffers = output.Data;
-            // }
-            // else
-            // {
-            //     categoryOffers = new List<BusinessOfferItem>();
-            // }
-            
-            // await InvokeAsync(StateHasChanged);
+            allCategoryOffers = new List<BusinessOfferItem>();
+            categoryOffers = new List<BusinessOfferItem>();
+            await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)
         {
-            // Console.WriteLine($"Error fetching category offers: {ex.Message}");
-            // categoryOffers = new List<BusinessOfferItem>();
+            Console.WriteLine($"Error fetching city offers: {ex.Message}");
+            allCategoryOffers = new List<BusinessOfferItem>();
+            categoryOffers = new List<BusinessOfferItem>();
         }
     }
+
     private async Task SearchOfferByText(string categoryKey, string count = "10")
     {
         try
@@ -700,27 +674,29 @@
                 App.CurrentUser.UserKey.ToString(),
                 categoryKey,
                 count);
-            
+
             var output = await apiService.GetOffersSearch(request);
-            
+
             if (output.Success && output.Data != null)
             {
-                categoryOffers = output.Data;
+                allCategoryOffers = output.Data.ToList();
+                categoryOffers = output.Data.ToList();
             }
             else
             {
+                allCategoryOffers = new List<BusinessOfferItem>();
                 categoryOffers = new List<BusinessOfferItem>();
             }
-            
+
             await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching category offers: {ex.Message}");
+            allCategoryOffers = new List<BusinessOfferItem>();
             categoryOffers = new List<BusinessOfferItem>();
         }
     }
-
 
     #endregion
 
@@ -735,8 +711,14 @@
         CategoryName = categoryItem.Name;
 
         businessList?.Clear();
+        categoryOffers?.Clear();
+        allCategoryOffers?.Clear();
+
         await InvokeAsync(StateHasChanged);
+
         await GetBusiness(categoryItem.Category_Sub_Key);
+        await GetOffersByCategory(categoryItem.Category_Sub_Key);
+
         await InvokeAsync(StateHasChanged);
     }
 
@@ -751,9 +733,16 @@
             return;
 
         CategoryKey = categoryItem.Category_Sub_Key;
+        CategoryName = categoryItem.Name;
+
         businessList?.Clear();
+        categoryOffers?.Clear();
+        allCategoryOffers?.Clear();
+
         await InvokeAsync(StateHasChanged);
+
         await GetBusiness(categoryItem.Category_Sub_Key);
+        await GetOffersByCategory(categoryItem.Category_Sub_Key);
     }
 
     private void ToggleScreen(bool showOffers)
@@ -884,7 +873,7 @@
         SelectedOffer = offer;
         Code = string.Empty;
         StateHasChanged();
-        
+
         await jSRuntime.InvokeVoidAsync("eval", "const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRedeem')); offcanvas.show();");
     }
 
@@ -949,6 +938,66 @@
     private async Task GotoSavingsPage()
     {
         await Shell.Current.GoToAsync(nameof(MySavingsPage));
+    }
+
+    private async Task ClearFilters()
+    {
+        selectedSort = "Newest";
+        subCatFood = false;
+        subCatPet = false;
+        subCatMovies = false;
+        subCatWine = false;
+        topRedeemedYes = false;
+        topRedeemedNo = false;
+        nearbyRange = 3.5;
+
+        categoryOffers = allCategoryOffers?.ToList() ?? new List<BusinessOfferItem>();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ApplyFilters()
+    {
+        if (allCategoryOffers == null)
+            return;
+
+        IEnumerable<BusinessOfferItem> filtered = allCategoryOffers;
+
+        var selectedSubs = new List<string>();
+        if (subCatFood) selectedSubs.Add("FOOD");
+        if (subCatPet) selectedSubs.Add("PET");
+        if (subCatMovies) selectedSubs.Add("MOVIES");
+        if (subCatWine) selectedSubs.Add("WINE");
+
+        if (selectedSubs.Any())
+        {
+            filtered = filtered.Where(o =>
+                o.BusinessCategory != null &&
+                o.BusinessCategory.Any(c =>
+                    !string.IsNullOrWhiteSpace(c.SubCategory) &&
+                    selectedSubs.Contains(c.SubCategory.Trim().ToUpperInvariant())));
+        }
+
+        if (topRedeemedYes && !topRedeemedNo)
+        {
+            filtered = filtered.Where(o => o.RedemptionsCount > 10);
+        }
+        else if (topRedeemedNo && !topRedeemedYes)
+        {
+            filtered = filtered.Where(o => o.RedemptionsCount <= 10);
+        }
+
+        filtered = selectedSort == "Newest"
+            ? filtered.OrderByDescending(o => o.StartDate ?? DateTime.MinValue)
+            : filtered.OrderBy(o => o.StartDate ?? DateTime.MinValue);
+
+        categoryOffers = filtered.ToList();
+
+        await InvokeAsync(StateHasChanged);
+
+        await jSRuntime.InvokeVoidAsync(
+            "eval",
+            "const el=document.getElementById('filterOffer'); if(el){ bootstrap.Offcanvas.getOrCreateInstance(el).hide(); }");
     }
 
     #endregion

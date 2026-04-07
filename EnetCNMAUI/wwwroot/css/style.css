@@ -4,15 +4,6 @@
 @import url("root.css");
 @import url("fonts/optimistic.css");
 
-.offcanvas .search-btn-bar {
-    background-color: #f9faff;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 7px;
-    z-index: 100;
-	left: 0;
-}
 /*Font-Size*/
 .fs-36 {font-size: var(--bs-px-36)}
 .fs-24 {font-size: var(--bs-px-24);}
@@ -1217,7 +1208,6 @@ h5.main-heading {
     font-size: 15px;
 }
 .recent-search li a small {
-	font-family: 'Montserrat', sans-serif;
     color: #222222;
     font-weight: 500;
     padding-left: 7px;
@@ -1563,9 +1553,9 @@ a .suggested-card h6{
 }
 
 /* Heart Animation */
-.heart:before, .heart.active:before {font-family:var(--fa-style-family,"Font Awesome 6 Free") !important; font-style:normal; font-weight:400!important; font-variant:normal; text-transform:none; line-height:1; display:inline-block; vertical-align:-0.125em; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
-.heart:before, .heart[aria-selected=false]:before {content:"\f004"; font-weight: 400 !important;}
-.heart.active:before, .heart[aria-selected=true]:before {font-weight: 900 !important;}
+.heart:before, .heart.active:before {font-family:bootstrap-icons!important; font-style:normal; font-weight:400!important; font-variant:normal; text-transform:none; line-height:1; display:inline-block; vertical-align:-0.125em; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+.heart:before, .heart[aria-selected=false]:before {content:"\f417";}
+.heart.active:before, .heart[aria-selected=true]:before {content:"\f415";}
 
 .heart {cursor:pointer; font-size:20px; color: #e63946; margin-right:6px; --bs-bg-opacity:1; border:none; background-color:transparent; transition:transform 0.2s ease;}
 .heart.active {color:#e63946; transform:scale(1.2);}

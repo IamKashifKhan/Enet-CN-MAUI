@@ -1,6 +1,5 @@
 ﻿@using AutoMapper
 @using EnetCNMAUI.Services.Local
-@using EnetCNMAUI.Services.Session
 @using EnetCNMAUI.Views
 @using Microsoft.AppCenter
 @inject ILocalCache localCache
@@ -14,8 +13,6 @@
 @inject IMapper mapper;
 @inject IFirstPaintNotifier FirstPaintNotifier
 @inject IMapConfig MapConfig
-@inject IUserSession UserSession
-@inject ILocationState LocationState
 
 
  
@@ -750,7 +747,7 @@
         {
 
 
-            var eventRequest = new EventRequest(UserSession.CurrentUser.UserKey.ToString());
+            var eventRequest = new EventRequest(App.CurrentUser.UserKey.ToString());
             var result = await apiService.GetEvents(eventRequest);
 
             if (result.Success)
@@ -863,7 +860,7 @@
 
         try
         {
-            var req = new OffersFavoriteRequest(UserSession.CurrentUser.UserKey.ToString());
+            var req = new OffersFavoriteRequest(App.CurrentUser.UserKey.ToString());
             var result = await apiService.GetFavoriteOffers(req);
 
             if (result.Success)
@@ -918,7 +915,7 @@
 
     private async void ValidateCode()
     {
-        var redeedmOfferRequest = new RedeemOfferRequest(UserSession.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
+        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
         var output = await apiService.RedeemOffer(redeedmOfferRequest);
         if (output.Success)
         {
@@ -955,15 +952,16 @@
 
 
 
-            if (LocationState.CurrentPosition == null)
+            if (App.MyPosition == null)
             {
-                LocationState.CurrentPosition = LocationState.DefaultPosition;
+                App.MyPosition = new Location { Latitude = 34.27851, Longitude = -119.16 };
+                // Or: App.MyPosition = await locationService.GetCurrentLocationAsync();
             }
 
             // ✅ Fix: use (lat, lng), not (lat, lat)
-            await LockCircleAt(LocationState.CurrentPosition.Latitude, LocationState.CurrentPosition.Longitude);
+            await LockCircleAt(App.MyPosition.Latitude, App.MyPosition.Longitude);
 
-            var offerMapRequest = new OfferMapRequest(lat, lng, radius, UserSession.CurrentUser.UserKey.ToString());
+            var offerMapRequest = new OfferMapRequest(lat, lng, radius, App.CurrentUser.UserKey.ToString());
             var output = await apiService.GetMapOffers(offerMapRequest);
 
             if (output.Success)
@@ -989,7 +987,7 @@
             AllMapBusinessItems = await localCache.GetCacheItem<List<BusinessItem>>(StringConstants.MapBusinessItems);
             if (AllMapBusinessItems!=null)
             {
-                await UpdateMapListItemsAsync(new Location { Latitude = LocationState.CurrentPosition.Latitude, Longitude = LocationState.CurrentPosition.Longitude }, (_fixedRadius) / 1000);
+                await UpdateMapListItemsAsync(new Location { Latitude = App.MyPosition.Latitude, Longitude = App.MyPosition.Longitude }, (_fixedRadius) / 1000);
 
             }
 
@@ -1018,7 +1016,7 @@
 
             // Position position = new Position(34.27401980980908, -119.22682399792073);
             // MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(5)));
-            await UpdateMapListItemsAsync(new Location { Latitude = LocationState.CurrentPosition.Latitude, Longitude = LocationState.CurrentPosition.Longitude }, (_fixedRadius) / 1000);
+            await UpdateMapListItemsAsync(new Location { Latitude = App.MyPosition.Latitude, Longitude = App.MyPosition.Longitude }, (_fixedRadius) / 1000);
 
         }
         catch (Exception ex)
@@ -1032,12 +1030,12 @@
     {
         var position = await locationService.GetCurrentLocationAsync();
         if(position != null){
-            LocationState.CurrentPosition =  position;
+            App.MyPosition =  position;
         }
         else {
-            LocationState.CurrentPosition = LocationState.DefaultPosition;
+            App.MyPosition = new Location { Latitude = 34.27851, Longitude = -119.16 };
         }
-         Console.WriteLine($"Current location: {LocationState.CurrentPosition.Latitude}, {LocationState.CurrentPosition.Longitude}");
+         Console.WriteLine($"Current location: {App.MyPosition.Latitude}, {App.MyPosition.Longitude}");
     }
 
     private bool _mapOffersLoading;
@@ -1138,9 +1136,9 @@
             await _map.SetRadiusAsync(_fixedRadius);
 
             // 2) filter list in C# using the SAME circle numbers
-            if (LocationState.CurrentPosition != null)
+            if (App.MyPosition != null)
             {
-                await UpdateMapListItemsAsync(LocationState.CurrentPosition, _fixedRadius / 1000.0);
+                await UpdateMapListItemsAsync(App.MyPosition, _fixedRadius / 1000.0);
             }
         }
     }
@@ -1204,7 +1202,7 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(UserSession.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
             var output = await apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
@@ -1297,13 +1295,13 @@
     {
       
          // Set initial position to start location
-        LocationState.CurrentPosition = new Location { Latitude = StartLat, Longitude = StartLng };
+        App.MyPosition = new Location { Latitude = StartLat, Longitude = StartLng };
          planDetails =  await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
          await GetCurrentLocation();
 
-        UserSession.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
+        App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
 
-        _user = UserSession.CurrentUser;
+        _user = App.CurrentUser;
 
         AppVersionAndCopyrightText =
             string.Format("App version: {0}({1}) | © {2} All About Local",

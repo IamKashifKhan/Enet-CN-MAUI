@@ -1,12 +1,10 @@
 ﻿@inject IJSRuntime JSRuntime
 @using EnetCNMAUI.Domain.Models.MVC
-@using EnetCNMAUI.Services.Session
 @using EnetCNMAUI.Views
 @using Plugin.Firebase.CloudMessaging;
 @inject EmailRegistrationRequestValidator emailValidator
 @inject ICNApiService apiService
-@inject ILocalCache LocalCache
-@inject IUserSession UserSession
+@inject ILocalCache LocalCache;
 <div class="main-wrap">
 
     <!--\/header START\/-->
@@ -277,7 +275,7 @@
             var userVerificationByPhoneresult = await apiService.VerifyUserByPhone(userVerificationByPhoneRequest);
             if (userVerificationByPhoneresult.Success)
             {
-                UserSession.CurrentUser = userVerificationByPhoneresult.Data;
+                App.CurrentUser = userVerificationByPhoneresult.Data;
                 Preferences.Default.Set(StringConstants.CurrentUserKey, userVerificationByPhoneresult.Data.UserKey.ToString());
 
                 await registrationByPhoneJsRefernce.InvokeVoidAsync("nextPrev", n, currenttab);
@@ -299,8 +297,8 @@
         {
             isNextDisabled = true;
             await this.InvokeAsync(this.StateHasChanged);
-            var setPasswordRequest = new EnetCNMAUI.Requests.User.SetPasswordRequest { Id = UserSession.CurrentUser.UserKey, NewPassword = password };
-            var userrequest = new SetUserPasswordRequest(UserSession.CurrentUser.UserKey, password);
+            var setPasswordRequest = new EnetCNMAUI.Requests.User.SetPasswordRequest { Id = App.CurrentUser.UserKey, NewPassword = password };
+            var userrequest = new SetUserPasswordRequest(App.CurrentUser.UserKey, password);
             //result = await apiservice.SetUserPassword(userrequest);
             var setPasswordResult = await apiService.SetUserPassword(userrequest);
             if (setPasswordResult.Success)
@@ -324,11 +322,11 @@
             await this.InvokeAsync(this.StateHasChanged);
 
 
-            UserSession.CurrentUser.FirstName = firstname;
-            UserSession.CurrentUser.LastName = lastname;
-            UserSession.CurrentUser.Email = email;
+            App.CurrentUser.FirstName = firstname;
+            App.CurrentUser.LastName = lastname;
+            App.CurrentUser.Email = email;
 
-            var userrequest = new UpdateUserRequest(UserSession.CurrentUser);
+            var userrequest = new UpdateUserRequest(App.CurrentUser);
             var result = await apiService.UpdateUserBio(userrequest);
             await LocalCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, result.Data);
 
@@ -386,16 +384,16 @@
             // var userVerificationByPhoneresult = await apiService.VerifyUserByPhone(userVerificationByPhoneRequest);
             // if (userVerificationByPhoneresult.Success)
             // {
-            //     UserSession.CurrentUser = userVerificationByPhoneresult.Data;
+            //     App.CurrentUser = userVerificationByPhoneresult.Data;
             // }
 
         }
         else if (n == 3)
         {
-            // var setPasswordRequest = new EnetCNMAUI.Requests.User.SetPasswordRequest { Id = UserSession.CurrentUser.UserKey, NewPassword = password };
+            // var setPasswordRequest = new EnetCNMAUI.Requests.User.SetPasswordRequest { Id = App.CurrentUser.UserKey, NewPassword = password };
 
 
-            // var userrequest = new SetUserPasswordRequest(UserSession.CurrentUser.UserKey, code);
+            // var userrequest = new SetUserPasswordRequest(App.CurrentUser.UserKey, code);
             // //result = await apiservice.SetUserPassword(userrequest);
 
 
@@ -410,11 +408,11 @@
         }
         else if (n == 4)
         {
-            // UserSession.CurrentUser.FirstName = firstname;
-            // UserSession.CurrentUser.LastName = lastname;
-            // UserSession.CurrentUser.Email = email;
+            // App.CurrentUser.FirstName = firstname;
+            // App.CurrentUser.LastName = lastname;
+            // App.CurrentUser.Email = email;
 
-            // var userrequest = new UpdateUserRequest(UserSession.CurrentUser);
+            // var userrequest = new UpdateUserRequest(App.CurrentUser);
             // var result = await apiService.UpdateUserBio(userrequest);
 
             // if (result.Success)

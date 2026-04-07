@@ -1,12 +1,10 @@
 ﻿@using EnetCNMAUI.Authorization
 @using EnetCNMAUI.Domain.Models
-@using EnetCNMAUI.Services.Session
 @inject ILocalCache LocalCache
 @inject ICNApiService ApiService
 @inject ILoginService loginService
 @inject IThemeManager themeManager
 @inject IJSRuntime JSRuntime
-@inject IUserSession UserSession
  
 
 
@@ -437,7 +435,7 @@
             var output = await ApiService.AppUsersActiveSubscription(businessMapRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
-                UserSession.PlanDetails = output.Data[0];
+                App.PlanDetails = output.Data[0];
                 await LocalCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
                 Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
             }

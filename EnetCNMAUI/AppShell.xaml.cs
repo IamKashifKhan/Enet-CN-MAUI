@@ -7,11 +7,13 @@ namespace EnetCNMAUI;
 public partial class AppShell : Shell
 {
 
-    public AppShell(ShellViewModel shellViewModel)
+    public ShellViewModel shellViewModel = new ShellViewModel();
+    public AppShell()
 	{
 		InitializeComponent();
         this.BindingContext = shellViewModel;
 
+        //Shell.TabBarBackgroundColorProperty
         Routing.RegisterRoute(nameof(WelComePage),
           typeof(WelComePage));
         Routing.RegisterRoute(nameof(LoginPage),
@@ -60,14 +62,24 @@ public partial class AppShell : Shell
     {
         var grid = (HorizontalStackLayout)sender;
 
+       // shellViewModel.SelectedPage = grid.AutomationId;
         Shell.Current.FlyoutIsPresented = false;
         try
         {
+            //var sessionManager = ServiceHelper.GetService<SessionManager>();
+            //if (sessionManager.NavigationStack == null)
+            //{
+            //    sessionManager.NavigationStack = new();
+            //}
+        //    App.SessionManager.NavigationStack.Add($"{grid.AutomationId}");
         }
         catch (Exception ex)
         {
 
         }
+
+       // await Shell.Current.GoToAsync($"//{grid.AutomationId}");
+
     }
 
     void TapGestureRecognizer_Tapped(System.Object sender, Microsoft.Maui.Controls.TappedEventArgs e)

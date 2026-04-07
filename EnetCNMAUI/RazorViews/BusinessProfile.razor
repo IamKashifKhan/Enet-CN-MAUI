@@ -1,5 +1,4 @@
 ﻿@using EnetCNMAUI.Services.Local
-@using EnetCNMAUI.Services.Session
 @using EnetCNMAUI.Views
 
 @inject ILocalCache localCache
@@ -9,7 +8,6 @@
 @inject IJSRuntime jSRuntime
 @inject IOfferService offerFavoriteService
 @inject IMapConfig MapConfig
-@inject IUserSession UserSession
 
      <div class="d-flex flex-column">
 
@@ -304,8 +302,8 @@
     {
         try
         {
-            var user = UserSession.CurrentUser;
-            var request = new BusinessDetailoffersRequest(UserSession.CurrentUser.UserKey, BusinessKey);
+            var user = App.CurrentUser;
+            var request = new BusinessDetailoffersRequest(App.CurrentUser.UserKey, BusinessKey);
             var offersapiresut = await apiService.GetAppBusinessOffers(request);
             var businessdetailsresult = await apiService.GetAppBusinessDetail(request);
             var sociallinksresult = await apiService.GetBusinessSocial(request);
@@ -320,7 +318,7 @@
 
             foreach (var item in BusinessOffers)
             {
-                item.IsActivePlan = !UserSession.PlanDetails.IsActive;
+                item.IsActivePlan = !App.PlanDetails.IsActive;
                 item.ShowRedemptionLabel = item.BusinessCategory.Any(x => x.SubCategoryKey == 22 || x.SubCategoryKey == 23 || x.SubCategoryKey == 7);
             }
 
@@ -394,7 +392,7 @@
     {
         try
         {
-            var result = await offerFavoriteService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, UserSession.CurrentUser.UserKey);
+            var result = await offerFavoriteService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, App.CurrentUser.UserKey);
             offer.isFavorite = result.Data;
             WeakReferenceMessenger.Default.Send<RefreshFavorites>();
             StateHasChanged();
@@ -410,7 +408,7 @@
 
     private async void ValidateCode()
     {
-        var redeedmOfferRequest = new RedeemOfferRequest(UserSession.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
+        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
         var output = await apiService.RedeemOffer(redeedmOfferRequest);
         if (output.Success)
         {

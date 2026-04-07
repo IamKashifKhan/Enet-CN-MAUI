@@ -6,7 +6,6 @@ using CommunityToolkit.Maui;
 using EnetCNMAUI.LocalCache;
 using EnetCNMAUI.Services;
 using EnetCNMAUI.Services.Local;
-using EnetCNMAUI.Services.Session;
 using EnetCNMAUI.Authorization;
 using EnetCNMAUI;
 using EnetCNMAUI.Views.CustomControls;
@@ -17,7 +16,7 @@ using EnetCNMAUI.Helpers.Mappings;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using EnetCNMAUI.Helpers;
-using EnetCNMAUI.ViewModel;
+using EnetCNMAUI.Services;
 using Microsoft.Extensions.Configuration;
 
 using Akavache;
@@ -155,12 +154,6 @@ namespace EnetCNMAUI
 
             services.AddSingleton<ILoginService, LoginService>();
             services.AddSingleton<EmailRegistrationRequestValidator>();
-
-            services.AddSingleton<IUserSession, UserSession>();
-            services.AddSingleton<ILocationState, LocationState>();
-            services.AddSingleton<SessionManager>();
-            services.AddSingleton<ShellViewModel>();
-            services.AddSingleton<IShellThemeProvider>(sp => sp.GetRequiredService<ShellViewModel>());
 
             services.AddTransient<IThemeManager, ThemeManager>();
             services.AddTransient<IOfferService, OfferService>();

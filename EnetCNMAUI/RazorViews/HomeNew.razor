@@ -63,8 +63,8 @@
                                colors="primary:#121331,secondary:#ff9935"
                                class="top-icon-animated"></lord-icon>
                 </a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/apmrcxtj.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/jdgfsfzr.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+                <a href="#"><lord-icon src="https://cdn.lordicon.com/xnwfqftu.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+                <a href="#"><lord-icon src="https://cdn.lordicon.com/awzxedqq.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
                 <a href="#"><lord-icon src="https://cdn.lordicon.com/onmwuuox.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
             </div>
         </div>
@@ -111,10 +111,17 @@ else
         </div> *@
 
         <div role="tabpanel" class="tab-pane"
-             hidden="@(selectedTab != NavTab.Events ? "hidden" : null)"
-             aria-hidden="@(selectedTab != NavTab.Events ? "true" : "false")">
+              hidden="@(selectedTab != NavTab.Events ? "hidden" : null)"
+              aria-hidden="@(selectedTab != NavTab.Events ? "true" : "false")">
             <div class="row">
-                @if (isRedemptionsLoading)
+                @if (_eventsLoadFailed)
+                {
+                    <div class="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+                        <span>Failed to load events. @(_eventsError ?? "Please try again.")</span>
+                        <button class="btn btn-sm btn-outline-light" @onclick="RetryEventsAsync">Retry</button>
+                    </div>
+                }
+                @if (isEventsLoading)
                 {
                     <div class="small text-muted d-flex align-items-center gap-2 mb-2">
                         <div class="spinner-border spinner-border-sm" role="status"></div>
@@ -122,21 +129,14 @@ else
                     </div>
                 }
                 <ul class="card-group events-timeline">
-                    @if (topRedemptions is not null && topRedemptions.Count > 0)
+                    @if (alleventItems is not null && alleventItems.Count > 0)
                     {
-                        @foreach (var ev in topRedemptions)
+                        @foreach (var ev in alleventItems)
                         {
-                            <li class="list-group-item">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Event</h5>
-                                        <p class="card-text">Events loading...</p>
-                                    </div>
-                                </div>
-                            </li>
+                            <EventCard Event="ev" OnSelected="HandleEventSelected" />
                         }
                     }
-                    else if (!isRedemptionsLoading)
+                    else if (!isEventsLoading && !_eventsLoadFailed)
                     {
                         <div class="map-offers-count">No events found nearby</div>
                     }
@@ -397,7 +397,7 @@ else
 <ul class="nav nav-foot d-flex flex-row flex-nowrap flex-lg-wrap justify-content-lg-end align-content-lg-between flex-lg-fill shadow mt-auto mt-lg-0">
     <li>
         <a href="#"
-               class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Home))"
+                class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Home))"
                @onclick="() => SelectTabAsync(NavTab.Home)"
                @onclick:preventDefault>
             <lord-icon src="https://cdn.lordicon.com/jeuxydnh.json"
@@ -409,18 +409,18 @@ else
     </li>
     <li>
         <a href="#"
-               class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Events))"
+                class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Events))"
                @onclick="() => SelectTabAsync(NavTab.Events)"
                @onclick:preventDefault>
-            <lord-icon src="https://cdn.lordicon.com/uphbloed.json"
-                       trigger="hover"
-                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+             <lord-icon src="https://cdn.lordicon.com/aswjckcz.json"
+                        trigger="hover"
+                        colors="primary:#121331,secondary:#ff9935"></lord-icon>
             Events
         </a>
     </li>
     <li>
         <a href="#"
-               class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Favorites))"
+                class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Favorites))"
                @onclick="() => SelectTabAsync(NavTab.Favorites)"
                @onclick:preventDefault>
             <lord-icon src="https://cdn.lordicon.com/nvsfzbop.json"
@@ -432,13 +432,13 @@ else
     </li>
     <li>
         <a href="#"
-               class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Map))"
+                class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center gap-1 column-gap-lg-1 pb-lg-2 px-0 px-lg-2 @(GetNavClass(NavTab.Map))"
                @onclick="() => SelectTabAsync(NavTab.Map)"
                @onclick:preventDefault>
-            <lord-icon src="https://cdn.lordicon.com/onmwuuox.json"
-                       trigger="hover"
-                       delay="2000"
-                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+             <lord-icon src="https://cdn.lordicon.com/pmwljrdr.json"
+                        trigger="hover"
+                        delay="2000"
+                        colors="primary:#121331,secondary:#ff9935"></lord-icon>
             Map
         </a>
     </li>
@@ -447,11 +447,11 @@ else
                data-bs-toggle="offcanvas"
                data-bs-target="#offcanvasMore"
                aria-controls="offcanvasMore"
-               class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center row-gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">
-            <lord-icon src="https://cdn.lordicon.com/feyvdmcx.json"
-                       trigger="hover"
-                       delay="2000"
-                       colors="primary:#121331,secondary:#ff9935"></lord-icon>
+                class="nav-link d-flex flex-column flex-lg-row justify-content-between align-items-center gap-1 column-gap-lg-1 text-decoration-none pb-lg-2 px-0 px-lg-2">
+             <lord-icon src="https://cdn.lordicon.com/ncdkqnpg.json"
+                        trigger="hover"
+                        delay="2000"
+                        colors="primary:#121331,secondary:#ff9935"></lord-icon>
             More
         </a>
     </li>
@@ -874,6 +874,7 @@ else
     private List<BusinessOfferItem> featuredOffers = new();
     private List<BusinessOfferItem> featuredOfferstop = new();
     private List<BusinessOfferItem> _favoriteOffers = new();
+    private List<EventItem> alleventItems = new();
 
     private ObservableCollection<RedemptionsItem> redemptions = new();
     public ObservableCollection<RedemptionsItem> Redemptions
@@ -893,6 +894,7 @@ else
     private bool isCategoriesLoading;
     private bool isRedemptionsLoading;
     private bool isFeaturedOffersLoading;
+    private bool isEventsLoading;
 
     private bool IsLoading { get; set; }
     private bool IsLoadingMore { get; set; }
@@ -903,6 +905,9 @@ else
     private bool _favLoading;
     private bool _favLoadFailed;
     private string? _favError;
+
+    private bool _eventsLoadFailed;
+    private string? _eventsError;
 
     private bool _initialDataLoaded;
     private bool _isInitializingData;
@@ -1060,6 +1065,7 @@ else
                 GetMainCategoriesAsync(),
                 GetRedemptionsAsync(),
                 GetFeaturedOffersAsync(),
+                getEvents(DateTime.Today),
                 LoadFavoritesAsync()
             );
 
@@ -1333,7 +1339,7 @@ else
                 ? response1.Data.Where(x => x.IsActive).ToList()
                 : new List<BusinessOfferItem>();
 
-           
+
             featuredOfferstop = activeOffers1;
 
             await localCache.SaveItemInCache(HomeFeaturedOffersCacheKey, featuredOffers);
@@ -1350,6 +1356,44 @@ else
             await InvokeAsync(StateHasChanged);
         }
     }
+
+    private async Task getEvents(DateTime dateTime)
+    {
+        _eventsLoadFailed = false;
+        _eventsError = null;
+        isEventsLoading = true;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            var eventRequest = new EventRequest(_user.UserKey.ToString());
+            var result = await apiService.GetEvents(eventRequest);
+
+            if (result.Success)
+            {
+                alleventItems = result.Data.OrderBy(o => o.EventStart).ToList();
+            }
+            else
+            {
+                _eventsLoadFailed = true;
+                _eventsError = result.Message;
+                alleventItems = new List<EventItem>();
+            }
+        }
+        catch (Exception ex)
+        {
+            _eventsLoadFailed = true;
+            _eventsError = ex.Message;
+            alleventItems = new List<EventItem>();
+        }
+        finally
+        {
+            isEventsLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private Task RetryEventsAsync() => getEvents(DateTime.Today);
 
     private async Task GetSubscription()
     {
@@ -1491,6 +1535,17 @@ else
 
         await EnsureJsModuleAsync();
         await _module!.InvokeVoidAsync("showOffcanvas", "#offcanvasRedeem");
+    }
+
+    private async Task HandleEventSelected(EventItem e)
+    {
+        await localCache.SaveItemInCache(StringConstants.SelectedEvent, e);
+        var route = RouteHelper.BuildRoute(nameof(EventDetailPage),
+          new Dictionary<string, string>
+          {
+                { "EventName", $"{e.Name}" }
+          });
+        await Shell.Current.GoToAsync(route);
     }
 
     private async Task AddRemoveFav(BusinessOfferItem offer)

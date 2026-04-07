@@ -1,7 +1,9 @@
 ﻿using System;
+using EnetCNMAUI.Services.Theme;
+
 namespace EnetCNMAUI.ViewModel
 {
-	public class ShellViewModel : BaseViewModel
+	public class ShellViewModel : BaseViewModel, IShellThemeProvider
 	{
         //IApiService apiService;
         string userName;

@@ -1,6 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime
 @using EnetCNMAUI.Domain.Models.MVC
 @using EnetCNMAUI.Models
+@using EnetCNMAUI.Services.Session
 @using EnetCNMAUI.Views
 @using Plugin.Firebase.CloudMessaging
 @inject EmailRegistrationRequestValidator emailValidator
@@ -8,7 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject IThemeManager themeManager
 @inject ILocalCache localCache
-@using EnetCNMAUI.RazorViews.Components 
+@inject IUserSession UserSession
+@using EnetCNMAUI.RazorViews.Components
 
 <div class="d-flex flex-column">
 
@@ -251,7 +253,7 @@
         );
 
         UserSubscriptionPlanKey = Preferences.Get(StringConstants.SelectedPlanKey, "");
-        membershipCode = App.DiscountCode;
+        membershipCode = UserSession.DiscountCode;
 
         PlanItem = await localCache.GetCacheItem<UserSubscriptionPlaneItem>(StringConstants.SelectedPlanKey);
         price = PlanItem.Fee.ToString();
@@ -286,7 +288,7 @@
         try
         {
 
-            SubscriptionTransactionRequest subscriptionTransactionRequest = new SubscriptionTransactionRequest(App.CurrentUser.UserKey.ToString(), UserSubscriptionPlanKey, ecomDetail.CardName, ecomDetail.CardNumber, ecomDetail.CardExpMonth, ecomDetail.CardExpYear, ecomDetail.CardCCCode, ecomDetail.ZipCode, App.DiscountCode);
+            SubscriptionTransactionRequest subscriptionTransactionRequest = new SubscriptionTransactionRequest(UserSession.CurrentUser.UserKey.ToString(), UserSubscriptionPlanKey, ecomDetail.CardName, ecomDetail.CardNumber, ecomDetail.CardExpMonth, ecomDetail.CardExpYear, ecomDetail.CardCCCode, ecomDetail.ZipCode, UserSession.DiscountCode);
             var result = await apiService.UserSubscriptionTransactionDirect(subscriptionTransactionRequest);
             if (result.Success)
             {
@@ -311,12 +313,12 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(UserSession.CurrentUser.UserKey);
             var output = await this.apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
                 var Plandetails = output.Data[0];
-                App.PlanDetails.IsActive = Plandetails.IsActive;
+                UserSession.PlanDetails.IsActive = Plandetails.IsActive;
             }
         }
         catch (Exception ex)
@@ -337,7 +339,7 @@
             if (apiResult.Success)
             {
                 PlanItem = apiResult.Data;
-                App.DiscountCode = discountcode;
+                UserSession.DiscountCode = discountcode;
 
                 price = apiResult.Data.TotalFee.ToString();
                 SetPrice();

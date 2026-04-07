@@ -1,8 +1,10 @@
 ﻿@inject IJSRuntime JSRuntime
 @using EnetCNMAUI.Domain.Models.MVC
+@using EnetCNMAUI.Services.Session
 @using EnetCNMAUI.Views
 @using Plugin.Firebase.CloudMessaging;
 @inject ICNApiService ApiService
+@inject IUserSession UserSession
 
 <div id="app">
   <div class="d-flex flex-column">
@@ -89,12 +91,12 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(UserSession.CurrentUser.UserKey);
             var output = await this.ApiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
                 var Plandetails = output.Data[0];
-                App.PlanDetails.IsActive = Plandetails.IsActive;
+                UserSession.PlanDetails.IsActive = Plandetails.IsActive;
             }
         }
         catch (Exception ex)

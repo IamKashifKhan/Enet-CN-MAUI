@@ -1,11 +1,13 @@
 ﻿@inject IJSRuntime JSRuntime
 @using EnetCNMAUI.Domain.Models.MVC
 @using EnetCNMAUI.Models
+@using EnetCNMAUI.Services.Session
 @using EnetCNMAUI.Views
 @using Plugin.Firebase.CloudMessaging;
 @inject EmailRegistrationRequestValidator emailValidator
 @inject ICNApiService apiService
 @inject ILocalCache localCache
+@inject IUserSession UserSession
 
 <div id="app">
   <div class="d-flex flex-column">
@@ -168,8 +170,8 @@
 
     private async  void OnSchoolChanged(string? school)
     {
-        App.CurrentUser.Referral = school.ToString();
-        var userrequest = new UpdateUserRequest(App.CurrentUser);
+        UserSession.CurrentUser.Referral = school.ToString();
+        var userrequest = new UpdateUserRequest(UserSession.CurrentUser);
         var result = await apiService.UpdateUserBio(userrequest);
         if(result.Success && result.Data != null)
         {
@@ -285,11 +287,11 @@
         try
         {
             ApiResult<string> apiResult = null;
-            apiResult = await this.apiService.UserSubscriptionTransactionOffer(new UserSubscriptionTransactionOfferRequest(App.CurrentUser.UserKey.ToString(), MemberShipCode));
+            apiResult = await this.apiService.UserSubscriptionTransactionOffer(new UserSubscriptionTransactionOfferRequest(UserSession.CurrentUser.UserKey.ToString(), MemberShipCode));
             if (apiResult.Success)
             {
                 await GetSubscription();
-                App.DiscountCode = MemberShipCode;
+                UserSession.DiscountCode = MemberShipCode;
                 WeakReferenceMessenger.Default.Send<UpdatePlaneDetails>();
                 await UpdateReferral();
                 await Shell.Current.GoToAsync(nameof(RegisterSuccessPage));
@@ -353,12 +355,12 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(UserSession.CurrentUser.UserKey);
             var output = await this.apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
                 var Plandetails = output.Data[0];
-                App.PlanDetails.IsActive = Plandetails.IsActive;
+                UserSession.PlanDetails.IsActive = Plandetails.IsActive;
                 await localCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
                 Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
             }

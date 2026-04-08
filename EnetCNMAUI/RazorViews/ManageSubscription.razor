@@ -6,6 +6,8 @@
 @inject EmailRegistrationRequestValidator emailValidator
 @inject ICNApiService apiService
 @inject ILocalCache localCache
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 <div id="app">
     <div class="d-flex flex-column">
@@ -146,7 +148,7 @@
         {
             ApiResult<string>? apiResult =
                 await apiService.UserSubscriptionTransactionOffer(
-                    new UserSubscriptionTransactionOfferRequest(App.CurrentUser.UserKey.ToString(), MemberShipCode));
+                    new UserSubscriptionTransactionOfferRequest(CurrentUserService.CurrentUser.UserKey.ToString(), MemberShipCode));
 
             if (apiResult.Success)
             {
@@ -169,7 +171,7 @@
     {
         try
         {
-            var req = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var req = new UserSubscriptionPlanRequest(CurrentUserService.CurrentUser.UserKey);
             var output = await apiService.AppUsersActiveSubscription(req);
 
             if (output.Success && output.Data is { Count: > 0 })
@@ -197,7 +199,7 @@
 
             bool confirm = await App.Current.MainPage.DisplayAlert("Confirm Deletion", "Are you sure you want to delete your account? This action cannot be undone.", "Yes, Delete", "Cancel");
             if (!confirm) return;   
-            var deletionRequest = new UserDeletionRequest(App.CurrentUser.UserKey);
+            var deletionRequest = new UserDeletionRequest(CurrentUserService.CurrentUser.UserKey);
             var result = await apiService.AppDeleteUserbyID(deletionRequest);
 
             if (result.Success)
@@ -232,6 +234,8 @@
         Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
         await localCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, new AALUser());
         await localCache.ClearAllAsync();
+
+        CurrentUserService.CurrentUser = new AALUser();
 
         await Shell.Current.GoToAsync("//LoginPage");
     }

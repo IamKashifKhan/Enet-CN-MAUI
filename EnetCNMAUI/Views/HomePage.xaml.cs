@@ -1,4 +1,5 @@
-﻿using EnetCNMAUI.Helpers;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using EnetCNMAUI.Helpers;
 using EnetCNMAUI.Views.Base;
 using Plugin.Firebase.CloudMessaging;
 
@@ -19,8 +20,9 @@ public partial class HomePage : BasePage
 
     protected override async void OnAppearing()
     {
-        // var token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();  
+        // var token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();
 
         base.OnAppearing();
+        WeakReferenceMessenger.Default.Send<UserLoggedIn>();
     }
 }

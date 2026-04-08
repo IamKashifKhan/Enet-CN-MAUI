@@ -8,7 +8,9 @@
 @inject IJSRuntime JSRuntime
 @inject IThemeManager themeManager
 @inject ILocalCache localCache
-@using EnetCNMAUI.RazorViews.Components 
+@using EnetCNMAUI.RazorViews.Components
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 <div class="d-flex flex-column">
 
@@ -286,7 +288,7 @@
         try
         {
 
-            SubscriptionTransactionRequest subscriptionTransactionRequest = new SubscriptionTransactionRequest(App.CurrentUser.UserKey.ToString(), UserSubscriptionPlanKey, ecomDetail.CardName, ecomDetail.CardNumber, ecomDetail.CardExpMonth, ecomDetail.CardExpYear, ecomDetail.CardCCCode, ecomDetail.ZipCode, App.DiscountCode);
+            SubscriptionTransactionRequest subscriptionTransactionRequest = new SubscriptionTransactionRequest(CurrentUserService.CurrentUser.UserKey.ToString(), UserSubscriptionPlanKey, ecomDetail.CardName, ecomDetail.CardNumber, ecomDetail.CardExpMonth, ecomDetail.CardExpYear, ecomDetail.CardCCCode, ecomDetail.ZipCode, App.DiscountCode);
             var result = await apiService.UserSubscriptionTransactionDirect(subscriptionTransactionRequest);
             if (result.Success)
             {
@@ -311,7 +313,7 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(CurrentUserService.CurrentUser.UserKey);
             var output = await this.apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {

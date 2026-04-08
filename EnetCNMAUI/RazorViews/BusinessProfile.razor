@@ -8,6 +8,8 @@
 @inject IJSRuntime jSRuntime
 @inject IOfferService offerFavoriteService
 @inject IMapConfig MapConfig
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
      <div class="d-flex flex-column">
 
@@ -302,8 +304,8 @@
     {
         try
         {
-            var user = App.CurrentUser;
-            var request = new BusinessDetailoffersRequest(App.CurrentUser.UserKey, BusinessKey);
+            var user = CurrentUserService.CurrentUser;
+            var request = new BusinessDetailoffersRequest(CurrentUserService.CurrentUser.UserKey, BusinessKey);
             var offersapiresut = await apiService.GetAppBusinessOffers(request);
             var businessdetailsresult = await apiService.GetAppBusinessDetail(request);
             var sociallinksresult = await apiService.GetBusinessSocial(request);
@@ -392,7 +394,7 @@
     {
         try
         {
-            var result = await offerFavoriteService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, App.CurrentUser.UserKey);
+            var result = await offerFavoriteService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, CurrentUserService.CurrentUser.UserKey);
             offer.isFavorite = result.Data;
             WeakReferenceMessenger.Default.Send<RefreshFavorites>();
             StateHasChanged();
@@ -408,7 +410,7 @@
 
     private async void ValidateCode()
     {
-        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
+        var redeedmOfferRequest = new RedeemOfferRequest(CurrentUserService.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
         var output = await apiService.RedeemOffer(redeedmOfferRequest);
         if (output.Success)
         {

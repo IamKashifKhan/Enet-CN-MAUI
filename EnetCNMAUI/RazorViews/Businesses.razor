@@ -8,6 +8,8 @@
 @inject IJSRuntime jSRuntime
 @inject IOfferService offerService
 @using EnetCNMAUI.Services.Local
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 <div class="d-flex flex-column business-page-new">
 
@@ -623,7 +625,7 @@
         try
         {
             var request = new OffersFeaturedByCategoryRequest(
-                App.CurrentUser.UserKey.ToString(),
+                CurrentUserService.CurrentUser.UserKey.ToString(),
                 categoryKey,
                 count);
 
@@ -671,7 +673,7 @@
         try
         {
             var request = new OffersSearchRequest(
-                App.CurrentUser.UserKey.ToString(),
+                CurrentUserService.CurrentUser.UserKey.ToString(),
                 categoryKey,
                 count);
 
@@ -895,7 +897,7 @@
             return;
 
         var redeedmOfferRequest = new RedeemOfferRequest(
-            App.CurrentUser.UserKey.ToString(),
+            CurrentUserService.CurrentUser.UserKey.ToString(),
             SelectedOffer.BusinessOffersKey.ToString(),
             Code);
 
@@ -918,7 +920,7 @@
 
         try
         {
-            var response = await offerService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, App.CurrentUser.UserKey);
+            var response = await offerService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, CurrentUserService.CurrentUser.UserKey);
 
             if (response.Success)
             {

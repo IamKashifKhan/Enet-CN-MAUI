@@ -19,4 +19,5 @@ namespace EnetCNMAUI
     public class RefreshFavorites { }
     public class UpdateAppThemeEvent { }
     public class UpdatePlaneDetails { }
+    public class UserLoggedIn { }
 }

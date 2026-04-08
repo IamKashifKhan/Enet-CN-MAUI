@@ -3,6 +3,8 @@
 @using EnetCNMAUI.Views
 @using Plugin.Firebase.CloudMessaging;
 @inject ICNApiService ApiService
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 <div id="app">
   <div class="d-flex flex-column">
@@ -89,7 +91,7 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(CurrentUserService.CurrentUser.UserKey);
             var output = await this.ApiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {

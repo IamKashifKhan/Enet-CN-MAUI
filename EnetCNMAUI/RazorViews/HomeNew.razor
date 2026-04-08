@@ -7,6 +7,8 @@
 @inject IOfferService offerService
 @inject ILocationService locationService
 @inject IMapConfig MapConfig
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 @using EnetCNMAUI.ApiService.Requests.MVC
 @using EnetCNMAUI.Domain.Models.MVC
@@ -978,8 +980,8 @@ else
             Longitude = StartLng
         };
 
-        App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser) ?? new AALUser();
-        _user = App.CurrentUser ?? new AALUser();
+        CurrentUserService.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser) ?? new AALUser();
+        _user = CurrentUserService.CurrentUser ?? new AALUser();
 
         planDetails = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails) ?? new PlanDetails();
         RecentSearches = await localCache.GetCacheItem<List<string>>(LocalCacheKeys.SearchHistory) ?? new List<string>();
@@ -989,12 +991,32 @@ else
 
         WeakReferenceMessenger.Default.Register<RefreshFavorites>(this, async (_, _) => await LoadFavoritesAsync());
         WeakReferenceMessenger.Default.Register<UpdatePlaneDetails>(this, async (_, _) => await GetSubscription());
+        WeakReferenceMessenger.Default.Register<UserLoggedIn>(this, async (_, _) => await ReloadAfterLoginAsync());
 
         if (_user?.UserKey > 0)
         {
             await GetSubscription();
             await GetSavingsAsync();
         }
+    }
+
+    private async Task ReloadAfterLoginAsync()
+    {
+        CurrentUserService.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser) ?? new AALUser();
+        _user = CurrentUserService.CurrentUser ?? new AALUser();
+        planDetails = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails) ?? new PlanDetails();
+
+        _initialDataLoaded = false;
+        _isInitializingData = false;
+
+        if (_user?.UserKey > 0)
+        {
+            await GetSubscription();
+            await GetSavingsAsync();
+        }
+
+        await InitializeHomeDataAsync();
+        await InvokeAsync(StateHasChanged);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -1646,6 +1668,10 @@ else
         Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
         await localCache.SaveItemInCache(StringConstants.CurrentUser, new AALUser());
         await localCache.ClearAllAsync();
+
+        CurrentUserService.CurrentUser = new AALUser();
+        _user = new AALUser();
+        planDetails = new PlanDetails();
 
         await Shell.Current.GoToAsync("//LoginPage");
     }

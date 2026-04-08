@@ -13,6 +13,8 @@
 @inject IMapper mapper;
 @inject IFirstPaintNotifier FirstPaintNotifier
 @inject IMapConfig MapConfig
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 
  
@@ -747,7 +749,7 @@
         {
 
 
-            var eventRequest = new EventRequest(App.CurrentUser.UserKey.ToString());
+            var eventRequest = new EventRequest(CurrentUserService.CurrentUser.UserKey.ToString());
             var result = await apiService.GetEvents(eventRequest);
 
             if (result.Success)
@@ -860,7 +862,7 @@
 
         try
         {
-            var req = new OffersFavoriteRequest(App.CurrentUser.UserKey.ToString());
+            var req = new OffersFavoriteRequest(CurrentUserService.CurrentUser.UserKey.ToString());
             var result = await apiService.GetFavoriteOffers(req);
 
             if (result.Success)
@@ -915,7 +917,7 @@
 
     private async void ValidateCode()
     {
-        var redeedmOfferRequest = new RedeemOfferRequest(App.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
+        var redeedmOfferRequest = new RedeemOfferRequest(CurrentUserService.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
         var output = await apiService.RedeemOffer(redeedmOfferRequest);
         if (output.Success)
         {
@@ -961,7 +963,7 @@
             // ✅ Fix: use (lat, lng), not (lat, lat)
             await LockCircleAt(App.MyPosition.Latitude, App.MyPosition.Longitude);
 
-            var offerMapRequest = new OfferMapRequest(lat, lng, radius, App.CurrentUser.UserKey.ToString());
+            var offerMapRequest = new OfferMapRequest(lat, lng, radius, CurrentUserService.CurrentUser.UserKey.ToString());
             var output = await apiService.GetMapOffers(offerMapRequest);
 
             if (output.Success)
@@ -1202,7 +1204,7 @@
     {
         try
         {
-            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(App.CurrentUser.UserKey);
+            var userSubscriptionPlanRequest = new UserSubscriptionPlanRequest(CurrentUserService.CurrentUser.UserKey);
             var output = await apiService.AppUsersActiveSubscription(userSubscriptionPlanRequest);
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
@@ -1299,9 +1301,9 @@
          planDetails =  await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
          await GetCurrentLocation();
 
-        App.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
+        CurrentUserService.CurrentUser = await localCache.GetCacheItem<AALUser>(StringConstants.CurrentUser);
 
-        _user = App.CurrentUser;
+        _user = CurrentUserService.CurrentUser;
 
         AppVersionAndCopyrightText =
             string.Format("App version: {0}({1}) | © {2} All About Local",
@@ -1381,12 +1383,12 @@
 
     private async Task logOut()
     {
-        // Simulate an exception that can be caught
-
         Preferences.Default.Set(StringConstants.IsUserLoggedIn, false);
         await localCache.SaveItemInCache<AALUser>(StringConstants.CurrentUser, new AALUser());
         await localCache.ClearAllAsync();
- 
+
+        CurrentUserService.CurrentUser = new AALUser();
+
         await Shell.Current.GoToAsync("//LoginPage");
     }
 

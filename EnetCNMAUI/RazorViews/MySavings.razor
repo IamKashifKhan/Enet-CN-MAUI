@@ -1,5 +1,7 @@
 ﻿@using System.Collections.ObjectModel
 @inject ICNApiService Apiservice
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
 
 <div id="app">
     <div class="d-flex flex-column">
@@ -169,7 +171,7 @@
             if (!append) IsLoading = true; else IsLoadingMore = true;
             IsSummaryLoading = !append && Page == 1;
 
-             var redemptionRequest = new GetUserRedemptionRequest(App.CurrentUser.UserKey);
+             var redemptionRequest = new GetUserRedemptionRequest(CurrentUserService.CurrentUser.UserKey);
     
 
             var redemptionsResp = await Apiservice.GetUserRedemptions(redemptionRequest);

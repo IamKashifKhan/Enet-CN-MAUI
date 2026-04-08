@@ -10,7 +10,7 @@ namespace EnetCNMAUI
         public static readonly SessionManager _sessionManager = new SessionManager();
         public static SessionManager SessionManager => _sessionManager;
         public static List<object> DarkThemeRecipients = [];
-        public static AALUser CurrentUser = new AALUser();
+
         public static PlanDetails PlanDetails = new PlanDetails();
         public static string DiscountCode = "";
         public static Location MyPosition { get; set; }

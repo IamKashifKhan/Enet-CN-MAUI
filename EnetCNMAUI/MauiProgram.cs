@@ -165,6 +165,8 @@ namespace EnetCNMAUI
 
             services.AddSingleton<IMapConfig, MapConfig>();
 
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
             return services;
         }
     }

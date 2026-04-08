@@ -96,7 +96,7 @@
             if (output.Success && output.Data != null && output.Data.Count > 0)
             {
                 var Plandetails = output.Data[0];
-                App.PlanDetails.IsActive = Plandetails.IsActive;
+                CurrentUserService.PlanDetails.IsActive = Plandetails.IsActive;
             }
         }
         catch (Exception ex)

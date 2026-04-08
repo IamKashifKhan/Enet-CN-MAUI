@@ -1536,7 +1536,8 @@ else
     {
         if (categoryItem.Category_Sub_Key == CategoryConstants.CategorySubKeyPerks)
         {
-            await Launcher.Default.OpenAsync("https://allaboutlocal.benefithub.com/");
+           // await Launcher.Default.OpenAsync("https://allaboutlocal.benefithub.com/");
+            await Shell.Current.GoToAsync(nameof(PerksPage));
             return;
         }
 

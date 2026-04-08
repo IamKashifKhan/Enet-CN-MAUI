@@ -1,0 +1,47 @@
+@using EnetCNMAUI.Services
+@inject ICurrentUserService CurrentUserService
+@inject IJSRuntime JSRuntime
+
+<div class="d-flex flex-column">
+
+    <!-- Title/Heading Header -->
+    <div class="container inner-header mt-3 bg-white sticky-sm-top-only">
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center pb-3">
+                <h4 class="mb-0 fw-semibold text-truncate">
+                    <a @onclick="GoBack" class="back-link" style="cursor:pointer;">
+                        <span class="back-arrow me-3"><i class="fa-solid fa-angle-left"></i></span>
+                    </a> PERKS
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="container border-top pt-3">
+        <div class="row">
+
+            <p class="mt-4">Your All About Local Membership entitles you to 100's of discounts on theme parks, zoos, aquariums, activities, entertainment, sporting events, travel, and so much more.</p>
+            <p>You can also earn and receive cash back on certain items! Short on cash, Pay Over Time is also available. It is all just a click away!</p>
+            <ol class="mb-2 ps-5">
+                <li class="pb-2">Sign up with your email, and set up a password (a one time login).</li>
+                <li class="pb-2">Use Referral Code: <span class="font-monospace text-red fw-bold fs-5" style="letter-spacing:1px;">YUJSEQ</span>.</li>
+            </ol>
+            <strong>Enjoy your All About Local membership!</strong>
+            <a href="//allaboutlocal.benefithub.com/" class="btn btn-primary w-auto mt-4" target="_blank">Get PERKS!</a>
+
+        </div>
+    </div>
+
+    <div class="mt-5 pt-1 d-block d-lg-none"></div>
+
+</div>
+
+@code {
+
+    public async void GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+
+}

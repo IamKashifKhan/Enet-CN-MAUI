@@ -177,7 +177,7 @@
             if (output.Success && output.Data is { Count: > 0 })
             {
                 PlanDetails = output.Data[0];
-                App.PlanDetails.IsActive = PlanDetails.IsActive;
+                CurrentUserService.PlanDetails.IsActive = PlanDetails.IsActive;
                 await localCache.SaveItemInCache<PlanDetails>(LocalCacheKeys.PlanDetails, output.Data[0]);
                 Preferences.Default.Set(StringConstants.IsPlanActive, output.Data[0].IsActive);
             }

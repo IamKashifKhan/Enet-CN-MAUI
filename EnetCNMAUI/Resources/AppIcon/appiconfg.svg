@@ -1,0 +1,38 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>Layer 1</title>
+  <g>
+   <g>
+    <g enable-background="new    " id="svg_8">
+     <g id="svg_9">
+      <g>
+       <path d="m162.98068,202.85c-36.2,41.2 -8.2,85.7 -8.2,85.7l49.4,49.4l-49.4,49.4c-32.9,32.9 8.2,88.9 8.2,88.9l135.1,-138.4l-135.1,-135z" fill="#282560"/>
+      </g>
+     </g>
+    </g>
+    <g enable-background="new    " id="svg_6">
+     <g id="svg_7">
+      <g>
+       <path d="m442.98068,344.45l-59.3,-59.3l59.3,-59.3c0,0 32.9,-52.7 -11.5,-102.1l-159.8,161.4l159.8,168c0,0 51,-67.5 11.5,-108.7z" fill="#FAAF42"/>
+      </g>
+     </g>
+    </g>
+    <g enable-background="new    " id="svg_4">
+     <g id="svg_5">
+      <g>
+       <ellipse ry="31.3" rx="31.3" cy="215.95" cx="243.68068" fill="#282560"/>
+      </g>
+     </g>
+    </g>
+    <g enable-background="new    " id="svg_2">
+     <g id="svg_3">
+      <g>
+       <ellipse ry="37.9" rx="37.9" cy="163.25" cx="316.18068" fill="#FAAF42"/>
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

@@ -3,69 +3,62 @@
 @using EnetCNMAUI.Services
 @inject ICurrentUserService CurrentUserService
 
-<div id="app">
-    <div class="d-flex flex-column">
+<div class="d-flex flex-column">
 
-        <!-- Header (kept as-is; wired up where useful) -->
-        <header class="nofoot fixed-top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between shadow py-lg-1">
-            <div class="container d-flex flex-row justify-content-between">
-                <a @onclick="() => GoBack()" href="index.html" class="logo d-none d-lg-block mb-2 mb-lg-0">
-                    <img src="img/logo-dark.svg" onerror="this.src='img/logo-dark.png'" alt="All About Local" />
-                </a>
-
-              
+    <!-- Title/Heading Header -->
+    <div class="container inner-header mt-3 bg-white sticky-sm-top-only">
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center pb-3">
+                <h4 class="mb-0 fw-semibold text-truncate">
+                    <a @onclick="GoBack" class="back-link" style="cursor:pointer;">
+                        <span class="back-arrow me-3"><i class="fa-solid fa-angle-left"></i></span>
+                    </a> my saving
+                </h4>
             </div>
+        </div>
+    </div>
 
-            <!-- Mobile top (kept) -->
-            <div id="mob_top" class="d-flex d-lg-none flex-row flex-nowrap justify-content-between align-items-center text-light lh-1 w-100 shadow">
-                <div class="mob_top-left visible"> <a @onclick="() => GoBack()"  href="business-list.html" class="d-flex fs-5 link-light ms-1 me-1 me-sm-3 p-2"> <i class="bi bi-chevron-left"></i> </a> </div>
-                <div class="mob_top-head visible"> <div class="fs-5 text-truncate lh-lg">My Savings</div> </div>
-                <div class="mob_top-right visible">
-                    <div class="d-flex">
-                        
-                    </div>
+    <!-- Summary + List -->
+    <div class="container border-top pt-3">
+        <div class="row">
+
+            <!-- Summary Row -->
+            <div class="d-flex flex-wrap mb-4">
+                <h6 class="w-100 text-center text-body-emphasis fs-6">
+                    Savings since @DefaultStartDate.ToString("MM/dd/yyyy")
+                </h6>
+
+                <div class="w-50 text-center fs-12 lh-sm border-end">
+                    Saving Amount <br />
+                    @if (IsSummaryLoading)
+                    {
+                        <span class="text-muted">loading...</span>
+                    }
+                    else
+                    {
+                        <h3 class="text-success fs-24 fw-bold">
+                            @FormatCurrency(RedemptionSummary?.RedemptionDiscountsTotal ?? 0m)
+                        </h3>
+                    }
+                </div>
+
+                <div class="w-50 text-center fs-12 lh-sm">
+                    Redemptions <br />
+                    @if (IsSummaryLoading)
+                    {
+                        <span class="text-muted">loading...</span>
+                    }
+                    else
+                    {
+                        <h3 class="text-success fs-24 fw-bold">@((RedemptionSummary?.Redemptions ?? 0))</h3>
+                    }
                 </div>
             </div>
-        </header>
 
-        <!-- Main -->
-        <main class="flex-shrink-0 py-0 mt-5 pt-5">
-            <div class="container">
-                <div class="row">
+            <!-- Redemption Cards -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="offersWrap">
 
-                    <div class="d-flex flex-wrap mb-4">
-                        <h6 class="w-100 text-center text-body-emphasis fs-6">
-                            Savings since 08/25/2021
-                        </h6>
-
-                        <div class="w-50 text-center fs-12 lh-sm border-end">
-                            Saving Amount <br />
-                            @if (IsSummaryLoading)
-                            {
-                                <span class="text-muted">loading…</span>
-                            }
-                            else
-                            {
-                                <span class="text-success fs-24 fw-bold">
-                                    @FormatCurrency(RedemptionSummary?.RedemptionDiscountsTotal ?? 0m)
-                                </span>
-                            }
-                        </div>
-
-                        <div class="w-50 text-center fs-12 lh-sm">
-                            Redemptions <br />
-                            @if (IsSummaryLoading)
-                            {
-                                <span class="text-muted">loading…</span>
-                            }
-                            else
-                            {
-                                <span class="text-success fs-24 fw-bold">@((RedemptionSummary?.Redemptions ?? 0))</span>
-                            }
-                        </div>
-                    </div>
-
-                    <!-- List -->
                     @if (!string.IsNullOrWhiteSpace(Error))
                     {
                         <div class="alert alert-danger" role="alert">
@@ -74,7 +67,7 @@
                     }
                     else if (IsLoading && Redemptions.Count == 0)
                     {
-                        <div class="text-center text-muted my-4">Loading your savings…</div>
+                        <div class="text-center text-muted my-4">Loading your savings...</div>
                     }
                     else if (Redemptions.Count == 0)
                     {
@@ -82,32 +75,30 @@
                     }
                     else
                     {
-                        <ul class="card-group my-savings">
-                            @foreach (var r in Redemptions)
-                            {
-                                <li class="card">
-                                    <div>
-                                        <h6 class="card-title text-truncate">@r.Heading</h6>
-                                        <p class="card-disc text-truncate mb-0">@r.Description</p>
-
-                                        <div class="bus-title">
-                                            @if (!string.IsNullOrWhiteSpace(r.ImagePath))
-                                            {
-                                                <img src="@r.ImagePath" alt="" />
-                                            }
-                                            <h6 class="bus-label">@r.BusinessName</h6>
-                                        </div>
+                        @foreach (var r in Redemptions)
+                        {
+                            <div class="card border-0 shadow-sm py-1">
+                                <div class="card-img rounded-4" style="background-image: url('@(r.ImagePath ?? "img/pic-saving.jpg")');"></div>
+                                <div class="card-body">
+                                    <div class="bus-title">
+                                        @if (!string.IsNullOrWhiteSpace(r.ImagePath))
+                                        {
+                                            <img src="@r.ImagePath" alt="" />
+                                        }
+                                        <p class="bus-label small mt-2">@r.BusinessName</p>
                                     </div>
-
-                                    <div class="card-img" style="background-image: url('@(r.ImagePath ?? "img/pic-saving.jpg")');"></div>
-
-                                    <div class="card-redeem">
-                                        <span title="Saved">Savings @FormatCurrency(r.Discount)</span>
-                                        <span title="Date">Used on @r.RedemptionTimestamp.ToString("MM/dd/yyyy")</span>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="fw-semibold mb-0">@r.Heading</h6>
                                     </div>
-                                </li>
-                            }
-                        </ul>
+                                    <p class="card-disc text-truncate mb-0 small pb-3">@r.Description</p>
+
+                                    <div class="d-flex gap-3 offers-icons border-top pt-2">
+                                        <small><span class="view_num">Used on @r.RedemptionTimestamp.ToString("MM/dd/yyyy")</span></small>
+                                        <p class="px-3 ms-auto text-red fs-6">Savings @FormatCurrency(r.Discount)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
                         @if (HasMore)
                         {
@@ -115,17 +106,20 @@
                                     disabled="@IsLoadingMore"
                                     @onclick="LoadMoreAsync"
                                     type="button">
-                                @(IsLoadingMore ? "Loading…" : "Load More Savings")
-                                <i class="bi bi-chevron-up"></i>
+                                @(IsLoadingMore ? "Loading..." : "Load More Savings")
+                                <i class="fa-solid fa-chevron-down"></i>
                             </button>
                         }
                     }
 
                 </div>
             </div>
-        </main>
 
+        </div>
     </div>
+
+    <div class="mt-5 pt-1 d-block d-lg-none"></div>
+
 </div>
 
 @code {

@@ -55,7 +55,7 @@ namespace EnetCNMAUI.Services.Theme
                // await jSRuntime.InvokeVoidAsync("setAppTheme", appTheme.ToString().ToLower());
 
           //UpdateNavBar(appTheme);
-          //UpdateNavAndStatusBarTheme();
+            UpdateNavAndStatusBarTheme();
             WeakReferenceMessenger.Default.Send<UpdateAppThemeEvent>();
         }
         public AppTheme GetSelectedTheme()
@@ -101,16 +101,37 @@ namespace EnetCNMAUI.Services.Theme
 
             UpdateNavAndStatusBarTheme();
         }
-        private void UpdateNavAndStatusBarTheme()
+        public void UpdateNavAndStatusBarTheme()
         {
-            var isLight = GetSelectedTheme() == AppTheme.Light;
-
+ 
 #if ANDROID
-            var navColor = isLight ? Android.Graphics.Color.White : Android.Graphics.Color.Black;
-            var statusColor = Android.Graphics.Color.ParseColor(isLight ? "#1D2C4C" : "#1F1D2B");
-            var window = Platform.CurrentActivity.Window;
-            window?.SetNavigationBarColor(navColor);  // Dark color for navigation bar
-            window?.SetStatusBarColor(statusColor); // Dark color for status bar
+            var activity = Platform.CurrentActivity;
+            if (activity?.Window == null)
+                return;
+
+            var isLight = Application.Current?.UserAppTheme == AppTheme.Light;
+
+            var navColor = isLight
+                ? global::Android.Graphics.Color.White
+                : global::Android.Graphics.Color.Black;
+            var statusColor = isLight
+                ? global::Android.Graphics.Color.White
+                : global::Android.Graphics.Color.ParseColor("#AAAAAA");
+            var window = activity.Window;
+            window.SetNavigationBarColor(navColor);
+            window.SetStatusBarColor(statusColor);
+#endif
+
+#if IOS
+            try
+            {
+                var isLight = Application.Current?.UserAppTheme == AppTheme.Light;
+                UIKit.UIApplication.SharedApplication.SetStatusBarStyle(isLight ? UIKit.UIStatusBarStyle.Default : UIKit.UIStatusBarStyle.LightContent, false);
+            }
+            catch (Exception ex)
+            {
+
+            }
 #endif
         }
     }

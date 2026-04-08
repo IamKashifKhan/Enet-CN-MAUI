@@ -14,5 +14,6 @@ namespace EnetCNMAUI.Services.Theme
         public void UpdateAppTheme(AppTheme appTheme);
         public AppTheme GetSelectedTheme();
         public void UpdateWelcomePageTheme();
+        public void UpdateNavAndStatusBarTheme();
     }
 }

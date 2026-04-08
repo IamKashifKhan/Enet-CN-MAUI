@@ -71,8 +71,10 @@
     </PropertyGroup>
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#000000" />
-
+        <!--<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#000000" />
+        <MauiIcon Include="Resources\AppIcon\appiconbg.svg" />
+        <MauiIcon Include="Resources\AppIcon\appiconfg.svg" />-->
+        <MauiIcon Include="Resources\AppIcon\appiconbg.svg" ForegroundFile="Resources\AppIcon\appicon.svg" />
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#ffffff" BaseSize="200,200" />
 
@@ -139,6 +141,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Resources\AppIcon\appiconbg.svg" />
       <None Remove="ViewModel\" />
       <None Remove="Services\" />
       <None Remove="Services\Session\" />

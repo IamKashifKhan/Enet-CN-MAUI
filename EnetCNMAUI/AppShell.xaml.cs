@@ -50,6 +50,8 @@ public partial class AppShell : Shell
     typeof(EventDetailPage));
         Routing.RegisterRoute(nameof(ManageSubscriptionPage),
         typeof(ManageSubscriptionPage));
+        Routing.RegisterRoute(nameof(PerksPage),
+        typeof(PerksPage));
 
     }
 

@@ -320,7 +320,7 @@
 
             foreach (var item in BusinessOffers)
             {
-                item.IsActivePlan = !App.PlanDetails.IsActive;
+                item.IsActivePlan = !CurrentUserService.PlanDetails.IsActive;
                 item.ShowRedemptionLabel = item.BusinessCategory.Any(x => x.SubCategoryKey == 22 || x.SubCategoryKey == 23 || x.SubCategoryKey == 7);
             }
 

@@ -203,16 +203,16 @@ export function initBusinessAccordion() {
 }
 
 export function initHeartAnimation() {
-    $(document).off('click', '.heart');
-    $(document).on('click', '.heart', function () {
-        $(this).toggleClass('active');
+    //$(document).off('click', '.heart');
+    //$(document).on('click', '.heart', function () {
+    //    $(this).toggleClass('active');
 
-        if ($(this).hasClass('active')) {
-            $(this).html('<i class="fa-solid fa-heart"></i>');
-        } else {
-            $(this).html('<i class="fa-regular fa-heart"></i>');
-        }
-    });
+    //    if ($(this).hasClass('active')) {
+    //        $(this).html('<i class="fa-solid fa-heart"></i>');
+    //    } else {
+    //        $(this).html('<i class="fa-regular fa-heart"></i>');
+    //    }
+    //});
 }
 
 export function showOffcanvas(selector) {

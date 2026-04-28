@@ -74,7 +74,7 @@
         <!--<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#000000" />
         <MauiIcon Include="Resources\AppIcon\appiconbg.svg" />
         <MauiIcon Include="Resources\AppIcon\appiconfg.svg" />-->
-        <MauiIcon Include="Resources\AppIcon\appiconbg.svg" ForegroundFile="Resources\AppIcon\appicon.svg" />
+        <MauiIcon Include="Resources\AppIcon\appiconbg.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" />
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#ffffff" BaseSize="200,200" />
 
@@ -179,7 +179,7 @@
         <GoogleServicesJson Include="google-services.json" />
     </ItemGroup>
       <ItemGroup>
-        <Content Include="RazorViews\BusinessProfile.razor.js" />
+         <Content Include="RazorViews\BusinessProfile.razor.js" />
         <Content Include="RazorViews\Cards\MapOfferCard.razor.js" />
         <Content Include="RazorViews\Ecommerce.razor.js" />
       </ItemGroup>

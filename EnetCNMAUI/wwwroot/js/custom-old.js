@@ -64,16 +64,16 @@ $(document).on('click','.heart',function(){
 });
 
 
-/* Heart Animation */
-$(document).on('click', '.heart', function () {
-  $(this).toggleClass('active');
+///* Heart Animation */
+//$(document).on('click', '.heart', function () {
+//  $(this).toggleClass('active');
 
-  if ($(this).hasClass('active')) {
-    $(this).html('<i class="fa-solid fa-heart"></i>');
-  } else {
-    $(this).html('<i class="fa-regular fa-heart"></i>');
-  }
-});
+//  if ($(this).hasClass('active')) {
+//    $(this).html('<i class="fa-solid fa-heart"></i>');
+//  } else {
+//    $(this).html('<i class="fa-regular fa-heart"></i>');
+//  }
+//});
 	
 	
 

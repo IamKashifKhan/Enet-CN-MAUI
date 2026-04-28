@@ -1,38 +1,77 @@
-<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
-
-  <g>
-    <title>Layer 1</title>
-    <g>
-      <g>
-        <g enable-background="new    " id="svg_8">
-          <g id="svg_9">
-            <g>
-              <path d="m162.98068,202.85c-36.2,41.2 -8.2,85.7 -8.2,85.7l49.4,49.4l-49.4,49.4c-32.9,32.9 8.2,88.9 8.2,88.9l135.1,-138.4l-135.1,-135z" fill="#282560"/>
-            </g>
-          </g>
-        </g>
-        <g enable-background="new    " id="svg_6">
-          <g id="svg_7">
-            <g>
-              <path d="m442.98068,344.45l-59.3,-59.3l59.3,-59.3c0,0 32.9,-52.7 -11.5,-102.1l-159.8,161.4l159.8,168c0,0 51,-67.5 11.5,-108.7z" fill="#FAAF42"/>
-            </g>
-          </g>
-        </g>
-        <g enable-background="new    " id="svg_4">
-          <g id="svg_5">
-            <g>
-              <ellipse ry="31.3" rx="31.3" cy="215.95" cx="243.68068" fill="#282560"/>
-            </g>
-          </g>
-        </g>
-        <g enable-background="new    " id="svg_2">
-          <g id="svg_3">
-            <g>
-              <ellipse ry="37.9" rx="37.9" cy="163.25" cx="316.18068" fill="#FAAF42"/>
-            </g>
-          </g>
-        </g>
-      </g>
-    </g>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 245.8 245.8" enable-background="new 0 0 245.8 245.8" xml:space="preserve">
+<g id="Layer_2">
+	<g id="Shape_2">
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="257.6459" y1="142.7466" x2="-2.4094" y2="138.2074">
+			<stop  offset="0.107" style="stop-color:#FFFFFF;stop-opacity:0"/>
+			<stop  offset="0.8128" style="stop-color:#000000"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_1_)" points="187.8,37.9 138.2,103.1 182.3,157.9 183.4,193 233.7,245.9 245.8,245.9 245.8,107.7 		"/>
+	</g>
+</g>
+<g id="Layer_5">
+	<g id="Shape_1_2_">
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="173.1688" y1="287.9647" x2="5.3116" y2="-2.7725">
+			<stop  offset="0.2139" style="stop-color:#FFFFFF;stop-opacity:0"/>
+			<stop  offset="0.8182" style="stop-color:#000000"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_2_)" points="119.4,138.8 55.6,208.3 94.3,245.9 220.4,245.9 		"/>
+	</g>
+</g>
+<g id="Layer_4">
+	<g id="Shape_3">
+		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="136.8601" y1="118.6858" x2="92.6616" y2="81.5989">
+			<stop  offset="9.090909e-002" style="stop-color:#FFFFFF;stop-opacity:0"/>
+			<stop  offset="1" style="stop-color:#000000;stop-opacity:0.1"/>
+		</linearGradient>
+		<polygon fill-rule="evenodd" clip-rule="evenodd" fill="url(#SVGID_3_)" points="105.3,70.8 83.8,92.2 121.9,127.6 144.5,109.6 		
+			"/>
+	</g>
+</g>
+<g id="Layer_3">
+	<g id="Shape_4">
+		<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="171.4172" y1="92.6102" x2="127.7315" y2="55.9536">
+			<stop  offset="9.090909e-002" style="stop-color:#FFFFFF;stop-opacity:0"/>
+			<stop  offset="1" style="stop-color:#000000;stop-opacity:0.2"/>
+		</linearGradient>
+		<polygon fill-rule="evenodd" clip-rule="evenodd" fill="url(#SVGID_4_)" points="143.7,43.4 117,68.8 151.9,102.2 180.2,82.2 		
+			"/>
+	</g>
+</g>
+<g id="Layer_7">
+	<g>
+		<g id="Shape_1_copy_1_" enable-background="new    ">
+			<g id="Shape_1_copy">
+				<g>
+					<path fill="#282560" d="M55.6,75.7c-17.8,20-4,41.5-4,41.5l24.3,24l-24.3,24c-16.2,16,4,43.1,4,43.1l66.3-67.1L55.6,75.7z"/>
+				</g>
+			</g>
+		</g>
+		<g id="Shape_1_1_" enable-background="new    ">
+			<g id="Shape_1">
+				<g>
+					<path fill="#F9AE41" d="M193.1,144.5L164,115.7l29.1-28.8c0,0,16.2-25.6-5.7-49.5L109,115.7l78.4,81.5
+						C187.4,197.2,212.5,164.4,193.1,144.5z"/>
+				</g>
+			</g>
+		</g>
+		<g id="Ellipse_1_copy_1_" enable-background="new    ">
+			<g id="Ellipse_1_copy">
+				<g>
+					<ellipse fill="#282560" cx="95.3" cy="82.1" rx="15.4" ry="15.2"/>
+				</g>
+			</g>
+		</g>
+		<g id="Ellipse_1_1_" enable-background="new    ">
+			<g id="Ellipse_1">
+				<g>
+					<ellipse fill="#F9AE41" cx="130.8" cy="56.6" rx="18.6" ry="18.4"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</g>
 </svg>

@@ -23,20 +23,27 @@
 
 @if (selectedTab == NavTab.Home)
 {
-    <header class="header bg-white sticky-top">
-        <div class="container d-flex justify-content-end top-links gap-3 mt-2 d-xs-none d-sm-none d-md-none d-lg-flex">
+    <header class="header bg-white border-bottom sticky-top">
+        <div class="container d-none d-lg-flex justify-content-end gap-3 top-links">
             <a href="#" class="hover-underline-animation left">Events</a>
             <a href="#" class="hover-underline-animation left">Favorites</a>
             <a href="#" class="hover-underline-animation left">Map</a>
             <a href="#" class="hover-underline-animation left">Login / Signup</a>
         </div>
 
-        <div class="container d-flex justify-content-between align-items-center border-bottom pt-3 pb-3 pt-md-3 pt-lg-1">
-            <a href="index.html" class="logo d-xs-none d-sm-none d-md-none d-lg-block">
-                <img src="images/logo-connect-local.svg" alt="" />
+        <div class="container d-flex justify-content-start align-items-center">
+            <a href="index.html" class="logo" title="ConnectLocal by TLP">
+                <img src="images/logo-connect-local-icon.svg"
+                     class="app-icon"
+                     onerror="this.src='images/logo-connect-local-icon.png'"
+                     alt="CL" />
+                <img src="images/logo-connect-local.svg"
+                     class="app-logo d-none d-lg-block"
+                     onerror="this.src='images/logo-connect-local.png'"
+                     alt="ConnectLocal" />
             </a>
 
-            <div class="top-search-field d-lg-none d-md-block">
+            <div class="d-block d-lg-none top-search-field">
                 <a href="#"
                        class="form-control"
                        data-bs-toggle="offcanvas"
@@ -45,29 +52,65 @@
                     <span id="basic-addon1">
                         <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
                                    trigger="loop"
+                                   stroke="bold"
                                    delay="2000"
                                    colors="primary:#121331,secondary:#ff9935"
-                                   class="top-icon-animated"></lord-icon>
+                                   class="top-icon-animated">
+                        </lord-icon>
                     </span>
                     Search for Offer / Food / Beauty etc.
                 </a>
             </div>
 
-            <div class="d-flex gap-4 g-md-3">
+            <div class="d-flex gap-4 g-md-3 ms-auto header-right">
                 <a href="#"
-                       class="d-xs-none d-sm-none d-md-none d-lg-block"
+                       title="Search"
+                       class="d-none d-lg-block"
                        data-bs-toggle="offcanvas"
                        data-bs-target="#offcanvasFullscreen"
                        aria-controls="offcanvasFullscreen">
                     <lord-icon src="https://cdn.lordicon.com/wjyqkiew.json"
                                trigger="loop"
+                               stroke="bold"
                                delay="2000"
                                colors="primary:#121331,secondary:#ff9935"
-                               class="top-icon-animated"></lord-icon>
+                               class="top-icon-animated">
+                    </lord-icon>
                 </a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/xnwfqftu.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/awzxedqq.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
-                <a href="#"><lord-icon src="https://cdn.lordicon.com/onmwuuox.json" trigger="loop" delay="2000" colors="primary:#121331,secondary:#ff9935" class="top-icon-animated"></lord-icon></a>
+
+                <a href="#" title="Notifications">
+                    <lord-icon src="https://cdn.lordicon.com/xnwfqftu.json"
+                               trigger="loop"
+                               stroke="bold"
+                               delay="2000"
+                               colors="primary:#121331,secondary:#ff9935"
+                               class="top-icon-animated">
+                    </lord-icon>
+                </a>
+
+                <a href="#" title="Messages">
+                    <lord-icon src="https://cdn.lordicon.com/awzxedqq.json"
+                               trigger="loop"
+                               stroke="bold"
+                               delay="2000"
+                               colors="primary:#121331,secondary:#ff9935"
+                               class="top-icon-animated">
+                    </lord-icon>
+                </a>
+
+                <a href="#"
+                       title="Map"
+                       data-bs-toggle="offcanvas"
+                       data-bs-target="#offcanvasCities"
+                       aria-controls="offcanvasCities">
+                    <lord-icon src="https://cdn.lordicon.com/onmwuuox.json"
+                               trigger="loop"
+                               stroke="bold"
+                               delay="2000"
+                               colors="primary:#121331,secondary:#ff9935"
+                               class="top-icon-animated">
+                    </lord-icon>
+                </a>
             </div>
         </div>
     </header>
@@ -165,7 +208,7 @@ else
                     <div class="alert alert-danger">@_favError</div>
                 }
 
-                <ul class="card-group favorites">
+                <div class="offersWrap">
                     @if (_favoriteOffers.Count == 0 && !_favLoading)
                     {
                         <li class="w-100 text-center py-4 text-muted">
@@ -182,7 +225,7 @@ else
                                        AddRemoveToFavorite="AddRemoveFav" />
                         }
                     }
-                </ul>
+                </div>
             </div>
         </div>
 
@@ -612,11 +655,13 @@ else
                 }
             </div>
 
-            <button class="heart d-inline-block ms-auto @(SelectedOffer?.isFavorite == true ? "active" : "")"
-                    @onclick="@(async () => await AddRemoveFav(SelectedOffer!))"
+            <button class="@(SelectedOffer?.isFavorite == true  ? "heart active" : "heart")"
                     type="button"
-                    data-bs-toggle="button">
-                <i class="@(SelectedOffer?.isFavorite == true ? "fa-solid fa-heart" : "fa-regular fa-heart")"></i>
+                    data-bs-toggle="button"
+                    aria-pressed="@(SelectedOffer?.isFavorite == true ? "true" : "false")"
+                    @onclick:stopPropagation="true"
+                    @onclick:preventDefault
+                    @onclick="@(async () => await AddRemoveFav(SelectedOffer!))">
             </button>
         </div>
 

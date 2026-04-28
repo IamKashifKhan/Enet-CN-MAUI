@@ -278,27 +278,11 @@
                     {
                         foreach (var offer in categoryOffers)
                         {
-                            <div class="card card-hover border-0 shadow-sm py-1">
-                                <div class="card-img rounded-4" style="background-image: url('@GetOfferImage(offer)');"></div>
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="fw-semibold mb-0">@GetOfferHeading(offer)</h6>
-                                        <span class="heart"><i class="fa-regular fa-heart"></i></span>
-                                    </div>
-                                    <p class="small">@GetOfferSubTitle(offer)</p>
-                                    <div class="d-flex gap-3 offers-icons">
-                                        <small>
-                                            <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
-                                            <span class="view_num">@offer.RedemptionsCount</span> <span class="view_txt">Redemptions</span>
-                                        </small>
-                                        <small>
-                                            <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json" trigger="loop" delay="2000" colors="primary:#ff9935,secondary:#ff9935"></lord-icon>
-                                            <span class="view_num">@offer.OfferViews</span> <span class="view_txt">Views</span>
-                                        </small>
-                                        <button class="btn btn-primary btn-sm px-3 ms-auto" @onclick="async () => await OpenOfferAsync(offer)">Redeem Now</button>
-                                    </div>
-                                </div>
-                            </div>
+                            <OfferCard Offer="offer"
+                                       isActivePlan="planDetails?.IsActive == true"
+                                       OnSelected="OpenOfferAsync"
+                                       AddRemoveToFavorite="AddRemoveFav">
+                            </OfferCard>
                         }
                     }
                     else
@@ -383,12 +367,16 @@
                     @:Expiry @SelectedOffer?.EndDate.ToString("MM/dd/yyyy")
                 }
             </div>
-            <button class="heart d-inline-block ms-auto @(SelectedOffer?.isFavorite == true ? "active" : "")"
-                    @onclick="@(async () => await ToggleFavorite(SelectedOffer))"
+
+            <button class="@(SelectedOffer?.isFavorite == true ? "heart active" : "heart")"
                     type="button"
-                    data-bs-toggle="button">
-                <i class="@(SelectedOffer?.isFavorite == true ? "fa-solid fa-heart" : "fa-regular fa-heart")"></i>
+                    data-bs-toggle="button"
+                    aria-pressed="@(SelectedOffer?.isFavorite == true ? "true" : "false")"
+                    @onclick:stopPropagation="true"
+                    @onclick:preventDefault
+                    @onclick="@(async () => await AddRemoveFav(SelectedOffer!))">
             </button>
+
         </div>
 
         <div class="card redeem">
@@ -492,6 +480,8 @@
 
     private string CategoryName = string.Empty;
     private string CategoryKey = string.Empty;
+    public AALUser _user { get; set; } = new();
+    private PlanDetails? planDetails = new();
 
     private string DisplayHeaderTitle => string.IsNullOrWhiteSpace(CategoryName) ? "" : CategoryName;
 
@@ -505,6 +495,7 @@
         await jSRuntime.InvokeVoidAsync("Helpers.setDotNetHelper", DotNetObjectReference.Create(this));
 
         businessesDotnetReference = DotNetObjectReference.Create(this);
+        planDetails = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails) ?? new PlanDetails();
 
         if (!string.IsNullOrWhiteSpace(CategoryId))
         {
@@ -529,7 +520,8 @@
                 await GetOffersByCategory(CategoryKey);
             }
         }
-
+        _user = CurrentUserService.CurrentUser ?? new AALUser();
+      
         GetMainCategories();
     }
 
@@ -1001,6 +993,47 @@
             "eval",
             "const el=document.getElementById('filterOffer'); if(el){ bootstrap.Offcanvas.getOrCreateInstance(el).hide(); }");
     }
+
+    private async Task AddRemoveFav(BusinessOfferItem offer)
+    {
+        if (_favBusy || offer is null || _user?.UserKey <= 0)
+            return;
+
+        _favBusy = true;
+
+        try
+        {
+            var response = await offerService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, CurrentUserService.CurrentUser.UserKey);
+
+            if (response.Success)
+            {
+                // var existingFav = _favoriteOffers.FirstOrDefault(x => x.BusinessOffersKey == offer.BusinessOffersKey);
+
+                // if (existingFav is not null)
+                // {
+                //     _favoriteOffers.RemoveAll(x => x.BusinessOffersKey == offer.BusinessOffersKey);
+                //     UpdateFavoriteStateAcrossLists(offer.BusinessOffersKey, false);
+                // }
+                // else
+                // {
+                //     offer.isFavorite = true;
+                //     _favoriteOffers.Insert(0, offer);
+                //     UpdateFavoriteStateAcrossLists(offer.BusinessOffersKey, true);
+                // }
+
+              //  await localCache.SaveItemInCache("HomeNew_Favorites", _favoriteOffers);
+            }
+        }
+        catch
+        {
+        }
+        finally
+        {
+            _favBusy = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
 
     #endregion
 }

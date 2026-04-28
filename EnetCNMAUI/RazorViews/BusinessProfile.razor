@@ -1,5 +1,6 @@
 ﻿@using EnetCNMAUI.Services.Local
 @using EnetCNMAUI.Views
+@using EnetCNMAUI.Services
 
 @inject ILocalCache localCache
 @inject ICNApiService apiService
@@ -8,239 +9,330 @@
 @inject IJSRuntime jSRuntime
 @inject IOfferService offerFavoriteService
 @inject IMapConfig MapConfig
-@using EnetCNMAUI.Services
 @inject ICurrentUserService CurrentUserService
 
-     <div class="d-flex flex-column">
+<div class="d-flex flex-column">
 
-        <!-- Search Offcanvas -->
-         
-        <div class="container my-3">
-            <div class="profile-banner position-relative">
-                <img src="@BusinessItem.ProfileImagePath" class="img-fluid banner-img" alt="@BusinessName">
-            </div>
+    <!-- Mobile Title Header -->
+    <div class="container bg-white sticky-sm-top-only d-flex d-lg-none inner-header">
+        <a href="#"
+           class="back-link d-flex d-lg-none me-2"
+           title="Go Back"
+           @onclick="GoBack"
+           @onclick:preventDefault>
+            <i class="fa fa-angle-left"></i>
+        </a>
 
-            <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="profile-logo">
-                        <img src="@BusinessItem.LogoPath" alt="@BusinessName">
-                    </div>
-                    <span class="offer-badge">@BusinessItem.ActiveOffersCount Offers</span>
-                </div>
+        <h4 class="text-truncate fw-semibold mb-0">
+            @BusinessName
+        </h4>
+    </div>
 
-                <div class="d-flex align-items-center gap-auto social-links-profile">
-                    @if (!string.IsNullOrWhiteSpace(BusinessItem.Website))
-                    {
-                        <span class="profile-website">
-                            <a href="@BusinessItem.Website" target="_blank" class="hover-underline-animation left">@BusinessItem.Website</a>
-                        </span>
-                    }
+    <!-- Profile Header -->
+    <div class="container my-3">
 
-                    <div class="social-icons">
-                        @if (SocialLinksList != null && SocialLinksList.Count > 0)
-                        {
-                            @foreach (var socialLink in SocialLinksList)
-                            {
-                                <SocialTag Item="socialLink" />
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
+        <!-- Banner -->
+        <div class="profile-banner position-relative">
+            <img src="@BusinessItem.ProfileImagePath"
+                 class="img-fluid banner-img"
+                 alt="@BusinessName" />
         </div>
 
-        <!-- Offers -->
-        <div class="container pt-3">
-            <div class="row">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="offersWrap">
-                        @if (BusinessOffers != null && BusinessOffers.Count > 0)
-                        {
-                            foreach (var offer in BusinessOffers)
-                            {
-                                <OfferCard Offer="offer"
-                                           OnSelected="HandleOfferSelected"
-                                           AddRemoveToFavorite="AddRemoveFav"
-                                           isActivePlan="IsPlanActive">
-                                </OfferCard>
-                            }
-                        }
-                        else
-                        {
-                            <LoadingCard></LoadingCard>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Header Info -->
+        <div class="d-flex flex-wrap align-items-center justify-content-start mt-2 mt-lg-3 profile-details">
+            <img class="profile-logo"
+                 src="@BusinessItem.LogoPath"
+                 alt="@BusinessName" />
 
-        <!-- Map + About -->
-        <div class="container">
-            <div class="d-flex flex-column flex-md-row flex-nowrap align-items-center gap-4 mb-4">
+            <h2 class="profile-name text-truncate">
+                @BusinessName
+            </h2>
 
-                <GoogleMap Width="100%"
-                           Height="400px"
-                           ApiKey="@MapConfig.GoogleMapsApiKey"
-                           StartLat="@Latitude"
-                           StartLng="@Longitude"
-                           StartZoom="12"
-                           OnViewChanged="OnMapChanged"
-                           @ref="_map" />
-
-                <div class="contact-detail about-box">
-                    <h3>About @BusinessName</h3>
-
-                    <p>@BusinessDetailItem.About</p>
-
-                    <div class="profile-location">
-                        <lord-icon src="https://cdn.lordicon.com/onmwuuox.json"
-                                   trigger="loop"
-                                   delay="2000"
-                                   class="contact-detail-animated">
-                        </lord-icon>
-                        @BusinessItem.Address @BusinessItem.City @BusinessItem.State @BusinessItem.Country @BusinessItem.Zipcode
-                    </div>
-
-                    @if (!string.IsNullOrWhiteSpace(Timings))
-                    {
-                        <div class="mt-2 pt-2 border-top">
-                            <a href="#bus-time"
-                                   class="d-flex flex-row flex-nowrap align-items-center gap-2 text-body"
-                                   data-bs-toggle="collapse"
-                                   role="button"
-                                   aria-expanded="false"
-                                   aria-controls="bus-time">
-                                <lord-icon src="https://cdn.lordicon.com/warimioc.json"
-                                           trigger="loop"
-                                           delay="2000"
-                                           class="contact-detail-animated">
-                                </lord-icon>
-                                <span>@Timings</span>
-                                <i class="fa fa-chevron-down ms-auto"></i>
-                            </a>
-
-                            <ul id="bus-time" class="collapse font-monospace">
-                                @if (BusinessTimingsList != null && BusinessTimingsList.Count > 0)
-                                {
-                                    @foreach (var item in BusinessTimingsList)
-                                    {
-                                        <li>
-                                            <span>@GetWeekDayName(item.DayOfWeek)</span>
-                                            <span>@item.StartTime.ToString("hh:mm tt")</span>
-                                            <b>-</b>
-                                            <span>@item.EndTime.ToString("hh:mm tt")</span>
-                                        </li>
-                                    }
-                                }
-                            </ul>
-                        </div>
-                    }
-                </div>
+            <div class="cont-offer-badge">
+                <span class="offer-badge">
+                    @BusinessItem.ActiveOffersCount offers
+                </span>
             </div>
         </div>
 
     </div>
 
+    <!-- Offers -->
+    <div class="container pt-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="offersWrap">
+
+                @if (BusinessOffers != null && BusinessOffers.Count > 0)
+                {
+                    foreach (var offer in BusinessOffers)
+                    {
+                        <OfferCard Offer="offer"
+                                   OnSelected="HandleOfferSelected"
+                                   AddRemoveToFavorite="AddRemoveFav"
+                                   isActivePlan="IsPlanActive">
+                        </OfferCard>
+                    }
+                }
+                else
+                {
+                    <LoadingCard></LoadingCard>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Map + About -->
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row flex-nowrap gap-4 mb-4">
+
+            <GoogleMap Width="100%"
+                       Height="400px"
+                       ApiKey="@MapConfig.GoogleMapsApiKey"
+                       StartLat="@Latitude"
+                       StartLng="@Longitude"
+                       StartZoom="12"
+                       OnViewChanged="OnMapChanged"
+                       @ref="_map" />
+
+            <div class="contact-detail">
+
+                <h3>About @BusinessName</h3>
+
+                @if (!string.IsNullOrWhiteSpace(BusinessDetailItem?.About))
+                {
+                    <p>@BusinessDetailItem.About</p>
+                }
+
+                <div>
+                    <a href="#"
+                       class="d-flex flex-row gap-2 text-body"
+                       title="Open Maps"
+                       @onclick:preventDefault>
+                        <i class="fas fa-map-pin"></i>
+                        <span>
+                            @BusinessItem.Address @BusinessItem.City @BusinessItem.State @BusinessItem.Country @BusinessItem.Zipcode
+                        </span>
+                        <i class="fas fa-arrow-up-right-from-square text-info ms-auto"></i>
+                    </a>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Timings))
+                {
+                    <div>
+                        <a href="#bus-time"
+                           class="d-flex flex-row gap-2 text-body"
+                           data-bs-toggle="collapse"
+                           role="button"
+                           aria-expanded="false"
+                           aria-controls="bus-time">
+                            <i class="far fa-clock"></i>
+                            <span class="@(Timings.Contains("Open", StringComparison.OrdinalIgnoreCase) ? "text-success" : "text-red")">
+                                @Timings
+                            </span>
+                            <i class="fa fa-chevron-down ms-auto"></i>
+                        </a>
+
+                        <ul id="bus-time" class="collapse font-monospace">
+                            @if (BusinessTimingsList != null && BusinessTimingsList.Count > 0)
+                            {
+                                foreach (var item in BusinessTimingsList)
+                                {
+                                    <li>
+                                        <span data-weekday>@GetWeekDayName(item.DayOfWeek)</span>
+                                        <span data-opening>@item.StartTime.ToString("hh:mm tt")</span>
+                                        <b>-</b>
+                                        <span data-closing>@item.EndTime.ToString("hh:mm tt")</span>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(BusinessItem.Website))
+                {
+                    <div>
+                        <a href="@BusinessItem.Website"
+                           target="_blank"
+                           class="d-flex flex-row gap-2 text-body"
+                           title="Open Link">
+                            <i class="fas fa-earth-americas"></i>
+                            <span>@BusinessItem.Website</span>
+                            <i class="fas fa-arrow-up-right-from-square text-info ms-auto"></i>
+                        </a>
+                    </div>
+                }
+
+                @if (SocialLinksList != null && SocialLinksList.Count > 0)
+                {
+                    <div class="social-icons">
+                        @foreach (var socialLink in SocialLinksList)
+                        {
+                            <SocialTag Item="socialLink" />
+                        }
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 pt-1 d-block d-lg-none"></div>
+
+</div>
 
 <!-- OffCanvas Redeem -->
-<!-- OffCanvas Redeem -->
-<div id="offcanvasRedeem" class="offcanvas offcanvas-bottom h-1000" data-bs-scroll="false" tabindex="-1">
+<div id="offcanvasRedeem"
+     class="offcanvas offcanvas-bottom h-1000"
+     data-bs-scroll="false"
+     tabindex="-1">
 
     <div class="offcanvas-header pt-4 pb-2">
-        <h2 class="offcanvas-title">
-            @BusinessName
-        </h2>
-        <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <h2 class="offcanvas-title">@BusinessName</h2>
+        <button type="button"
+                class="btn-close shadow-none"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close">
+        </button>
     </div>
 
     <div class="offcanvas-body d-flex flex-column">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="offer-expiry">
-                @if (SelectedOffer.EndDate != default)
+                @if (SelectedOffer?.EndDate != default)
                 {
-                    @:Expiry @SelectedOffer.EndDate.ToString("MM/dd/yyyy")
+                    @:Expires @SelectedOffer.EndDate.ToString("MM/dd/yyyy")
                 }
             </div>
 
-            <button class="heart d-inline-block ms-auto @(SelectedOffer.isFavorite ? "active" : "")"
-                    @onclick="@(async () => AddRemoveFav(SelectedOffer))"
+            <button class="heart @(SelectedOffer?.isFavorite == true ? "active" : "")"
                     type="button"
-                    data-bs-toggle="button">
-                <i class="@(SelectedOffer.isFavorite ? "fa-solid fa-heart" : "fa-regular fa-heart")"></i>
+                    data-bs-toggle="button"
+                    @onclick="@(async () => await AddRemoveFav(SelectedOffer))">
+                <i class="@(SelectedOffer?.isFavorite == true ? "fa-solid fa-heart" : "fa-regular fa-heart")"></i>
             </button>
         </div>
 
-        <!-- Card Redeem -->
         <div class="card redeem">
             <h2 class="card-header">@SelectedOffer?.Heading</h2>
 
             <div class="card-body">
                 <h5 class="redeem-desc">@SelectedOffer?.Description</h5>
+
                 <p>Tap Redeem at checkout to display SKU number for cashier.</p>
 
                 @if (!string.IsNullOrWhiteSpace(SelectedOffer?.ThumbnailPath))
                 {
-                    <div class="card-img" style="background-image: url('@SelectedOffer.ThumbnailPath');"></div>
+                    <div class="card-img"
+                         style="background-image: url('@SelectedOffer.ThumbnailPath');">
+                    </div>
                 }
 
                 <p>
-                    This coupon is valid only at @(SelectedOffer?.BusinessName ?? "merchant").
-                   @*  @if (!string.IsNullOrWhiteSpace(SelectedOffer?.Disclaimer))
-                    {
-                        <span> @SelectedOffer.Disclaimer</span>
-                    } *@
+                    This coupon is valid only at @(SelectedOffer?.BusinessName ?? BusinessName).
                 </p>
             </div>
 
             <div class="card-footer">
                 <a href="#"
-                       class="btn btn-primary px-5"
-                       data-bs-toggle="modal"
-                       data-bs-target="#modalRedeemCode"
-                       @onclick:preventDefault>
+                   class="btn btn-primary px-5"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modalRedeemCode"
+                   @onclick:preventDefault>
                     Redeem Offer
                 </a>
             </div>
         </div>
-        <!-- /Card Redeem -->
 
     </div>
 </div>
+
 <!-- Modal Redeem -->
-<div id="modalRedeemCode" class="modal fade" aria-labelledby="modalRedeemCode" aria-hidden="true" tabindex="-1">
+<div id="modalRedeemCode"
+     class="modal fade"
+     aria-labelledby="modalRedeemCode"
+     aria-hidden="true"
+     tabindex="-1">
+
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+
             <div class="modal-header">
-                <h5 class="modal-title text-body-emphasis">To Redeem this Offer</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title text-body-emphasis">
+                    To Redeem this Offer
+                </h5>
+                <button class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
             </div>
+
             <div class="modal-body">
-                <p>Enter code @SelectedOffer.ConfirmationCode to redeem offer at time of checkout</p>
-                <input @bind="Code" class="form-control form-control-lg font-monospace" type="text" minlength="6" maxlength="6" placeholder="Enter Code" />
+                <p>Enter the merchant redemption code.</p>
+
+                <input @bind="Code"
+                       class="form-control form-control-lg font-monospace"
+                       type="text"
+                       minlength="6"
+                       maxlength="6"
+                       placeholder="Enter Code" />
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" @onclick="ValidateCode" class="btn btn-primary" data-bs-toggle="modal">OK</button>
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        @onclick="ValidateCode">
+                    OK
+                </button>
             </div>
+
         </div>
     </div>
 </div>
 
 <!-- Modal Success -->
-<div id="modalRedeemSuccess" class="modal fade" aria-labelledby="modalRedeemSuccess" aria-hidden="true" tabindex="-1">
+<div id="modalRedeemSuccess"
+     class="modal fade"
+     aria-labelledby="modalRedeemSuccess"
+     aria-hidden="true"
+     tabindex="-1">
+
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+
             <div class="modal-header">
-                <h5 class="modal-title text-body-emphasis">Congrats..! Enjoy..!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title text-body-emphasis">
+                    Congrats..! Enjoy..!
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
             </div>
+
             <div class="modal-body">
-                <p>You have successfully redeemed this offer, thank for your shopping local!</p>
+                <p>You have successfully redeemed this offer. Thank you for shopping local!</p>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @onclick="GotoSavingPage" data-bs-dismiss="modal">SEE YOUR SAVINGS</button>
+                <button type="button"
+                        class="btn btn-primary"
+                        @onclick="GotoSavingPage"
+                        data-bs-dismiss="modal">
+                    SEE YOUR SAVINGS
+                </button>
             </div>
+
         </div>
     </div>
 </div>
@@ -248,16 +340,17 @@
 @code {
     [Parameter]
     public string? BusinessKeyweb { get; set; }
+
     public string? BusinessKey { get; set; }
     public string? BusinessName { get; set; }
-    public string Timings { get; set; }
-    public string Code { get; set; }
+    public string Timings { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
+
     public BusinessDetailItem BusinessDetailItem = new();
     public List<SocialListItem> SocialLinksList = new();
     private List<BusinessTimings> BusinessTimingsList = new();
     public List<BusinessOfferItem> BusinessOffers = new();
     private BusinessItem BusinessItem = new();
-
     private BusinessOfferItem SelectedOffer = new();
 
     private double Latitude = 34.197504;
@@ -269,64 +362,109 @@
     private IJSObjectReference? _routeMapModule;
     private DotNetObjectReference<BusinessProfile>? _routeMapReference;
 
-    protected async override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        var Key = BusinessKeyweb;
-        var DataArray = Key.Split(',');
-        BusinessKey = DataArray[0];
-        BusinessName = DataArray[1];
-        BusinessItem = await localCache.GetCacheItem<BusinessItem>(LocalCacheKeys.BusinessItem(int.Parse(BusinessKey)));
+        if (!string.IsNullOrWhiteSpace(BusinessKeyweb))
+        {
+            var dataArray = BusinessKeyweb.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
-        if (BusinessItem.Latitude.HasValue)
-            Latitude = BusinessItem.Latitude.Value;
-        else
-            Latitude = 0;
+            if (dataArray.Length > 0)
+                BusinessKey = dataArray[0];
 
-        if (BusinessItem.Longitude.HasValue)
-            Longitude = BusinessItem.Longitude.Value;
-        else
-            Longitude = 0;
+            if (dataArray.Length > 1)
+                BusinessName = dataArray[1];
+        }
 
-        var CurrentPlanDetail = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
-        IsPlanActive = CurrentPlanDetail?.IsActive ?? false;
+        if (!string.IsNullOrWhiteSpace(BusinessKey))
+        {
+            BusinessItem = await localCache.GetCacheItem<BusinessItem>(
+                LocalCacheKeys.BusinessItem(int.Parse(BusinessKey))
+            ) ?? new BusinessItem();
 
-        await GetBusinessDetails();
-        _routeMapModule = await jSRuntime.InvokeAsync<IJSObjectReference>("import", "./RazorViews/BusinessProfile.razor.js");
+            BusinessName ??= BusinessItem.Name;
+
+            Latitude = BusinessItem.Latitude ?? 0;
+            Longitude = BusinessItem.Longitude ?? 0;
+
+            var currentPlanDetail = await localCache.GetCacheItem<PlanDetails>(LocalCacheKeys.PlanDetails);
+            IsPlanActive = currentPlanDetail?.IsActive ?? false;
+
+            await GetBusinessDetails();
+        }
+
+        _routeMapModule = await jSRuntime.InvokeAsync<IJSObjectReference>(
+            "import",
+            "./RazorViews/BusinessProfile.razor.js"
+        );
+
         _routeMapReference = DotNetObjectReference.Create(this);
+    }
 
-        await _map.HideCircleAsync();
-        await _map.SetCenterAsync(Latitude, Longitude);
-        await _map.AddMarkerAsync(Latitude, Longitude, BusinessItem.BusinessKey, BusinessItem.Name, BusinessItem.ActiveOffersCount.ToString());
-        await InvokeAsync(StateHasChanged);
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && _map is not null)
+        {
+            await _map.HideCircleAsync();
+            await _map.SetCenterAsync(Latitude, Longitude);
+            await _map.AddMarkerAsync(
+                Latitude,
+                Longitude,
+                BusinessItem.BusinessKey,
+                BusinessItem.Name,
+                BusinessItem.ActiveOffersCount.ToString()
+            );
+        }
     }
 
     async Task GetBusinessDetails()
     {
         try
         {
-            var user = CurrentUserService.CurrentUser;
-            var request = new BusinessDetailoffersRequest(CurrentUserService.CurrentUser.UserKey, BusinessKey);
-            var offersapiresut = await apiService.GetAppBusinessOffers(request);
-            var businessdetailsresult = await apiService.GetAppBusinessDetail(request);
-            var sociallinksresult = await apiService.GetBusinessSocial(request);
-            var businesstimingresults = await apiService.AppBusinessSchedule(request);
+            if (string.IsNullOrWhiteSpace(BusinessKey))
+                return;
 
-            if (businessdetailsresult.Success) BusinessDetailItem = businessdetailsresult.Data;
+            var request = new BusinessDetailoffersRequest(
+                CurrentUserService.CurrentUser.UserKey,
+                BusinessKey
+            );
 
-            if (sociallinksresult.Success)
-                SocialLinksList = sociallinksresult.Data;
+            var offersApiResult = await apiService.GetAppBusinessOffers(request);
+            var businessDetailsResult = await apiService.GetAppBusinessDetail(request);
+            var socialLinksResult = await apiService.GetBusinessSocial(request);
+            var businessTimingResults = await apiService.AppBusinessSchedule(request);
 
-            if (offersapiresut.Success) BusinessOffers = offersapiresut.Data;
+            if (businessDetailsResult.Success && businessDetailsResult.Data is not null)
+            {
+                BusinessDetailItem = businessDetailsResult.Data;
+
+                ApplyBusinessDetailToBusinessItem(BusinessDetailItem);
+
+                BusinessName ??= BusinessItem.Name;
+                Latitude = BusinessItem.Latitude ?? 0;
+                Longitude = BusinessItem.Longitude ?? 0;
+            }
+
+            
+
+            if (socialLinksResult.Success)
+                SocialLinksList = socialLinksResult.Data;
+
+            if (offersApiResult.Success)
+                BusinessOffers = offersApiResult.Data;
 
             foreach (var item in BusinessOffers)
             {
                 item.IsActivePlan = !CurrentUserService.PlanDetails.IsActive;
-                item.ShowRedemptionLabel = item.BusinessCategory.Any(x => x.SubCategoryKey == 22 || x.SubCategoryKey == 23 || x.SubCategoryKey == 7);
+                item.ShowRedemptionLabel = item.BusinessCategory.Any(x =>
+                    x.SubCategoryKey == 22 ||
+                    x.SubCategoryKey == 23 ||
+                    x.SubCategoryKey == 7
+                );
             }
 
-            if (businesstimingresults.Success)
+            if (businessTimingResults.Success)
             {
-                BusinessTimingsList = businesstimingresults.Data;
+                BusinessTimingsList = businessTimingResults.Data;
                 ProcessTimings();
             }
         }
@@ -343,26 +481,30 @@
         return Task.CompletedTask;
     }
 
-    public async void GoBack()
+    public async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }
 
     private void ProcessTimings()
     {
-        foreach (var item in BusinessTimingsList)
+        var today = (int)DateTime.UtcNow.DayOfWeek;
+        var todayTiming = BusinessTimingsList.FirstOrDefault(x => x.DayOfWeek == today);
+
+        if (todayTiming == null)
         {
-            if (((int)DateTime.UtcNow.DayOfWeek) == item.DayOfWeek)
-            {
-                if (DateTime.UtcNow.TimeOfDay >= item.StartTime.TimeOfDay && DateTime.UtcNow.TimeOfDay <= item.EndTime.TimeOfDay)
-                    Timings = "Open Now";
-                else
-                    Timings = $"Closed -- Opens {item.StartTime:hh:mm tt} - {item.EndTime:hh:mm tt}";
-            }
-            else
-            {
-                Timings = "Closed";
-            }
+            Timings = "Closed";
+            return;
+        }
+
+        if (DateTime.UtcNow.TimeOfDay >= todayTiming.StartTime.TimeOfDay &&
+            DateTime.UtcNow.TimeOfDay <= todayTiming.EndTime.TimeOfDay)
+        {
+            Timings = "Open Now";
+        }
+        else
+        {
+            Timings = $"Closed - Opens {todayTiming.StartTime:hh:mm tt}";
         }
     }
 
@@ -385,43 +527,96 @@
     {
         SelectedOffer = offer;
         Code = string.Empty;
-        StateHasChanged();
-        
-        await jSRuntime.InvokeVoidAsync("eval", "const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRedeem')); offcanvas.show();");
+
+        await InvokeAsync(StateHasChanged);
+
+        await jSRuntime.InvokeVoidAsync(
+            "eval",
+            "const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRedeem')); offcanvas.show();"
+        );
     }
 
-    private async void AddRemoveFav(BusinessOfferItem offer)
+    private async Task AddRemoveFav(BusinessOfferItem? offer)
     {
+        if (offer == null)
+            return;
+
         try
         {
-            var result = await offerFavoriteService.ToggleOfferFavoriteAsync(offer.BusinessOffersKey, CurrentUserService.CurrentUser.UserKey);
+            var result = await offerFavoriteService.ToggleOfferFavoriteAsync(
+                offer.BusinessOffersKey,
+                CurrentUserService.CurrentUser.UserKey
+            );
+
             offer.isFavorite = result.Data;
+
             WeakReferenceMessenger.Default.Send<RefreshFavorites>();
-            StateHasChanged();
+
+            await InvokeAsync(StateHasChanged);
         }
-        catch (Exception ex)
+        catch
         {
         }
-    }
-
-    private async Task openWebsite(string url)
-    {
     }
 
     private async void ValidateCode()
     {
-        var redeedmOfferRequest = new RedeemOfferRequest(CurrentUserService.CurrentUser.UserKey.ToString(), SelectedOffer.BusinessOffersKey.ToString(), Code);
-        var output = await apiService.RedeemOffer(redeedmOfferRequest);
+        var redeemOfferRequest = new RedeemOfferRequest(
+            CurrentUserService.CurrentUser.UserKey.ToString(),
+            SelectedOffer.BusinessOffersKey.ToString(),
+            Code
+        );
+
+        var output = await apiService.RedeemOffer(redeemOfferRequest);
+
         if (output.Success)
         {
             await jSRuntime.InvokeVoidAsync("eval", "$('#modalRedeemCode').modal('hide');");
+
             await Task.Delay(300);
-            await jSRuntime.InvokeVoidAsync("eval", "const modal = new bootstrap.Modal(document.getElementById('modalRedeemSuccess')); modal.show();");
+
+            await jSRuntime.InvokeVoidAsync(
+                "eval",
+                "const modal = new bootstrap.Modal(document.getElementById('modalRedeemSuccess')); modal.show();"
+            );
         }
     }
 
     private async void GotoSavingPage()
     {
         await Shell.Current.GoToAsync(nameof(MySavingsPage));
+    }
+
+    private void ApplyBusinessDetailToBusinessItem(BusinessDetailItem detail)
+    {
+        BusinessItem.BusinessKey = detail.BusinessKey;
+        BusinessItem.Name = detail.Name;
+        BusinessItem.ProfileImagePath = detail.ProfileImagePath;
+        BusinessItem.LogoPath = detail.LogoPath;
+        BusinessItem.ActiveOffersCount = detail.ActiveOffersCount;
+
+        BusinessItem.Address = detail.Address;
+        BusinessItem.City = detail.City;
+        BusinessItem.State = detail.State;
+        BusinessItem.Country = detail.Country;
+        BusinessItem.Zipcode = detail.Zipcode;
+        BusinessItem.Website = detail.Website;
+
+        BusinessItem.Latitude = ToNullableDouble(detail.Latitude);
+        BusinessItem.Longitude = ToNullableDouble(detail.Longitude);
+    }
+
+    private static double? ToNullableDouble(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+
+        return double.TryParse(
+            value,
+            System.Globalization.NumberStyles.Any,
+            System.Globalization.CultureInfo.InvariantCulture,
+            out var result)
+            ? result
+            : null;
     }
 }

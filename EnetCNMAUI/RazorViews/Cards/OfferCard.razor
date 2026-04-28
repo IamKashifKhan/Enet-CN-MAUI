@@ -1,52 +1,84 @@
-﻿@inject ILocalCache LocalCache
-<div  class="@(isActivePlan? "card card-hover border-0 shadow-sm py-1" : "card blur card-hover border-0 shadow-sm py-1")" >
+﻿@using EnetCNMAUI.Views
+@inject ILocalCache LocalCache
+<div class="@(isActivePlan ? "card border-0 shadow-sm py-1 card-hover" : "card border-0 shadow-sm py-1 card-hover blur")">
+
     @if (!isActivePlan)
     {
         <div class="member-only">
             To view and redeem this offer, please upgrade your account...
-            <button class="btn btn-primary btn-sm d-flex mx-auto mt-2">
+            <button class="btn btn-primary btn-sm d-flex mx-auto mt-2"
+                    type="button">
                 <lord-icon src="https://cdn.lordicon.com/fgxwhgfp.json"
-                trigger="loop"
-                delay="2000"
-                colors="primary:#fff,secondary:#fff"> </lord-icon>
+                           trigger="loop"
+                           delay="2000"
+                           stroke="bold"
+                           colors="primary:#fff,secondary:#fff">
+                </lord-icon>
                 Start Saving
             </button>
-        </div>            
+        </div>
     }
-    <div class="card-img rounded-4" style="background-image: url('@Offer.ThumbnailPath');"></div>
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-            <h6 class="fw-semibold mb-0">@Offer.Heading</h6>
-            <button class="@(Offer.isFavorite ? "heart active" : "heart")" type="button"
+
+    <a href="#"
+       class="card-body"
+       @onclick="OpenBusinessProfile"
+       @onclick:preventDefault>
+
+        <div class="card-img rounded-4"
+             style="background-image:url('@Offer.ThumbnailPath');">
+        </div>
+
+        <div class="offer-title d-flex justify-content-between align-items-center">
+            <h6 class="fw-semibold mb-0 text-truncate">
+                @Offer.Heading
+            </h6>
+
+            <button class="@(Offer.isFavorite ? "heart active" : "heart")"
+                    type="button"
+                    data-bs-toggle="button"
+                    aria-pressed="@(Offer.isFavorite ? "true" : "false")"
+                    @onclick:stopPropagation="true"
+                    @onclick:preventDefault
                     @onclick="@(async () => await AddRemoveToFavorite.InvokeAsync(Offer))">
             </button>
-           @*  <span class="@(Offer.isFavorite ? "heart active" : "heart")" id="heart"><i class="fa-regular fa-heart"></i></span> *@
         </div>
-        <p class="small">@Offer.Description</p>
-        <div class="d-flex gap-3 offers-icons">
-            <small>
-                <lord-icon src="https://cdn.lordicon.com/ytklkgsc.json"
-                           trigger="loop"
-                           delay="2000"
-                           colors="primary:#ff9935,secondary:#ff9935"> </lord-icon>
-                <span class="view_num">@Offer.RedemptionsCount</span> <span class="view_txt">Redemptions</span>
-            </small>
-            <small>
-                <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
-                           trigger="loop"
-                           delay="2000"
-                           colors="primary:#ff9935,secondary:#ff9935"> </lord-icon>
-                <span class="view_num">@Offer.OfferViews</span> <span class="view_txt">Views</span>
-            </small>
-            <button class="btn btn-primary btn-sm px-3 ms-auto" @onclick:stopPropagation="true"
-                    @onclick="HandleRedeemAsync">
-                Redeem Now
-            </button>
-        </div>
+
+        <p class="small">
+            @(string.IsNullOrWhiteSpace(Offer.Description) ? "Max Value" : Offer.Description)
+        </p>
+    </a>
+
+    <div class="d-flex gap-3 offers-icons">
+        <small>
+            <lord-icon src="https://cdn.lordicon.com/gvdzkarq.json"
+                       trigger="loop"
+                       delay="2000"
+                       stroke="bold"
+                       colors="primary:#ff9935,secondary:#121331">
+            </lord-icon>
+            <span class="view_num">@Offer.RedemptionsCount</span>
+            <span class="view_txt">Redemptions</span>
+        </small>
+
+        <small>
+            <lord-icon src="https://cdn.lordicon.com/dicvhxpz.json"
+                       trigger="loop"
+                       delay="2000"
+                       stroke="bold"
+                       colors="primary:#ff9935,secondary:#121331">
+            </lord-icon>
+            <span class="view_num">@Offer.OfferViews</span>
+            <span class="view_txt">Views</span>
+        </small>
+
+        <button class="btn btn-primary btn-sm px-3 ms-auto"
+                type="button"
+                @onclick:stopPropagation="true"
+                @onclick="HandleRedeemAsync">
+            Redeem Now
+        </button>
     </div>
 </div>
-
-
 
 @code {
     [Parameter, EditorRequired] public BusinessOfferItem Offer { get; set; } = null!;
@@ -95,6 +127,20 @@
         }
         finally { _busy = false; }
     }
-    
+
+    private async Task OpenBusinessProfile()
+    {
+        // var ite = IsGridView;
+        var route = RouteHelper.BuildRoute(nameof(BusinessProfilePage),
+          new Dictionary<string, string>
+          {
+                { "BusinessKeyweb", $"{Offer.BusinessKey},{Offer.BusinessName}" }
+          });
+
+        //await LocalCache.SaveItemInCache(LocalCacheKeys.BusinessItem(Offer.BusinessKey), iOffertem);
+
+        await Shell.Current.GoToAsync(route);
+    }
 
 }
+s
